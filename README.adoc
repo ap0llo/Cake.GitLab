@@ -1,0 +1,56 @@
+= Cake.GitLab
+
+:link-cake: link:https://cakebuild.net[Cake]
+:link-cakefrosting: link:https://cakebuild.net/docs/running-builds/runners/cake-frosting[Cake Frosting]
+
+:url-build-statusbadge: TODO
+:url-build-latest: TODO
+
+:url-nuget-badge: https://img.shields.io/nuget/v/Cake.GitLab.svg
+:url-nuget-package: https://www.nuget.org/packages/Cake.GitLab
+
+IMPORTANT::TODO: Provide a description of the Addin
+
+image:{url-build-statusbadge}[link={url-build-latest}]
+
+image:{url-nuget-badge}[link={url-nuget-package}]
+
+
+IMPORTANT:: TODO
+
+## License
+
+Cake.GitLab is licensed under the MIT License.
+
+For details see link:LICENSE[]
+
+
+== Building from source
+
+Building the project from source requires the .NET SDK (version as specified in link:global.json[]) and uses Cake.
+
+To execute the default build, run
+
+[source,ps1]
+----
+.\build.ps1
+----
+
+This will build the project, run all tests and pack the NuGet package.
+
+
+== Versioning and Branching
+
+The version of the addin is automatically derived from git and the information in `version.json` using link:https://github.com/AArnott/Nerdbank.GitVersioning[Nerdbank.GitVersioning]:
+
+* The `main` branch always contains the latest version. Packages produced from `main` are always marked as pre-release versions (using the -pre suffix).
+* Stable versions are built from release branches. Build from release branches will have no -pre suffix
+* Builds from any other branch will have both the -pre prerelease tag and the git commit hash included in the version string
+
+To create a new release branch use the link:https://www.nuget.org/packages/nbgv/[nbgv tool]:
+
+[source,sh]
+----
+dotnet tool install --global nbgv
+nbgv prepare-release
+----

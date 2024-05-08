@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)/../../</RunWorkingDirectory>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cake.BuildSystems.Module" Version="5.0.0" />
+    <PackageReference Include="Cake.DotNetLocalTools.Module" Version="3.0.12" />
+    <PackageReference Include="Grynwald.SharedBuild" Version="2.4.20" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\azure-pipelines.yml" Link="azure-pipelines.yml" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,51 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C4E7483-75A1-42E0-91D6-0643D52567E4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{85265202-82C0-4C3F-BA65-EE9182FCE1F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.GitLab.Build", "build\workflow\Cake.GitLab.Build.csproj", "{6E290301-79AD-4EF4-8860-5A48CFC8C4E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CB234764-DF2D-4DC3-8590-5B44BD4568EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.GitLab", "src\Cake.GitLab\Cake.GitLab.csproj", "{7FA92AFF-7DAE-4D8B-B631-9F27314D37DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D94C7483-C80A-4B55-9A3C-0CA7AECD469B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.GitLab.Test", "test\Cake.GitLab.Test\Cake.GitLab.Test.csproj", "{D0B3BD5A-6424-4AAE-B551-0E16A9B4EA8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E290301-79AD-4EF4-8860-5A48CFC8C4E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E290301-79AD-4EF4-8860-5A48CFC8C4E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E290301-79AD-4EF4-8860-5A48CFC8C4E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E290301-79AD-4EF4-8860-5A48CFC8C4E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FA92AFF-7DAE-4D8B-B631-9F27314D37DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FA92AFF-7DAE-4D8B-B631-9F27314D37DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FA92AFF-7DAE-4D8B-B631-9F27314D37DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FA92AFF-7DAE-4D8B-B631-9F27314D37DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B3BD5A-6424-4AAE-B551-0E16A9B4EA8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B3BD5A-6424-4AAE-B551-0E16A9B4EA8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B3BD5A-6424-4AAE-B551-0E16A9B4EA8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B3BD5A-6424-4AAE-B551-0E16A9B4EA8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E290301-79AD-4EF4-8860-5A48CFC8C4E8} = {85265202-82C0-4C3F-BA65-EE9182FCE1F0}
+		{7FA92AFF-7DAE-4D8B-B631-9F27314D37DA} = {CB234764-DF2D-4DC3-8590-5B44BD4568EC}
+		{D0B3BD5A-6424-4AAE-B551-0E16A9B4EA8C} = {D94C7483-C80A-4B55-9A3C-0CA7AECD469B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,10 @@
+# Changes here will be overwritten by Copier
+_commit: 59f5424
+_src_path: gh:ap0llo/copier-template
+addin_name: GitLab
+author: Andreas Gruenwald
+github_org: ap0llo
+package_repository_url: https://github.com/ap0llo/Cake.GitLab
+project_type: Cake Addin
+repository_name: Cake.GitLab
+target_frameworks: net6.0;net7.0;net8.0
