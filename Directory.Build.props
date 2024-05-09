@@ -31,6 +31,8 @@
 
   <!--NuGet package properties -->
   <PropertyGroup>
+    <!-- By default, make project non-packable-->
+    <IsPackable>false</IsPackable>
     <Authors>Andreas Gruenwald</Authors>
     <PackageProjectUrl>https://github.com/ap0llo/Cake.GitLab</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
