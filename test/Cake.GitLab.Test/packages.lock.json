@@ -2,6 +2,25 @@
   "version": 1,
   "dependencies": {
     "net6.0": {
+      "Cake.Common": {
+        "type": "Direct",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "yvSJkK7rxvm/m1Juvt+b7H2xK8LnYTSdRBeoP6uyXKVQPZPXq0YOgM4Zzh1QwmNprLCpxh2kDRnj0ENuvkNkVw==",
+        "dependencies": {
+          "Cake.Core": "3.2.0"
+        }
+      },
+      "Cake.Core": {
+        "type": "Direct",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "dependencies": {
+          "Microsoft.CSharp": "4.7.0",
+          "Microsoft.Win32.Registry": "5.0.0"
+        }
+      },
       "Cake.Testing": {
         "type": "Direct",
         "requested": "[3.2.0, )",
@@ -50,14 +69,23 @@
         "resolved": "2.5.4",
         "contentHash": "YUtEOBdArAISyb1cTWcHc6/bilSDB9q5lc8ughPQP1MqlAKSkxKMBqLQ+tiWMFRBd2o22E59nLD/4V5R3jfZxQ=="
       },
-      "Cake.Core": {
+      "LibGit2Sharp": {
         "type": "Transitive",
-        "resolved": "3.2.0",
-        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "resolved": "0.30.0",
+        "contentHash": "1cBg/7nz6q+yzvComhqQaTS4nbXloLp/x29ZgY/Rr82ohpkuaWT8ZYzsPLFvs1zmCh/4xQbVt5sQxazGblgRig==",
         "dependencies": {
-          "Microsoft.CSharp": "4.7.0",
-          "Microsoft.Win32.Registry": "5.0.0"
+          "LibGit2Sharp.NativeBinaries": "[2.0.322]"
         }
+      },
+      "LibGit2Sharp.NativeBinaries": {
+        "type": "Transitive",
+        "resolved": "2.0.322",
+        "contentHash": "EWQaEevzc8uS1ZGS6T83jqUPBY//2WUSCHwbZHBoHOjlfSehqr30nm/VAhJPzjam/69sv7nlLKVcho9t2XuR/Q=="
+      },
+      "Microsoft.Bcl.AsyncInterfaces": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "3WA9q9yVqJp222P3x1wYIGDAkpjAku0TMUaaQV22g6L67AI0LdOIrVS7Ht2vJfLHGSPVuqN94vIr15qn+HEkHw=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -330,6 +358,11 @@
           "System.Threading": "4.3.0",
           "System.Threading.Tasks": "4.3.0"
         }
+      },
+      "System.ComponentModel.Annotations": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "dMkqfy2el8A8/I76n2Hi1oBFEbG1SfxD2l5nhwXV3XjlnOmwxJlQbYpJH4W51odnU9sARCSAgv7S3CyAFMkpYg=="
       },
       "System.Console": {
         "type": "Transitive",
@@ -698,6 +731,11 @@
           "Microsoft.NETCore.Targets": "1.1.0"
         }
       },
+      "System.Runtime.CompilerServices.Unsafe": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg=="
+      },
       "System.Runtime.Extensions": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -935,6 +973,23 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
+      "System.Text.Encodings.Web": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ==",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        }
+      },
+      "System.Text.Json": {
+        "type": "Transitive",
+        "resolved": "8.0.2",
+        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0",
+          "System.Text.Encodings.Web": "8.0.0"
+        }
+      },
       "System.Text.RegularExpressions": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -1065,11 +1120,51 @@
           "xunit.extensibility.core": "[2.6.2]"
         }
       },
+      "YamlDotNet": {
+        "type": "Transitive",
+        "resolved": "13.7.1",
+        "contentHash": "X4m1PnFcJwvAj1sCDMntg/eZcX96CJLrWMiYnq41KqhFVZPuw63ZTSxIGqgdCwHWHvCAyTxheELC/VDf1HsU2A=="
+      },
       "cake.gitlab": {
         "type": "Project"
+      },
+      "ngitlab": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "[8.0.0, )",
+          "System.ComponentModel.Annotations": "[5.0.0, )",
+          "System.Text.Json": "[8.0.2, )"
+        }
+      },
+      "ngitlab.mock": {
+        "type": "Project",
+        "dependencies": {
+          "LibGit2Sharp": "[0.30.0, )",
+          "NGitLab": "[1.0.0, )",
+          "YamlDotNet": "[13.7.1, )"
+        }
       }
     },
     "net7.0": {
+      "Cake.Common": {
+        "type": "Direct",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "yvSJkK7rxvm/m1Juvt+b7H2xK8LnYTSdRBeoP6uyXKVQPZPXq0YOgM4Zzh1QwmNprLCpxh2kDRnj0ENuvkNkVw==",
+        "dependencies": {
+          "Cake.Core": "3.2.0"
+        }
+      },
+      "Cake.Core": {
+        "type": "Direct",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "dependencies": {
+          "Microsoft.CSharp": "4.7.0",
+          "Microsoft.Win32.Registry": "5.0.0"
+        }
+      },
       "Cake.Testing": {
         "type": "Direct",
         "requested": "[3.2.0, )",
@@ -1118,14 +1213,23 @@
         "resolved": "2.5.4",
         "contentHash": "YUtEOBdArAISyb1cTWcHc6/bilSDB9q5lc8ughPQP1MqlAKSkxKMBqLQ+tiWMFRBd2o22E59nLD/4V5R3jfZxQ=="
       },
-      "Cake.Core": {
+      "LibGit2Sharp": {
         "type": "Transitive",
-        "resolved": "3.2.0",
-        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "resolved": "0.30.0",
+        "contentHash": "1cBg/7nz6q+yzvComhqQaTS4nbXloLp/x29ZgY/Rr82ohpkuaWT8ZYzsPLFvs1zmCh/4xQbVt5sQxazGblgRig==",
         "dependencies": {
-          "Microsoft.CSharp": "4.7.0",
-          "Microsoft.Win32.Registry": "5.0.0"
+          "LibGit2Sharp.NativeBinaries": "[2.0.322]"
         }
+      },
+      "LibGit2Sharp.NativeBinaries": {
+        "type": "Transitive",
+        "resolved": "2.0.322",
+        "contentHash": "EWQaEevzc8uS1ZGS6T83jqUPBY//2WUSCHwbZHBoHOjlfSehqr30nm/VAhJPzjam/69sv7nlLKVcho9t2XuR/Q=="
+      },
+      "Microsoft.Bcl.AsyncInterfaces": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "3WA9q9yVqJp222P3x1wYIGDAkpjAku0TMUaaQV22g6L67AI0LdOIrVS7Ht2vJfLHGSPVuqN94vIr15qn+HEkHw=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -1398,6 +1502,11 @@
           "System.Threading": "4.3.0",
           "System.Threading.Tasks": "4.3.0"
         }
+      },
+      "System.ComponentModel.Annotations": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "dMkqfy2el8A8/I76n2Hi1oBFEbG1SfxD2l5nhwXV3XjlnOmwxJlQbYpJH4W51odnU9sARCSAgv7S3CyAFMkpYg=="
       },
       "System.Console": {
         "type": "Transitive",
@@ -2003,6 +2112,19 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
+      "System.Text.Encodings.Web": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ=="
+      },
+      "System.Text.Json": {
+        "type": "Transitive",
+        "resolved": "8.0.2",
+        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+        "dependencies": {
+          "System.Text.Encodings.Web": "8.0.0"
+        }
+      },
       "System.Text.RegularExpressions": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -2133,11 +2255,51 @@
           "xunit.extensibility.core": "[2.6.2]"
         }
       },
+      "YamlDotNet": {
+        "type": "Transitive",
+        "resolved": "13.7.1",
+        "contentHash": "X4m1PnFcJwvAj1sCDMntg/eZcX96CJLrWMiYnq41KqhFVZPuw63ZTSxIGqgdCwHWHvCAyTxheELC/VDf1HsU2A=="
+      },
       "cake.gitlab": {
         "type": "Project"
+      },
+      "ngitlab": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "[8.0.0, )",
+          "System.ComponentModel.Annotations": "[5.0.0, )",
+          "System.Text.Json": "[8.0.2, )"
+        }
+      },
+      "ngitlab.mock": {
+        "type": "Project",
+        "dependencies": {
+          "LibGit2Sharp": "[0.30.0, )",
+          "NGitLab": "[1.0.0, )",
+          "YamlDotNet": "[13.7.1, )"
+        }
       }
     },
     "net8.0": {
+      "Cake.Common": {
+        "type": "Direct",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "yvSJkK7rxvm/m1Juvt+b7H2xK8LnYTSdRBeoP6uyXKVQPZPXq0YOgM4Zzh1QwmNprLCpxh2kDRnj0ENuvkNkVw==",
+        "dependencies": {
+          "Cake.Core": "3.2.0"
+        }
+      },
+      "Cake.Core": {
+        "type": "Direct",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "dependencies": {
+          "Microsoft.CSharp": "4.7.0",
+          "Microsoft.Win32.Registry": "5.0.0"
+        }
+      },
       "Cake.Testing": {
         "type": "Direct",
         "requested": "[3.2.0, )",
@@ -2186,14 +2348,23 @@
         "resolved": "2.5.4",
         "contentHash": "YUtEOBdArAISyb1cTWcHc6/bilSDB9q5lc8ughPQP1MqlAKSkxKMBqLQ+tiWMFRBd2o22E59nLD/4V5R3jfZxQ=="
       },
-      "Cake.Core": {
+      "LibGit2Sharp": {
         "type": "Transitive",
-        "resolved": "3.2.0",
-        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "resolved": "0.30.0",
+        "contentHash": "1cBg/7nz6q+yzvComhqQaTS4nbXloLp/x29ZgY/Rr82ohpkuaWT8ZYzsPLFvs1zmCh/4xQbVt5sQxazGblgRig==",
         "dependencies": {
-          "Microsoft.CSharp": "4.7.0",
-          "Microsoft.Win32.Registry": "5.0.0"
+          "LibGit2Sharp.NativeBinaries": "[2.0.322]"
         }
+      },
+      "LibGit2Sharp.NativeBinaries": {
+        "type": "Transitive",
+        "resolved": "2.0.322",
+        "contentHash": "EWQaEevzc8uS1ZGS6T83jqUPBY//2WUSCHwbZHBoHOjlfSehqr30nm/VAhJPzjam/69sv7nlLKVcho9t2XuR/Q=="
+      },
+      "Microsoft.Bcl.AsyncInterfaces": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "3WA9q9yVqJp222P3x1wYIGDAkpjAku0TMUaaQV22g6L67AI0LdOIrVS7Ht2vJfLHGSPVuqN94vIr15qn+HEkHw=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -2466,6 +2637,11 @@
           "System.Threading": "4.3.0",
           "System.Threading.Tasks": "4.3.0"
         }
+      },
+      "System.ComponentModel.Annotations": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "dMkqfy2el8A8/I76n2Hi1oBFEbG1SfxD2l5nhwXV3XjlnOmwxJlQbYpJH4W51odnU9sARCSAgv7S3CyAFMkpYg=="
       },
       "System.Console": {
         "type": "Transitive",
@@ -3071,6 +3247,19 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
+      "System.Text.Encodings.Web": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ=="
+      },
+      "System.Text.Json": {
+        "type": "Transitive",
+        "resolved": "8.0.2",
+        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+        "dependencies": {
+          "System.Text.Encodings.Web": "8.0.0"
+        }
+      },
       "System.Text.RegularExpressions": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -3201,8 +3390,29 @@
           "xunit.extensibility.core": "[2.6.2]"
         }
       },
+      "YamlDotNet": {
+        "type": "Transitive",
+        "resolved": "13.7.1",
+        "contentHash": "X4m1PnFcJwvAj1sCDMntg/eZcX96CJLrWMiYnq41KqhFVZPuw63ZTSxIGqgdCwHWHvCAyTxheELC/VDf1HsU2A=="
+      },
       "cake.gitlab": {
         "type": "Project"
+      },
+      "ngitlab": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "[8.0.0, )",
+          "System.ComponentModel.Annotations": "[5.0.0, )",
+          "System.Text.Json": "[8.0.2, )"
+        }
+      },
+      "ngitlab.mock": {
+        "type": "Project",
+        "dependencies": {
+          "LibGit2Sharp": "[0.30.0, )",
+          "NGitLab": "[1.0.0, )",
+          "YamlDotNet": "[13.7.1, )"
+        }
       }
     }
   }
