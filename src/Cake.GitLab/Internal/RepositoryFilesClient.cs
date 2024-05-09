@@ -7,19 +7,8 @@ using NGitLab;
 
 namespace Cake.GitLab.Internal;
 
-internal class RepositoryFilesClient
+internal sealed class RepositoryFilesClient(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient) : ClientBase(log, fileSystem, gitLabClient)
 {
-    private readonly ICakeLog m_Log;
-    private readonly IFileSystem m_FileSystem;
-    private readonly IGitLabClient m_GitLabClient;
-
-    public RepositoryFilesClient(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient)
-    {
-        m_Log = log ?? throw new ArgumentNullException(nameof(log));
-        m_FileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        m_GitLabClient = gitLabClient ?? throw new ArgumentNullException(nameof(gitLabClient));
-    }
-
     public async Task DownloadFileAsync(string project, string filePath, string @ref, FilePath destination)
     {
         m_Log.Debug($"Downlaoding file from GitLab. Project '{project}', File Path: '{filePath}', Ref: '{@ref}'");

@@ -5,12 +5,10 @@
 
 using System;
 using System.Threading.Tasks;
-using Cake.Common.Diagnostics;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 using Cake.GitLab.Internal;
-using NGitLab;
 
 namespace Cake.GitLab;
 
@@ -50,21 +48,5 @@ public static partial class GitLabAliases
         var filesClient = new RepositoryFilesClient(context.Log, context.FileSystem, gitLabClient);
 
         await filesClient.DownloadFileAsync(project, filePath, @ref, destination);
-    }
-
-
-    private static IGitLabClient GetClient(ICakeContext context, GitLabConnection connection)
-    {
-        context.Debug($"Creating GitLab client for server url '{connection.ServerUrl}'");
-        if (context is IGitlabClientFactory clientFactory)
-        {
-            context.Debug($"Context of type '{context.GetType().FullName}' implements {nameof(IGitlabClientFactory)}. Delegating client creation to context");
-            return clientFactory.GetClient(connection);
-        }
-        else
-        {
-            context.Debug($"Creating default GitLab client {typeof(GitLabClient).FullName}");
-            return new GitLabClient(connection.ServerUrl, connection.AccessToken);
-        }
     }
 }

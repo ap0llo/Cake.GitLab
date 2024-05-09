@@ -8,11 +8,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 namespace Cake.GitLab.Test;
-
-/// <summary>
-/// Tests for <see cref="GitLabAliases"/>
-/// </summary>
-public class GitLabAliasesTest
+public partial class GitLabAliasesTest
 {
     public class GitLabRepositoryDownloadFileAsync(ITestOutputHelper testOutputHelper)
     {
