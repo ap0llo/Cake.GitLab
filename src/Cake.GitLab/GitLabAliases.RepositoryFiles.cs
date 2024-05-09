@@ -9,6 +9,7 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 using Cake.GitLab.Internal;
+using NGitLab.Models;
 
 namespace Cake.GitLab;
 
@@ -21,19 +22,15 @@ public static partial class GitLabAliases
     /// </summary>
     /// <param name="context">The current Cake context</param>
     /// <param name="connection">The connection specifing the GitLab server to connect to</param>
-    /// <param name="project">The path (name and namespace) of the project to get the file from</param>
+    /// <param name="project">The path (name and namespace) or id of the project to get the file from</param>
     /// <param name="filePath">The path of the file to download (as relative path within the repository)</param>
     /// <param name="ref">The name of the branch, a git tag or commit specifying the version of the file to get</param>
     /// <param name="destination">The path to save the file's content to.</param>
     [CakeMethodAlias]
-    //TODO: allow both project id and path
-    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, GitLabConnection connection, string project, string filePath, string @ref, FilePath destination)
+    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, string filePath, string @ref, FilePath destination)
     {
         if (connection is null)
             throw new ArgumentNullException(nameof(connection));
-
-        if (String.IsNullOrWhiteSpace(project))
-            throw new ArgumentException("Value must not be null or whitespace", nameof(project));
 
         if (String.IsNullOrWhiteSpace(filePath))
             throw new ArgumentException("Value must not be null or whitespace", nameof(filePath));

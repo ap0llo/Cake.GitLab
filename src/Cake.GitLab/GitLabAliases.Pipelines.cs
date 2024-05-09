@@ -19,17 +19,13 @@ public static partial class GitLabAliases
     /// </summary>
     /// <param name="context">The current Cake context</param>
     /// <param name="connection">The connection specifing the GitLab server to connect to</param>
-    /// <param name="project">The path (name and namespace) of the project to get the pipeline data for.</param>
+    /// <param name="project">The path (name and namespace) or id of the project to get the pipeline data for.</param>
     /// <param name="pipelineId">The id of the pipeline to load data for.</param>    
     [CakeMethodAlias]
-    //TODO: allow both project id and path
-    public static async Task<Pipeline> GitLabGetPipeline(this ICakeContext context, GitLabConnection connection, string project, int pipelineId)
+    public static async Task<Pipeline> GitLabGetPipeline(this ICakeContext context, GitLabConnection connection, ProjectId project, int pipelineId)
     {
         if (connection is null)
             throw new ArgumentNullException(nameof(connection));
-
-        if (String.IsNullOrWhiteSpace(project))
-            throw new ArgumentException("Value must not be null or whitespace", nameof(project));
 
         var gitLabClient = GetClient(context, connection);
         var pipelinesClient = new PipelinesClient(context.Log, context.FileSystem, gitLabClient);

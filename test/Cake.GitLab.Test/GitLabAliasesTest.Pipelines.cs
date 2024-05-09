@@ -2,6 +2,7 @@
 using Cake.Core;
 using NGitLab;
 using NGitLab.Mock.Config;
+using NGitLab.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,6 +15,7 @@ public partial class GitLabAliasesTest
         private const string s_GroupName = "group1";
         private const string s_ProjectName = "project1";
         private const string s_ProjectPath = $"{s_GroupName}/{s_ProjectName}";
+        private const long s_ProjectId = 42;
         private const int s_PipelineId = 23;
 
         private readonly GitLabConfig m_GitLabConfig =
@@ -21,7 +23,8 @@ public partial class GitLabAliasesTest
                 .WithUser("user1", isDefault: true)
                 .WithGroup(s_GroupName)
                 .WithProjectOfFullPath(
-                    s_ProjectPath,
+                    fullPath: s_ProjectPath,
+                    id: (int)s_ProjectId,
                     configure: project =>
                         project
                             .WithCommit("Commit1", configure: commit => commit.Alias = "commit1")
@@ -33,10 +36,16 @@ public partial class GitLabAliasesTest
                                     .WithJob("Job2", status: JobStatus.Success);
                             }));
 
-        [Fact]
-        public async Task Gets_expected_pipeline_data()
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Gets_expected_pipeline_data(object projectIdOrPath)
         {
-            // ARRANGE            
+            // ARRANGE
+            ProjectId projectId = projectIdOrPath is string
+                ? (string)projectIdOrPath
+                : (long)projectIdOrPath;
+
             var server = m_GitLabConfig.BuildServer();
 
             var context = new FakeContext(testOutputHelper);
@@ -45,7 +54,7 @@ public partial class GitLabAliasesTest
             var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
 
             // ACT
-            var pipeline = await context.GitLabGetPipeline(connection, s_ProjectPath, s_PipelineId);
+            var pipeline = await context.GitLabGetPipeline(connection, projectId, s_PipelineId);
 
             // ASSERT
             Assert.NotNull(pipeline);

@@ -9,10 +9,9 @@ namespace Cake.GitLab.Internal;
 
 internal sealed class PipelinesClient(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient) : ClientBase(log, fileSystem, gitLabClient)
 {
-    //TODO: Wrap the data in a custom model or continue using the NGitLab types?
-    public async Task<Pipeline> GetPipelineAsync(string project, int pipelineId)
+    public async Task<Pipeline> GetPipelineAsync(ProjectId project, int pipelineId)
     {
-        m_Log.Debug($"Getting pipeline from GitLab. Project '{project}', Pipeline Id: '{pipelineId}'");
+        m_Log.Debug($"Getting pipeline from GitLab. Project {project}, Pipeline Id: {pipelineId}");
 
         var pipelinesClient = m_GitLabClient.GetPipelines(project);
         try
@@ -22,7 +21,7 @@ internal sealed class PipelinesClient(ICakeLog log, IFileSystem fileSystem, IGit
         }
         catch (GitLabException ex)
         {
-            throw new CakeException($"Error while getting pipeline from GitLab: {ex.Message}", ex);
+            throw new CakeException($"Error while getting pipeline {pipelineId} from GitLab project {project}: {ex.Message}", ex);
         }
     }
 }

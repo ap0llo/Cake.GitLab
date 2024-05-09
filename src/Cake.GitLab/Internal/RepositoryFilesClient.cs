@@ -4,24 +4,25 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NGitLab;
+using NGitLab.Models;
 
 namespace Cake.GitLab.Internal;
 
 internal sealed class RepositoryFilesClient(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient) : ClientBase(log, fileSystem, gitLabClient)
 {
-    public async Task DownloadFileAsync(string project, string filePath, string @ref, FilePath destination)
+    public async Task DownloadFileAsync(ProjectId project, string filePath, string @ref, FilePath destination)
     {
-        m_Log.Debug($"Downlaoding file from GitLab. Project '{project}', File Path: '{filePath}', Ref: '{@ref}'");
+        m_Log.Debug($"Downlaoding file from GitLab. Project {project}, File Path: {filePath}, Ref: {@ref}");
 
         var repo = m_GitLabClient.GetRepository(project);
-        NGitLab.Models.FileData fileData;
+        FileData fileData;
         try
         {
             fileData = await repo.Files.GetAsync(filePath, @ref);
         }
         catch (GitLabException ex)
         {
-            throw new CakeException($"Error while downloading file from GitLab: {ex.Message}", ex);
+            throw new CakeException($"Error while downloading file {filePath} at ref {@ref} from GitLab project {project}: {ex.Message}", ex);
         }
 
         m_Log.Debug($"Received response from GitLab");

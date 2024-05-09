@@ -4,6 +4,7 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
 using NGitLab.Mock.Config;
+using NGitLab.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,6 +16,7 @@ public partial class GitLabAliasesTest
         private const string s_GroupName = "group1";
         private const string s_ProjectName = "project1";
         private const string s_ProjectPath = $"{s_GroupName}/{s_ProjectName}";
+        private const long s_ProjectId = 42;
         private const string s_FileName = "file1.txt";
         private const string s_FileContent = "Hello World";
         private readonly GitLabConfig m_GitLabConfig =
@@ -22,15 +24,23 @@ public partial class GitLabAliasesTest
                 .WithUser("user1", isDefault: true)
                 .WithGroup(s_GroupName)
                 .WithProjectOfFullPath(
-                    s_ProjectPath,
+                    fullPath: s_ProjectPath,
+                    id: (int)s_ProjectId,
                     configure: project => project.WithCommit(
                         configure: commit => commit.WithFile(s_FileName, s_FileContent)
                 ));
 
-        [Fact]
-        public async Task Creates_expected_file()
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Creates_expected_file(object projectIdOrPath)
         {
-            // ARRANGE            
+            // ARRANGE
+            ProjectId projectId = projectIdOrPath is string
+                ? (string)projectIdOrPath
+                : (long)projectIdOrPath;
+
             var server = m_GitLabConfig.BuildServer();
 
             var context = new FakeContext(testOutputHelper);
@@ -41,7 +51,7 @@ public partial class GitLabAliasesTest
             var outputPath = (FilePath)"file1.txt";
 
             // ACT
-            await context.GitLabRepositoryDownloadFileAsync(connection, s_ProjectPath, s_FileName, "main", outputPath);
+            await context.GitLabRepositoryDownloadFileAsync(connection, projectId, s_FileName, "main", outputPath);
 
             // ASSERT
             var outFile = context.FileSystem.GetFile(outputPath);
