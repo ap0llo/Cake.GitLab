@@ -10,7 +10,7 @@ namespace Cake.GitLab.Test;
 
 public partial class GitLabAliasesTest
 {
-    public class GitLabGetPipeline(ITestOutputHelper testOutputHelper)
+    public class GitLabGetPipelineAsync(ITestOutputHelper testOutputHelper)
     {
         private const string s_GroupName = "group1";
         private const string s_ProjectName = "project1";
@@ -54,7 +54,7 @@ public partial class GitLabAliasesTest
             var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
 
             // ACT
-            var pipeline = await context.GitLabGetPipeline(connection, projectId, s_PipelineId);
+            var pipeline = await context.GitLabGetPipelineAsync(connection, projectId, s_PipelineId);
 
             // ASSERT
             Assert.NotNull(pipeline);
@@ -73,7 +73,7 @@ public partial class GitLabAliasesTest
             var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
 
             // ACT            
-            var ex = await Record.ExceptionAsync(async () => await context.GitLabGetPipeline(connection, s_ProjectPath, s_PipelineId + 10));
+            var ex = await Record.ExceptionAsync(async () => await context.GitLabGetPipelineAsync(connection, s_ProjectPath, s_PipelineId + 10));
 
             // ASSERT
             Assert.IsType<CakeException>(ex);

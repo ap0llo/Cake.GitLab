@@ -22,7 +22,7 @@ public static partial class GitLabAliases
     /// <param name="project">The path (name and namespace) or id of the project to get the pipeline data for.</param>
     /// <param name="pipelineId">The id of the pipeline to load data for.</param>    
     [CakeMethodAlias]
-    public static async Task<Pipeline> GitLabGetPipeline(this ICakeContext context, GitLabConnection connection, ProjectId project, int pipelineId)
+    public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, int pipelineId)
     {
         if (connection is null)
             throw new ArgumentNullException(nameof(connection));
