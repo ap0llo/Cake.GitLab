@@ -8,19 +8,35 @@ using NGitLab.Models;
 
 namespace Cake.GitLab;
 
-[CakeAliasCategory("GitLab")]
-[CakeNamespaceImport("Cake.GitLab")]
 public static partial class GitLabAliases
 {
     /// <summary>
     /// Downloads a file from a GitLab-hosted repository
     /// </summary>
-    /// <param name="context">The current Cake context</param>
-    /// <param name="connection">The connection specifing the GitLab server to connect to</param>
-    /// <param name="project">The path (name and namespace) or id of the project to get the file from</param>
-    /// <param name="filePath">The path of the file to download (as relative path within the repository)</param>
-    /// <param name="ref">The name of the branch, a git tag or commit specifying the version of the file to get</param>
+    /// <param name="context">The current Cake context.</param>
+    /// <param name="connection">The connection specifing the GitLab server to connect to.</param>
+    /// <param name="project">The path (name and namespace) or id of the project to get the file from.</param>
+    /// <param name="filePath">The path of the file to download (as relative path within the repository)-</param>
+    /// <param name="ref">The name of the branch, a git tag or commit specifying the version of the file to get.</param>
     /// <param name="destination">The path to save the file's content to.</param>
+    /// <example language="cs"><![CDATA[
+    /// [TaskName("Download-File")]   
+    /// public class DownloadRepositoryFileTask : AsyncFrostingTask
+    ///  {
+    ///     public override async Task RunAsync(ICakeContext context)
+    ///     {
+    ///         var connection = new GitLabConnection("https://gitlab.com", "ACCESSTOKEN"),
+    ///         await context.GitLabRepositoryDownloadFileAsync(
+    ///             connection,
+    ///             "owner/repository",
+    ///             "README.md",
+    ///             "main",
+    ///             "downloaded/README.md"
+    ///         );
+    ///     }
+    /// }
+    /// ]]>
+    /// </example>
     [CakeMethodAlias]
     public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, string filePath, string @ref, FilePath destination)
     {

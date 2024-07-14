@@ -98,7 +98,7 @@ public partial class GitLabAliasesTest
 
             // ASSERT
             Assert.IsType<CakeException>(ex);
-            Assert.Equal("Error while downloading file from GitLab: File not found", ex.Message);
+            Assert.Equal("Failed to download does-not-exist at ref main from GitLab project group1/project1: File not found", ex.Message);
         }
     }
 }

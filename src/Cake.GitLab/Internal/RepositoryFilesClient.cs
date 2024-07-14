@@ -12,7 +12,7 @@ internal sealed class RepositoryFilesClient(ICakeLog log, IFileSystem fileSystem
 {
     public async Task DownloadFileAsync(ProjectId project, string filePath, string @ref, FilePath destination)
     {
-        m_Log.Debug($"Downlaoding file from GitLab. Project {project}, File Path: {filePath}, Ref: {@ref}");
+        m_Log.Verbose($"Downloading {filePath} from GitLab project {project}");
 
         var repo = m_GitLabClient.GetRepository(project);
         FileData fileData;
@@ -22,7 +22,7 @@ internal sealed class RepositoryFilesClient(ICakeLog log, IFileSystem fileSystem
         }
         catch (GitLabException ex)
         {
-            throw new CakeException($"Error while downloading file {filePath} at ref {@ref} from GitLab project {project}: {ex.Message}", ex);
+            throw new CakeException($"Failed to download {filePath} at ref {@ref} from GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
         }
 
         m_Log.Debug($"Received response from GitLab");
