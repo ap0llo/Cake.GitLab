@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
@@ -11,16 +13,17 @@ using Xunit.Abstractions;
 namespace Cake.GitLab.Test;
 public partial class GitLabAliasesTest
 {
+    private const string s_GroupName = "group1";
+    private const string s_ProjectName = "project1";
+    private const string s_ProjectPath = $"{s_GroupName}/{s_ProjectName}";
+    private const long s_ProjectId = 42;
+
     public class GitLabRepositoryDownloadFileAsync(ITestOutputHelper testOutputHelper)
     {
-        private const string s_GroupName = "group1";
-        private const string s_ProjectName = "project1";
-        private const string s_ProjectPath = $"{s_GroupName}/{s_ProjectName}";
-        private const long s_ProjectId = 42;
         private const string s_FileName = "file1.txt";
         private const string s_FileContent = "Hello World";
         private readonly GitLabConfig m_GitLabConfig =
-            new GitLabConfig()
+            new GitLabConfig() { Url = "https://example.gitlab.com" }
                 .WithUser("user1", isDefault: true)
                 .WithGroup(s_GroupName)
                 .WithProjectOfFullPath(
@@ -99,6 +102,57 @@ public partial class GitLabAliasesTest
             // ASSERT
             Assert.IsType<CakeException>(ex);
             Assert.Equal("Failed to download does-not-exist at ref main from GitLab project group1/project1: File not found", ex.Message);
+        }
+    }
+
+
+    public class GitLabRepositoryGetBranchesAsync(ITestOutputHelper testOutputHelper)
+    {
+        private readonly GitLabConfig m_GitLabConfig =
+            new GitLabConfig() { Url = "https://example.gitlab.com" }
+                .WithUser("user1", isDefault: true)
+                .WithGroup(s_GroupName)
+                .WithProjectOfFullPath(
+                    fullPath: s_ProjectPath,
+                    id: (int)s_ProjectId
+                );
+
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public void Returns_expected_branches(object projectIdOrPath)
+        {
+            // ARRANGE
+            ProjectId projectId = projectIdOrPath is string
+                ? (string)projectIdOrPath
+                : (long)projectIdOrPath;
+
+            m_GitLabConfig.Projects.Single()
+                .Configure(project =>
+                {
+                    project.DefaultBranch = "main";
+                    project.WithCommit("Intial commit");
+                });
+
+            var server = m_GitLabConfig.BuildServer();
+
+            server.AllProjects.Single().Repository.CreateBranch("some-other-branch");
+
+            var context = new FakeContext(testOutputHelper);
+            context.AddServer(server);
+
+            var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
+
+            // ACT
+            var branches = context.GitLabRepositoryGetBranches(connection, projectId);
+
+            // ASSERT
+            Assert.Collection(
+                branches.OrderBy(x => x.Name, StringComparer.Ordinal),
+                branch => Assert.Equal("main", branch.Name),
+                branch => Assert.Equal("some-other-branch", branch.Name)
+            );
         }
     }
 }

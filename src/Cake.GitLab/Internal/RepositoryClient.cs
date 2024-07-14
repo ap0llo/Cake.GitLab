@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -8,7 +10,7 @@ using NGitLab.Models;
 
 namespace Cake.GitLab.Internal;
 
-internal sealed class RepositoryFilesClient(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient) : ClientBase(log, fileSystem, gitLabClient)
+internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient) : ClientBase(log, fileSystem, gitLabClient)
 {
     public async Task DownloadFileAsync(ProjectId project, string filePath, string @ref, FilePath destination)
     {
@@ -38,5 +40,23 @@ internal sealed class RepositoryFilesClient(ICakeLog log, IFileSystem fileSystem
         m_FileSystem.GetDirectory(destination.GetDirectory()).Create();
         using var outStream = m_FileSystem.GetFile(destination).OpenWrite();
         outStream.Write(Convert.FromBase64String(fileData.Content));
+    }
+
+    public IReadOnlyCollection<Branch> GetBranches(ProjectId project)
+    {
+        m_Log.Debug($"Getting branches for GitLab project {project}");
+
+        var repo = m_GitLabClient.GetRepository(project);
+        Branch[] branches;
+        try
+        {
+            branches = repo.Branches.All.ToArray();
+        }
+        catch (GitLabException ex)
+        {
+            throw new CakeException($"Failed to get branches for from GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
+        }
+
+        return branches;
     }
 }
