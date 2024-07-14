@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NGitLab", "deps\NGitLab\NGi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NGitLab.Mock", "deps\NGitLab\NGitLab.Mock\NGitLab.Mock.csproj", "{910C507D-01AA-4DF0-829D-C7CD20CBFB08}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.GitLab.Generator", "build\Cake.GitLab.Generator\Cake.GitLab.Generator.csproj", "{68BB4B53-940E-4D90-8D1D-A90EA09A21F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{910C507D-01AA-4DF0-829D-C7CD20CBFB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{910C507D-01AA-4DF0-829D-C7CD20CBFB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{910C507D-01AA-4DF0-829D-C7CD20CBFB08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68BB4B53-940E-4D90-8D1D-A90EA09A21F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BB4B53-940E-4D90-8D1D-A90EA09A21F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BB4B53-940E-4D90-8D1D-A90EA09A21F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BB4B53-940E-4D90-8D1D-A90EA09A21F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,5 +68,9 @@ Global
 		{D0B3BD5A-6424-4AAE-B551-0E16A9B4EA8C} = {D94C7483-C80A-4B55-9A3C-0CA7AECD469B}
 		{C6EF77DC-63E3-48D0-A8C8-5AFAC0317F75} = {955FA4C1-0B2E-496F-AA74-F0F75351A860}
 		{910C507D-01AA-4DF0-829D-C7CD20CBFB08} = {955FA4C1-0B2E-496F-AA74-F0F75351A860}
+		{68BB4B53-940E-4D90-8D1D-A90EA09A21F1} = {85265202-82C0-4C3F-BA65-EE9182FCE1F0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A24558A9-BA58-4B2C-BE43-CD75B6A47195}
 	EndGlobalSection
 EndGlobal
