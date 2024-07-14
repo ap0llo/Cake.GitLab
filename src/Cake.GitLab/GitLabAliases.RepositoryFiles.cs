@@ -1,9 +1,4 @@
-﻿// Disable nullable reference methods for the alias method, since
-// the Cake.Scripting runner is currently not compatible with aliases that contains nullabilty annotations
-// See https://github.com/cake-build/cake/issues/4197
-#nullable disable
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Annotations;
