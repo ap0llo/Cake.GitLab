@@ -77,7 +77,7 @@ public partial class GitLabAliasesTest
 
             // ASSERT
             Assert.IsType<CakeException>(ex);
-            Assert.StartsWith("Error while getting pipeline from GitLab:", ex.Message);
+            Assert.StartsWith($"Error while getting pipeline {s_PipelineId + 10} from GitLab project {s_ProjectPath}:", ex.Message);
         }
     }
 }
