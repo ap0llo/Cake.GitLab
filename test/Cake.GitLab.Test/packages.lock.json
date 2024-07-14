@@ -4,18 +4,18 @@
     "net6.0": {
       "Cake.Common": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "yvSJkK7rxvm/m1Juvt+b7H2xK8LnYTSdRBeoP6uyXKVQPZPXq0YOgM4Zzh1QwmNprLCpxh2kDRnj0ENuvkNkVw==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "8yCfEyAFfyzfUQTEfhXQgWq6JubdOrLBoYYmWvM7sTKjvH4kW4ffJthvBCl+JEgSCAtK4WbsOaMR5S8VLyUrxw==",
         "dependencies": {
-          "Cake.Core": "3.2.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "Cake.Core": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "co363RHz4eAU+5jCYiBZziTd8V1KlVU/0xOmI441NHEYa7ybsEHzTUIeLT56GHvgqqrIX4LG6HcZtjzvCMdk2g==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.Win32.Registry": "5.0.0"
@@ -23,11 +23,11 @@
       },
       "Cake.Testing": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "A/zx2mRaQz5NE+se1jc4WYbF/p5zbawl92FW5pXTtc9Uc9D4fPc6lvsl3W5Xwsyj+Hj3k3Bu9JC2Xr+Xko3msA==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "hs7m+9zpKIs3jUcm6apANdoey96+MlwCrBeRIaHerY8IvxUTDbRpTWYGqlyMe7eX8RIjWorAZEN54C24NCIdZw==",
         "dependencies": {
-          "Cake.Core": "3.2.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "coverlet.collector": {
@@ -1148,18 +1148,18 @@
     "net7.0": {
       "Cake.Common": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "yvSJkK7rxvm/m1Juvt+b7H2xK8LnYTSdRBeoP6uyXKVQPZPXq0YOgM4Zzh1QwmNprLCpxh2kDRnj0ENuvkNkVw==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "8yCfEyAFfyzfUQTEfhXQgWq6JubdOrLBoYYmWvM7sTKjvH4kW4ffJthvBCl+JEgSCAtK4WbsOaMR5S8VLyUrxw==",
         "dependencies": {
-          "Cake.Core": "3.2.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "Cake.Core": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "co363RHz4eAU+5jCYiBZziTd8V1KlVU/0xOmI441NHEYa7ybsEHzTUIeLT56GHvgqqrIX4LG6HcZtjzvCMdk2g==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.Win32.Registry": "5.0.0"
@@ -1167,11 +1167,11 @@
       },
       "Cake.Testing": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "A/zx2mRaQz5NE+se1jc4WYbF/p5zbawl92FW5pXTtc9Uc9D4fPc6lvsl3W5Xwsyj+Hj3k3Bu9JC2Xr+Xko3msA==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "hs7m+9zpKIs3jUcm6apANdoey96+MlwCrBeRIaHerY8IvxUTDbRpTWYGqlyMe7eX8RIjWorAZEN54C24NCIdZw==",
         "dependencies": {
-          "Cake.Core": "3.2.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "coverlet.collector": {
@@ -2283,18 +2283,18 @@
     "net8.0": {
       "Cake.Common": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "yvSJkK7rxvm/m1Juvt+b7H2xK8LnYTSdRBeoP6uyXKVQPZPXq0YOgM4Zzh1QwmNprLCpxh2kDRnj0ENuvkNkVw==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "8yCfEyAFfyzfUQTEfhXQgWq6JubdOrLBoYYmWvM7sTKjvH4kW4ffJthvBCl+JEgSCAtK4WbsOaMR5S8VLyUrxw==",
         "dependencies": {
-          "Cake.Core": "3.2.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "Cake.Core": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "tN4iFgwS2Y7VgnXJZ5mtB0CElCCADQDtiNkJRZzgykc61dLcJ3dyuXnjc7jO3KPQs2j+0IbciH1S8tR6FVzc2g==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "co363RHz4eAU+5jCYiBZziTd8V1KlVU/0xOmI441NHEYa7ybsEHzTUIeLT56GHvgqqrIX4LG6HcZtjzvCMdk2g==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.Win32.Registry": "5.0.0"
@@ -2302,11 +2302,11 @@
       },
       "Cake.Testing": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "A/zx2mRaQz5NE+se1jc4WYbF/p5zbawl92FW5pXTtc9Uc9D4fPc6lvsl3W5Xwsyj+Hj3k3Bu9JC2Xr+Xko3msA==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "hs7m+9zpKIs3jUcm6apANdoey96+MlwCrBeRIaHerY8IvxUTDbRpTWYGqlyMe7eX8RIjWorAZEN54C24NCIdZw==",
         "dependencies": {
-          "Cake.Core": "3.2.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "coverlet.collector": {

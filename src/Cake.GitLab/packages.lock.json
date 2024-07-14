@@ -4,18 +4,18 @@
     "net6.0": {
       "Cake.Common": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "gs4/iOhCQTGH39TiYElQOt/VZx4E1Vq/IW2ePsxw5xQz5GKSzwv9dfqG7giHic9Wst7qZngFN7mzFCIvuG7e/Q==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "8yCfEyAFfyzfUQTEfhXQgWq6JubdOrLBoYYmWvM7sTKjvH4kW4ffJthvBCl+JEgSCAtK4WbsOaMR5S8VLyUrxw==",
         "dependencies": {
-          "Cake.Core": "3.0.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "Cake.Core": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "d1/NImObNEiTe1BLX16Rfi0KK3oCVIMvLbFzEy8xlTh9wDCI/yTDwLZ8YgjhOG32MpBm0WbVDsJklK6nFvBcQg==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "co363RHz4eAU+5jCYiBZziTd8V1KlVU/0xOmI441NHEYa7ybsEHzTUIeLT56GHvgqqrIX4LG6HcZtjzvCMdk2g==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.Win32.Registry": "5.0.0"
@@ -91,8 +91,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "8.0.2",
-        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+        "resolved": "8.0.4",
+        "contentHash": "bAkhgDJ88XTsqczoxEMliSrpijKZHhbJQldhAmObj/RbrN3sU5dcokuXmWJWsdQAhiMJ9bTayWsL1C9fbbCRhw==",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
           "System.Text.Encodings.Web": "8.0.0"
@@ -103,25 +103,25 @@
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "[8.0.0, )",
           "System.ComponentModel.Annotations": "[5.0.0, )",
-          "System.Text.Json": "[8.0.2, )"
+          "System.Text.Json": "[8.0.4, )"
         }
       }
     },
     "net7.0": {
       "Cake.Common": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "gs4/iOhCQTGH39TiYElQOt/VZx4E1Vq/IW2ePsxw5xQz5GKSzwv9dfqG7giHic9Wst7qZngFN7mzFCIvuG7e/Q==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "8yCfEyAFfyzfUQTEfhXQgWq6JubdOrLBoYYmWvM7sTKjvH4kW4ffJthvBCl+JEgSCAtK4WbsOaMR5S8VLyUrxw==",
         "dependencies": {
-          "Cake.Core": "3.0.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "Cake.Core": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "d1/NImObNEiTe1BLX16Rfi0KK3oCVIMvLbFzEy8xlTh9wDCI/yTDwLZ8YgjhOG32MpBm0WbVDsJklK6nFvBcQg==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "co363RHz4eAU+5jCYiBZziTd8V1KlVU/0xOmI441NHEYa7ybsEHzTUIeLT56GHvgqqrIX4LG6HcZtjzvCMdk2g==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.Win32.Registry": "5.0.0"
@@ -189,8 +189,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "8.0.2",
-        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+        "resolved": "8.0.4",
+        "contentHash": "bAkhgDJ88XTsqczoxEMliSrpijKZHhbJQldhAmObj/RbrN3sU5dcokuXmWJWsdQAhiMJ9bTayWsL1C9fbbCRhw==",
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
         }
@@ -200,25 +200,25 @@
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "[8.0.0, )",
           "System.ComponentModel.Annotations": "[5.0.0, )",
-          "System.Text.Json": "[8.0.2, )"
+          "System.Text.Json": "[8.0.4, )"
         }
       }
     },
     "net8.0": {
       "Cake.Common": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "gs4/iOhCQTGH39TiYElQOt/VZx4E1Vq/IW2ePsxw5xQz5GKSzwv9dfqG7giHic9Wst7qZngFN7mzFCIvuG7e/Q==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "8yCfEyAFfyzfUQTEfhXQgWq6JubdOrLBoYYmWvM7sTKjvH4kW4ffJthvBCl+JEgSCAtK4WbsOaMR5S8VLyUrxw==",
         "dependencies": {
-          "Cake.Core": "3.0.0"
+          "Cake.Core": "4.0.0"
         }
       },
       "Cake.Core": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "d1/NImObNEiTe1BLX16Rfi0KK3oCVIMvLbFzEy8xlTh9wDCI/yTDwLZ8YgjhOG32MpBm0WbVDsJklK6nFvBcQg==",
+        "requested": "[4.0.0, )",
+        "resolved": "4.0.0",
+        "contentHash": "co363RHz4eAU+5jCYiBZziTd8V1KlVU/0xOmI441NHEYa7ybsEHzTUIeLT56GHvgqqrIX4LG6HcZtjzvCMdk2g==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.Win32.Registry": "5.0.0"
@@ -286,8 +286,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "8.0.2",
-        "contentHash": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+        "resolved": "8.0.4",
+        "contentHash": "bAkhgDJ88XTsqczoxEMliSrpijKZHhbJQldhAmObj/RbrN3sU5dcokuXmWJWsdQAhiMJ9bTayWsL1C9fbbCRhw==",
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
         }
@@ -297,7 +297,7 @@
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "[8.0.0, )",
           "System.ComponentModel.Annotations": "[5.0.0, )",
-          "System.Text.Json": "[8.0.2, )"
+          "System.Text.Json": "[8.0.4, )"
         }
       }
     }
