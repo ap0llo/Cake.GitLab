@@ -45,6 +45,11 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         /// </summary>
         public INamedTypeSymbol SystemThreadingTasksTask { get; set; } = null!;
 
+        /// <summary>
+        /// Gets the symbol for the <c>System.String</c> type
+        /// </summary>
+        public INamedTypeSymbol SystemString { get; set; } = null!;
+
         public static Symbols? TryGet(GeneratorExecutionContext generatorContext)
         {
             // Find required type symbols
@@ -52,7 +57,9 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabConnection", out var gitlabConnectionSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.IGitLabConnectionCakeContext", out var gitlabConnectionCakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.ICakeContext", out var cakeContextSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol))
+               !TryGetSymbolByMetadataName(generatorContext, "System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "System.String", out var systemStringSymbol)
+            )
             {
                 return null;
             }
@@ -63,7 +70,8 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                 GitLabConnection = gitlabConnectionSymbol!,
                 GitLabConnectionCakeContext = gitlabConnectionCakeContextSymbol!,
                 CakeContext = cakeContextSymbol!,
-                SystemThreadingTasksTask = systemThreadingTasksTaskSymbol!
+                SystemThreadingTasksTask = systemThreadingTasksTaskSymbol!,
+                SystemString = systemStringSymbol!
             };
         }
 
@@ -232,9 +240,12 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             .Where(method =>
                 method.DeclaredAccessibility == Accessibility.Public &&
                 method.IsStatic &&
-                method.Parameters.Length >= 2 &&
+                method.Parameters.Length >= 3 &&
                 SymbolEqualityComparer.Default.Equals(method.Parameters[0].Type, context.Symbols.CakeContext) &&
-                SymbolEqualityComparer.Default.Equals(method.Parameters[1].Type, context.Symbols.GitLabConnection)
+                SymbolEqualityComparer.Default.Equals(method.Parameters[1].Type, context.Symbols.SystemString) &&
+                method.Parameters[1].Name == "serverUrl" &&
+                SymbolEqualityComparer.Default.Equals(method.Parameters[2].Type, context.Symbols.SystemString) &&
+                method.Parameters[2].Name == "accessToken"
             );
 
         if (!aliases.Any())
@@ -289,7 +300,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                 context.Output.Append(" context");
 
                 // Add remaining parameters unchanged
-                foreach (var parameter in alias.Parameters.Skip(2))
+                foreach (var parameter in alias.Parameters.Skip(3))
                 {
                     context.Output.Append(", ");
                     context.Output.Append("global::");
@@ -323,11 +334,11 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                     context.Output.Append(".");
                     context.Output.Append(alias.Name);
 
-                    // Pass first two parameters (context and the connection provided by the context)
-                    context.Output.Append("(context, context.Connection");
+                    // Pass first two parameters (context and the connection details provided by the context)
+                    context.Output.Append("(context, context.Connection.ServerUrl, context.Connection.AccessToken");
 
                     // Pass remaining parameter
-                    foreach (var parameter in alias.Parameters.Skip(2))
+                    foreach (var parameter in alias.Parameters.Skip(3))
                     {
                         context.Output.Append(", ");
                         context.Output.Append("@");
