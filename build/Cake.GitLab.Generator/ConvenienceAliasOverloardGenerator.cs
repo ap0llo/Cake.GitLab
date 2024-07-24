@@ -292,12 +292,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 
     private static void GenerateOverloadForGitLabConnectionCakeContext(Context context, IMethodSymbol alias)
     {
-        // TODO: Generate /// documentation comments based on documentation of original alias
-
-        context.Output.BeginLine();
-        context.Output.Append("[global::Cake.Core.Annotations.CakeMethodAlias]");
-        context.Output.EndLine();
-
+        // TODO: Generate /// documentation comments based on documentation of original alias        
         context.Output.BeginLine();
         context.Output.Append("public static ");
 
