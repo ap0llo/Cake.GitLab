@@ -15,5 +15,5 @@ namespace Cake.GitLab;
 /// </remarks>
 public interface IGitlabClientFactory
 {
-    IGitLabClient GetClient(GitLabConnection connection);
+    IGitLabClient GetClient(string serverUrl, string accessToken);
 }

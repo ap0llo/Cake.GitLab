@@ -63,16 +63,16 @@ public class FakeContext : ICakeContext, IGitlabClientFactory
         FileSystem.CreateDirectory(Environment.WorkingDirectory);
     }
 
-    public IGitLabClient GetClient(GitLabConnection connection)
+    public IGitLabClient GetClient(string serverUrl, string accessToken)
     {
-        if (m_GitLabServers.TryGetValue(connection.ServerUrl, out var server))
+        if (m_GitLabServers.TryGetValue(serverUrl, out var server))
         {
             return server.CreateClient(server.Users.First());
 
         }
         else
         {
-            throw new ArgumentException($"No server for connection {connection.ServerUrl} configured");
+            throw new ArgumentException($"No server for connection {serverUrl} configured");
         }
     }
 

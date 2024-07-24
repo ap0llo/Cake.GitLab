@@ -51,10 +51,8 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
-
             // ACT
-            var pipeline = await context.GitLabGetPipelineAsync(connection, projectId, s_PipelineId);
+            var pipeline = await context.GitLabGetPipelineAsync(server.Url.ToString(), "SomeAccessToken", projectId, s_PipelineId);
 
             // ASSERT
             Assert.NotNull(pipeline);
@@ -70,10 +68,8 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
-
             // ACT            
-            var ex = await Record.ExceptionAsync(async () => await context.GitLabGetPipelineAsync(connection, s_ProjectPath, s_PipelineId + 10));
+            var ex = await Record.ExceptionAsync(async () => await context.GitLabGetPipelineAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, s_PipelineId + 10));
 
             // ASSERT
             Assert.IsType<CakeException>(ex);

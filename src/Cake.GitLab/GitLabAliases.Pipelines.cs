@@ -13,18 +13,24 @@ public static partial class GitLabAliases
     /// Gets data about the specified pipeline
     /// </summary>
     /// <param name="context">The current Cake context</param>
-    /// <param name="connection">The connection specifing the GitLab server to connect to</param>
+    /// <param name="serverUrl">The url of the GitLab server</param>
+    /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
     /// <param name="project">The path (name and namespace) or id of the project to get the pipeline data for.</param>
     /// <param name="pipelineId">The id of the pipeline to load data for.</param>    
     [CakeMethodAlias]
+    public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId)
+    {
+        var gitLabClient = GetClient(context, serverUrl, accessToken);
+        var pipelinesClient = new PipelinesClient(context.Log, context.FileSystem, gitLabClient);
+
+        return await pipelinesClient.GetPipelineAsync(project, pipelineId);
+    }
+
     public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, int pipelineId)
     {
         if (connection is null)
             throw new ArgumentNullException(nameof(connection));
 
-        var gitLabClient = GetClient(context, connection);
-        var pipelinesClient = new PipelinesClient(context.Log, context.FileSystem, gitLabClient);
-
-        return await pipelinesClient.GetPipelineAsync(project, pipelineId);
+        return await context.GitLabGetPipelineAsync(connection.ServerUrl, connection.AccessToken, project, pipelineId);
     }
 }

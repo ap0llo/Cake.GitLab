@@ -343,3 +343,4 @@ MigrationBackup/
 
 launchSettings.json
 /tools/
+*.received.*

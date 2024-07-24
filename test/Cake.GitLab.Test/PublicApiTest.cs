@@ -15,9 +15,9 @@ public class PublicApiTest
     public Task Has_expected_public_api()
     {
         // ARRANGE
-        
+
         var assembly = typeof(GitLabAliases).Assembly;
-        
+
 
         var options = new ApiGeneratorOptions()
         {

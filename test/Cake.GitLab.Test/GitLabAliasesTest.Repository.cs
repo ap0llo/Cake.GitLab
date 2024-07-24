@@ -49,12 +49,10 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
-
             var outputPath = (FilePath)"file1.txt";
 
             // ACT
-            await context.GitLabRepositoryDownloadFileAsync(connection, projectId, s_FileName, "main", outputPath);
+            await context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", projectId, s_FileName, "main", outputPath);
 
             // ASSERT
             var outFile = context.FileSystem.GetFile(outputPath);
@@ -71,14 +69,12 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
-
             // ACT
             var outputDirectory = context.Environment.WorkingDirectory.Combine("new-directory");
             context.EnsureDirectoryDoesNotExist(outputDirectory);
             var outputPath = outputDirectory.CombineWithFilePath("outfile.txt");
 
-            await context.GitLabRepositoryDownloadFileAsync(connection, s_ProjectPath, s_FileName, "main", outputPath);
+            await context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, s_FileName, "main", outputPath);
 
             // ASSERT
             var outFile = context.FileSystem.GetFile(outputPath);
@@ -94,10 +90,8 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
-
             // ACT            
-            var ex = await Record.ExceptionAsync(async () => await context.GitLabRepositoryDownloadFileAsync(connection, s_ProjectPath, "does-not-exist", "main", "output.txt"));
+            var ex = await Record.ExceptionAsync(async () => await context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, "does-not-exist", "main", "output.txt"));
 
             // ASSERT
             Assert.IsType<CakeException>(ex);
@@ -142,10 +136,8 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            var connection = new GitLabConnection(server.Url.ToString(), "SomeAccessToken");
-
             // ACT
-            var branches = context.GitLabRepositoryGetBranches(connection, projectId);
+            var branches = context.GitLabRepositoryGetBranches(server.Url.ToString(), "SomeAccessToken", projectId);
 
             // ASSERT
             Assert.Collection(

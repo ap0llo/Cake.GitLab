@@ -15,9 +15,10 @@ public static partial class GitLabAliases
     /// Downloads a file from a GitLab-hosted repository
     /// </summary>
     /// <param name="context">The current Cake context.</param>
-    /// <param name="connection">The connection specifing the GitLab server to connect to.</param>
+    /// <param name="serverUrl">The url of the GitLab server</param>
+    /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
     /// <param name="project">The path (name and namespace) or id of the project to get the file from.</param>
-    /// <param name="filePath">The path of the file to download (as relative path within the repository)-</param>
+    /// <param name="filePath">The path of the file to download (as relative path within the repository).</param>
     /// <param name="ref">The name of the branch, a git tag or commit specifying the version of the file to get.</param>
     /// <param name="destination">The path to save the file's content to.</param>
     /// <example language="cs"><![CDATA[
@@ -26,24 +27,22 @@ public static partial class GitLabAliases
     /// {
     ///    public override async Task RunAsync(ICakeContext context)
     ///    {
-    ///      var connection = new GitLabConnection("https://gitlab.com", "ACCESSTOKEN");
+    ///      var connection = new GitLabConnection();
     ///      await context.GitLabRepositoryDownloadFileAsync(
-    ///          connection,
-    ///           "owner/repository",
-    ///           "README.md",
-    ///           "main",
-    ///           "downloaded/README.md"
+    ///          "https://gitlab.com",
+    ///          "ACCESSTOKEN"
+    ///          "owner/repository",
+    ///          "README.md",
+    ///          "main",
+    ///          "downloaded/README.md"
     ///       );
     ///    }
     /// }
     /// ]]>
     /// </example>
     [CakeMethodAlias]
-    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, string filePath, string @ref, FilePath destination)
+    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
     {
-        if (connection is null)
-            throw new ArgumentNullException(nameof(connection));
-
         if (String.IsNullOrWhiteSpace(filePath))
             throw new ArgumentException("Value must not be null or whitespace", nameof(filePath));
 
@@ -53,17 +52,27 @@ public static partial class GitLabAliases
         if (destination is null)
             throw new ArgumentNullException(nameof(destination));
 
-        var gitLabClient = GetClient(context, connection);
+        var gitLabClient = GetClient(context, serverUrl, accessToken);
         var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
 
         await repositoryClient.DownloadFileAsync(project, filePath, @ref, destination);
+    }
+
+    [CakeMethodAlias]
+    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, string filePath, string @ref, FilePath destination)
+    {
+        if (connection is null)
+            throw new ArgumentNullException(nameof(connection));
+
+        await context.GitLabRepositoryDownloadFileAsync(connection.ServerUrl, connection.AccessToken, project, filePath, @ref, destination);
     }
 
     /// <summary>
     /// Get the branches that exist in a GitLab-hosted repository
     /// </summary>
     /// <param name="context">The current Cake context.</param>
-    /// <param name="connection">The connection specifing the GitLab server to connect to.</param>
+    /// <param name="serverUrl">The url of the GitLab server</param>
+    /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
     /// <param name="project">The path (name and namespace) or id of the project to get the branches for.</param>
     /// <example language="cs"><![CDATA[
     /// [TaskName("Get-Branches")]   
@@ -81,14 +90,19 @@ public static partial class GitLabAliases
     /// ]]>
     /// </example>
     [CakeMethodAlias]
+    public static IReadOnlyCollection<Branch> GitLabRepositoryGetBranches(this ICakeContext context, string serverUrl, string accessToken, ProjectId project)
+    {
+        var gitLabClient = GetClient(context, serverUrl, accessToken);
+        var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
+
+        return repositoryClient.GetBranches(project);
+    }
+
     public static IReadOnlyCollection<Branch> GitLabRepositoryGetBranches(this ICakeContext context, GitLabConnection connection, ProjectId project)
     {
         if (connection is null)
             throw new ArgumentNullException(nameof(connection));
 
-        var gitLabClient = GetClient(context, connection);
-        var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
-
-        return repositoryClient.GetBranches(project);
+        return context.GitLabRepositoryGetBranches(connection.ServerUrl, connection.AccessToken, project);
     }
 }
