@@ -1,7 +1,6 @@
 ﻿// Derived from https://github.com/ap0llo/changelog/blob/97d0d3111510dae9f4222704a50d88938be8debe/src/ChangeLog.Test/Integrations/GitLab/GitLabUrlParserTest.cs
 // Licensed under the MIT License
 
-using Cake.GitLab.Model;
 using Xunit;
 using Xunit.Abstractions;
 

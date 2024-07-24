@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Cake.GitLab.Model;
+namespace Cake.GitLab;
 
 /// <summary>
 /// Encapsualtes the identity of a project on a GitLab server
@@ -16,7 +16,7 @@ public sealed class GitLabProjectInfo : IEquatable<GitLabProjectInfo>
     public string Host { get; }
 
     /// <summary>
-    /// The project namespace (the user or group (incl.subgroups) the project belongs to.
+    /// The project namespace (the user or group (incl. subgroups) the project belongs to.
     /// </summary>
     public string Namespace { get; }
 

@@ -2,7 +2,6 @@
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.GitLab.Internal;
-using Cake.GitLab.Model;
 
 namespace Cake.GitLab;
 

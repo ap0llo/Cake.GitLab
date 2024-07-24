@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Xunit;
 
-namespace Cake.GitLab.Test.Model;
+namespace Cake.GitLab.Test;
 
 public interface IEqualityTestDataProvider<TTestee>
 {

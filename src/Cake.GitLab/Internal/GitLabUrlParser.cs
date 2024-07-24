@@ -3,7 +3,6 @@
 
 using System;
 using Cake.Core.Diagnostics;
-using Cake.GitLab.Model;
 
 namespace Cake.GitLab.Internal;
 

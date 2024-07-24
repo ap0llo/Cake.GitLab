@@ -3,10 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.GitLab.Model;
 using Xunit;
 
-namespace Cake.GitLab.Test.Model;
+namespace Cake.GitLab.Test;
 
 /// <summary>
 /// Tests for <see cref="GitLabProjectInfo"/>
