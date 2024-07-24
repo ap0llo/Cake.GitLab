@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using Microsoft.CodeAnalysis;
 
@@ -107,6 +108,22 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         public void Append(string value) => m_StringBuilder.Append(value);
 
         public void Append(ITypeSymbol symbol) => m_StringBuilder.Append(GetFullName(symbol));
+
+        public void AppendParameter(IParameterSymbol parameter)
+        {
+            Append("global::");
+            Append(parameter.Type);
+            Append(" ");
+            Append("@");
+            Append(parameter.Name);
+        }
+
+        public void AppendArgument(IParameterSymbol parameter)
+        {
+            Append("@");
+            Append(parameter.Name);
+        }
+
 
         public void AppendLine(string value) => m_StringBuilder.AppendLine(value);
 
@@ -264,98 +281,196 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         {
             foreach (var alias in aliases)
             {
-                // TODO: Generate /// documentation comments based on documentation of original alias
-
-                context.Output.BeginLine();
-                context.Output.Append("[global::Cake.Core.Annotations.CakeMethodAlias]");
-                context.Output.EndLine();
-
-                context.Output.BeginLine();
-                context.Output.Append("public static ");
-
-
-                // Return Type
-                if (alias.IsAsync)
-                {
-                    context.Output.Append("async ");
-                }
-
-                if (alias.ReturnsVoid)
-                {
-                    context.Output.Append("void ");
-                }
-                else
-                {
-                    context.Output.Append("global::");
-                    context.Output.Append(alias.ReturnType);
-                    context.Output.Append(" ");
-                }
-
-                // Method Name
-                context.Output.Append(alias.Name);
-
-                // Parameters (first parameter of type IGitLabConnectionCakeContext replaces the first two parameters of the original declaration)
-                context.Output.Append("(this global::");
-                context.Output.Append(context.Symbols.GitLabConnectionCakeContext);
-                context.Output.Append(" context");
-
-                // Add remaining parameters unchanged
-                foreach (var parameter in alias.Parameters.Skip(3))
-                {
-                    context.Output.Append(", ");
-                    context.Output.Append("global::");
-                    context.Output.Append(parameter.Type);
-                    context.Output.Append(" ");
-                    context.Output.Append("@");
-                    context.Output.Append(parameter.Name);
-                }
-                context.Output.Append(")");
-                context.Output.EndLine();
-
-                context.Output.BeginBlock();
-                {
-                    context.Output.BeginLine();
-
-                    // add "return" if alias returns a value, otherwise omit it
-                    if (!alias.ReturnsVoid && !(alias.IsAsync && SymbolEqualityComparer.Default.Equals(alias.ReturnType, context.Symbols.SystemThreadingTasksTask)))
-                    {
-                        context.Output.Append("return ");
-                    }
-
-                    // Add "await" is alias is asnc
-                    if (alias.IsAsync)
-                    {
-                        context.Output.Append("await ");
-                    }
-
-                    // Call original alias
-                    context.Output.Append("global::");
-                    context.Output.Append(context.Symbols.GitLabAliases);
-                    context.Output.Append(".");
-                    context.Output.Append(alias.Name);
-
-                    // Pass first two parameters (context and the connection details provided by the context)
-                    context.Output.Append("(context, context.Connection.ServerUrl, context.Connection.AccessToken");
-
-                    // Pass remaining parameter
-                    foreach (var parameter in alias.Parameters.Skip(3))
-                    {
-                        context.Output.Append(", ");
-                        context.Output.Append("@");
-                        context.Output.Append(parameter.Name);
-                    }
-                    context.Output.Append(");");
-
-                    context.Output.EndLine();
-                }
-                context.Output.EndBlock();
-
-                // For readability, add empty line between methods
-                context.Output.AppendLine();
-
+                GenerateOverloadForGitLabConnectionCakeContext(context, alias);
+                GenerateOverloadForGitLabConnection(context, alias);
             }
 
         }
         context.Output.EndBlock();
+    }
+
+
+    private static void GenerateOverloadForGitLabConnectionCakeContext(Context context, IMethodSymbol alias)
+    {
+        // TODO: Generate /// documentation comments based on documentation of original alias
+
+        context.Output.BeginLine();
+        context.Output.Append("[global::Cake.Core.Annotations.CakeMethodAlias]");
+        context.Output.EndLine();
+
+        context.Output.BeginLine();
+        context.Output.Append("public static ");
+
+
+        // Return Type
+        if (alias.IsAsync)
+        {
+            context.Output.Append("async ");
+        }
+
+        if (alias.ReturnsVoid)
+        {
+            context.Output.Append("void ");
+        }
+        else
+        {
+            context.Output.Append("global::");
+            context.Output.Append(alias.ReturnType);
+            context.Output.Append(" ");
+        }
+
+        // Method Name
+        context.Output.Append(alias.Name);
+
+        // Parameters (first parameter of type IGitLabConnectionCakeContext replaces the first two parameters of the original declaration)
+        context.Output.Append("(this global::");
+        context.Output.Append(context.Symbols.GitLabConnectionCakeContext);
+        context.Output.Append(" context");
+
+        // Add remaining parameters unchanged
+        foreach (var parameter in alias.Parameters.Skip(3))
+        {
+            context.Output.Append(", ");
+            context.Output.AppendParameter(parameter);
+        }
+        context.Output.Append(")");
+        context.Output.EndLine();
+
+        context.Output.BeginBlock();
+        {
+            context.Output.BeginLine();
+
+            // add "return" if alias returns a value, otherwise omit it
+            if (!alias.ReturnsVoid && !(alias.IsAsync && SymbolEqualityComparer.Default.Equals(alias.ReturnType, context.Symbols.SystemThreadingTasksTask)))
+            {
+                context.Output.Append("return ");
+            }
+
+            // Add "await" is alias is asnc
+            if (alias.IsAsync)
+            {
+                context.Output.Append("await ");
+            }
+
+            // Call original alias
+            context.Output.Append("global::");
+            context.Output.Append(context.Symbols.GitLabAliases);
+            context.Output.Append(".");
+            context.Output.Append(alias.Name);
+
+            // Pass first two parameters (context and the connection details provided by the context)
+            context.Output.Append("(context, context.Connection.ServerUrl, context.Connection.AccessToken");
+
+            // Pass remaining parameter
+            foreach (var parameter in alias.Parameters.Skip(3))
+            {
+                context.Output.Append(", ");
+                context.Output.AppendArgument(parameter);
+            }
+            context.Output.Append(");");
+
+            context.Output.EndLine();
+        }
+        context.Output.EndBlock();
+
+        // For readability, add empty line between methods
+        context.Output.AppendLine();
+    }
+
+    private static void GenerateOverloadForGitLabConnection(Context context, IMethodSymbol alias)
+    {
+        // TODO: Generate /// documentation comments based on documentation of original alias
+
+        context.Output.BeginLine();
+        context.Output.Append("[global::Cake.Core.Annotations.CakeMethodAlias]");
+        context.Output.EndLine();
+
+        context.Output.BeginLine();
+        context.Output.Append("public static ");
+
+
+        // Return Type
+        if (alias.IsAsync)
+        {
+            context.Output.Append("async ");
+        }
+
+        if (alias.ReturnsVoid)
+        {
+            context.Output.Append("void ");
+        }
+        else
+        {
+            context.Output.Append("global::");
+            context.Output.Append(alias.ReturnType);
+            context.Output.Append(" ");
+        }
+
+        // Method Name
+        context.Output.Append(alias.Name);
+
+        // First parameter is unchanged (ICakeContext)        
+        context.Output.Append("(this ");
+        context.Output.AppendParameter(alias.Parameters[0]);
+
+        // Second and third parameters (serverUrl and accessToken) are replaced with a single parameter of type GitLabConnection
+        context.Output.Append(", ");
+        context.Output.Append("global::");
+        context.Output.Append(context.Symbols.GitLabConnection);
+        context.Output.Append(" @connection");
+
+        // Add remaining parameters unchanged
+        foreach (var parameter in alias.Parameters.Skip(3))
+        {
+            context.Output.Append(", ");
+            context.Output.AppendParameter(parameter);
+        }
+        context.Output.Append(")");
+        context.Output.EndLine();
+
+        context.Output.BeginBlock();
+        {
+            // Add null check for "connection" parameter
+            context.Output.BeginLine();
+            context.Output.Append("global::System.ArgumentNullException.ThrowIfNull(connection);");
+            context.Output.EndLine();
+
+            context.Output.BeginLine();
+
+            // add "return" if alias returns a value, otherwise omit it
+            if (!alias.ReturnsVoid && !(alias.IsAsync && SymbolEqualityComparer.Default.Equals(alias.ReturnType, context.Symbols.SystemThreadingTasksTask)))
+            {
+                context.Output.Append("return ");
+            }
+
+            // Add "await" is alias is asnc
+            if (alias.IsAsync)
+            {
+                context.Output.Append("await ");
+            }
+
+            // Call original alias
+            context.Output.Append("global::");
+            context.Output.Append(context.Symbols.GitLabAliases);
+            context.Output.Append(".");
+            context.Output.Append(alias.Name);
+
+            // Pass first three parameters (context and the connection details provided by the GitLabConnection)
+            context.Output.Append("(context, connection.ServerUrl, connection.AccessToken");
+
+            // Pass remaining parameter
+            foreach (var parameter in alias.Parameters.Skip(3))
+            {
+                context.Output.Append(", ");
+                context.Output.AppendArgument(parameter);
+            }
+            context.Output.Append(");");
+
+            context.Output.EndLine();
+        }
+        context.Output.EndBlock();
+
+        // For readability, add empty line between methods
+        context.Output.AppendLine();
     }
 }

@@ -25,12 +25,4 @@ public static partial class GitLabAliases
 
         return await pipelinesClient.GetPipelineAsync(project, pipelineId);
     }
-
-    public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, int pipelineId)
-    {
-        if (connection is null)
-            throw new ArgumentNullException(nameof(connection));
-
-        return await context.GitLabGetPipelineAsync(connection.ServerUrl, connection.AccessToken, project, pipelineId);
-    }
 }

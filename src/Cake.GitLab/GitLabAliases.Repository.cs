@@ -58,15 +58,6 @@ public static partial class GitLabAliases
         await repositoryClient.DownloadFileAsync(project, filePath, @ref, destination);
     }
 
-    [CakeMethodAlias]
-    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, GitLabConnection connection, ProjectId project, string filePath, string @ref, FilePath destination)
-    {
-        if (connection is null)
-            throw new ArgumentNullException(nameof(connection));
-
-        await context.GitLabRepositoryDownloadFileAsync(connection.ServerUrl, connection.AccessToken, project, filePath, @ref, destination);
-    }
-
     /// <summary>
     /// Get the branches that exist in a GitLab-hosted repository
     /// </summary>
@@ -96,13 +87,5 @@ public static partial class GitLabAliases
         var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
 
         return repositoryClient.GetBranches(project);
-    }
-
-    public static IReadOnlyCollection<Branch> GitLabRepositoryGetBranches(this ICakeContext context, GitLabConnection connection, ProjectId project)
-    {
-        if (connection is null)
-            throw new ArgumentNullException(nameof(connection));
-
-        return context.GitLabRepositoryGetBranches(connection.ServerUrl, connection.AccessToken, project);
     }
 }
