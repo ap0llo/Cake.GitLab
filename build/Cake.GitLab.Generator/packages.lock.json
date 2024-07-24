@@ -2,6 +2,12 @@
   "version": 1,
   "dependencies": {
     ".NETStandard,Version=v2.0": {
+      "Grynwald.XmlDocs": {
+        "type": "Direct",
+        "requested": "[1.1.29-pre, )",
+        "resolved": "1.1.29-pre",
+        "contentHash": "bE5KeOOs+y8q7uAFck5IvQwaXOhZaGMwVYF3hY+YA4tXQS0h6fiPw7fVQ6xqyVTDuA+yFWqWaoqzjbtGNEvFTA=="
+      },
       "Microsoft.CodeAnalysis.Analyzers": {
         "type": "Direct",
         "requested": "[3.3.4, )",
