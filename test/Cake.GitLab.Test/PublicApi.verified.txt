@@ -1,0 +1,50 @@
+﻿namespace Cake.GitLab
+{
+    [Cake.Core.Annotations.CakeAliasCategory("GitLab")]
+    [Cake.Core.Annotations.CakeNamespaceImport("Cake.GitLab")]
+    public static class GitLabAliases
+    {
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.GitLab.IGitLabConnectionCakeContext context, NGitLab.Models.ProjectId project, int pipelineId) { }
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabConnection connection, NGitLab.Models.ProjectId project, int pipelineId) { }
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static Cake.GitLab.Model.GitLabProjectInfo? GitLabGetProjectFromRemoteUrl(this Cake.Core.ICakeContext context, string remoteUrl) { }
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.GitLab.IGitLabConnectionCakeContext context, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabConnection connection, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.GitLab.IGitLabConnectionCakeContext context, NGitLab.Models.ProjectId project) { }
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabConnection connection, NGitLab.Models.ProjectId project) { }
+    }
+    public class GitLabConnection : System.IEquatable<Cake.GitLab.GitLabConnection>
+    {
+        public GitLabConnection(string ServerUrl, string AccessToken) { }
+        public string AccessToken { get; init; }
+        public string ServerUrl { get; init; }
+    }
+    public interface IGitLabConnectionCakeContext : Cake.Core.ICakeContext
+    {
+        Cake.GitLab.GitLabConnection Connection { get; }
+    }
+    public interface IGitlabClientFactory
+    {
+        NGitLab.IGitLabClient GetClient(Cake.GitLab.GitLabConnection connection);
+    }
+}
+namespace Cake.GitLab.Model
+{
+    public sealed class GitLabProjectInfo : System.IEquatable<Cake.GitLab.Model.GitLabProjectInfo>
+    {
+        public GitLabProjectInfo(string host, string @namespace, string project) { }
+        public string Host { get; }
+        public string Namespace { get; }
+        public string Project { get; }
+        public string ProjectPath { get; }
+        public bool Equals(Cake.GitLab.Model.GitLabProjectInfo? other) { }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+    }
+}
