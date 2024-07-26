@@ -53,40 +53,6 @@ public class GitLabProjectInfoTest : EqualityTest<GitLabProjectInfo, GitLabProje
             new GitLabProjectInfo("example.com", "group/subgroup", "repo"),
             new GitLabProjectInfo("example.com", "group/SUBGROUP", "repo")
         );
-
-        // Leading and trailing slashes in namespace and project are ignored
-        yield return (
-            new GitLabProjectInfo("example.com", "user", "repo"),
-            new GitLabProjectInfo("example.com", "/user", "repo")
-        );
-        yield return (
-            new GitLabProjectInfo("example.com", "group/subgroup", "repo"),
-            new GitLabProjectInfo("example.com", "/group/subgroup", "repo")
-        );
-        yield return (
-            new GitLabProjectInfo("example.com", "user", "repo"),
-            new GitLabProjectInfo("example.com", "user/", "repo")
-        );
-        yield return (
-            new GitLabProjectInfo("example.com", "group/subgroup", "repo"),
-            new GitLabProjectInfo("example.com", "group/subgroup/", "repo")
-        );
-        yield return (
-            new GitLabProjectInfo("example.com", "user", "repo"),
-            new GitLabProjectInfo("example.com", "user", "/repo")
-        );
-        yield return (
-            new GitLabProjectInfo("example.com", "group/subgroup", "repo"),
-            new GitLabProjectInfo("example.com", "group/subgroup", "/repo")
-        );
-        yield return (
-            new GitLabProjectInfo("example.com", "user", "repo"),
-            new GitLabProjectInfo("example.com", "user", "repo/")
-        );
-        yield return (
-            new GitLabProjectInfo("example.com", "group/subgroup", "repo"),
-            new GitLabProjectInfo("example.com", "group/subgroup", "repo/")
-        );
     }
 
     public IEnumerable<(GitLabProjectInfo left, GitLabProjectInfo right)> GetUnequalTestCases()
@@ -146,5 +112,71 @@ public class GitLabProjectInfoTest : EqualityTest<GitLabProjectInfo, GitLabProje
     public void Project_must_not_be_null_or_whitespace(string? project)
     {
         Assert.Throws<ArgumentException>(() => new GitLabProjectInfo("example.com", "user", project!));
+    }
+
+
+    [Fact]
+    public void Setting_Project_updates_project_path()
+    {
+        // ARRANGE
+        var initial = new GitLabProjectInfo("example.com", "group/subgroup", "project");
+
+        // ACT 
+        var updated = initial with { Project = "another-project" };
+
+        // ASSERT
+        Assert.Equal("group/subgroup/another-project", updated.ProjectPath);
+    }
+
+
+    [Fact]
+    public void Setting_Namespace_updates_project_path()
+    {
+        // ARRANGE
+        var initial = new GitLabProjectInfo("example.com", "group/subgroup", "project");
+
+        // ACT 
+        var updated = initial with { Namespace = "someUser" };
+
+        // ASSERT
+        Assert.Equal("someUser/project", updated.ProjectPath);
+    }
+
+
+
+    [Theory]
+    [InlineData("user/project", "user", "project")]
+    [InlineData("group/subgroup/project", "group/subgroup", "project")]
+    public void Setting_ProjectPath_updates_namespace_and_project(string projectPath, string expectedNamespace, string expetedProject)
+    {
+        // ARRANGE
+        var initial = new GitLabProjectInfo("example.com", "initalNamespace", "initialProject");
+
+        // ACT 
+        var updated = initial with { ProjectPath = projectPath };
+
+        // ASSERT
+        Assert.Equal(projectPath, updated.ProjectPath);
+        Assert.Equal(expectedNamespace, updated.Namespace);
+        Assert.Equal(expetedProject, updated.Project);
+    }
+
+    [Theory]
+    [InlineData("user")]
+    [InlineData("user/")]
+    [InlineData("/user")]
+    [InlineData("group/subgroup/")]
+    [InlineData("/group/subgroup/")]
+    [InlineData("/group/subgroup/project")]
+    public void Setting_ProjectPath_throws_ArgumentException_if_path_is_invalid(string projectPath)
+    {
+        // ARRANGE
+        var initial = new GitLabProjectInfo("example.com", "initalNamespace", "initialProject");
+
+        // ACT 
+        var ex = Record.Exception(() => initial with { ProjectPath = projectPath });
+
+        // ASSERT
+        Assert.IsType<ArgumentException>(ex);
     }
 }

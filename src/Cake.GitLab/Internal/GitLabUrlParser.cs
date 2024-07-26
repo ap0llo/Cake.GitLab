@@ -47,9 +47,15 @@ internal class GitLabUrlParser
                     return null;
                 }
 
+                if (projectPath.StartsWith('/') || projectPath.EndsWith("/"))
+                {
+                    m_Log.Debug($"Cannot parse '{remoteUrl}' as GitLab url: Invalid project path '{projectPath}'");
+                    return null;
+                }
+
                 var splitIndex = projectPath.LastIndexOf('/');
                 var @namespace = projectPath.Substring(0, splitIndex);
-                var projectName = projectPath.Substring(splitIndex);
+                var projectName = projectPath.Substring(splitIndex + 1);
 
                 if (String.IsNullOrWhiteSpace(@namespace))
                 {

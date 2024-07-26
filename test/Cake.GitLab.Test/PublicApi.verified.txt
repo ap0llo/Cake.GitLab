@@ -31,12 +31,11 @@
     public sealed class GitLabProjectInfo : System.IEquatable<Cake.GitLab.GitLabProjectInfo>
     {
         public GitLabProjectInfo(string host, string @namespace, string project) { }
-        public string Host { get; }
-        public string Namespace { get; }
-        public string Project { get; }
-        public string ProjectPath { get; }
+        public string Host { get; init; }
+        public string Namespace { get; init; }
+        public string ProjectPath { get; init; }
+        public string Project { get; init; }
         public bool Equals(Cake.GitLab.GitLabProjectInfo? other) { }
-        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
     }
     public interface IGitLabConnectionCakeContext : Cake.Core.ICakeContext
