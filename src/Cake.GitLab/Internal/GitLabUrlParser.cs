@@ -15,7 +15,7 @@ internal class GitLabUrlParser
         m_Log = log;
     }
 
-    public GitLabProjectInfo? GetProjectFromRemoteUrl(string remoteUrl)
+    public GitLabProjectIdentity? GetProjectFromRemoteUrl(string remoteUrl)
     {
         if (!GitUrl.TryGetUri(remoteUrl, out var uri))
         {
@@ -69,7 +69,7 @@ internal class GitLabUrlParser
                     return null; ;
                 }
 
-                return new GitLabProjectInfo(uri.Host, @namespace, projectName);
+                return new GitLabProjectIdentity(uri.Host, @namespace, projectName);
 
             default:
                 m_Log.Debug($"Cannot parse '{remoteUrl}' as GitLab url: Unsupported scheme '{uri.Scheme}'");

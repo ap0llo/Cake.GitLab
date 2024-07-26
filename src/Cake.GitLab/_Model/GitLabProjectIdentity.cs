@@ -9,7 +9,7 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsualtes the identity of a project on a GitLab server
 /// </summary>
-public sealed record GitLabProjectInfo : IEquatable<GitLabProjectInfo>
+public sealed record GitLabProjectIdentity : IEquatable<GitLabProjectIdentity>
 {
     private readonly string m_Host;
     private readonly string m_Namespace;
@@ -63,13 +63,13 @@ public sealed record GitLabProjectInfo : IEquatable<GitLabProjectInfo>
 
 
     /// <summary>
-    /// Initializes a new instance of <see cref="GitLabProjectInfo"/>
+    /// Initializes a new instance of <see cref="GitLabProjectIdentity"/>
     /// </summary>
     /// <param name="host">The host name of the GitLab server.</param>
     /// <param name="namespace">The GitLab project's namespace (user name or group and subgroup)</param>
     /// <param name="project">The GitLab project's name</param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="host"/>, <paramref name="namespace"/> or <paramref name="project"/> is null or whitespace</exception>
-    public GitLabProjectInfo(string host, string @namespace, string project)
+    public GitLabProjectIdentity(string host, string @namespace, string project)
     {
         m_Host = Guard.NotNullOrWhitespace(host);
         m_Namespace = Guard.NotNullOrWhitespace(@namespace);
@@ -89,7 +89,7 @@ public sealed record GitLabProjectInfo : IEquatable<GitLabProjectInfo>
     }
 
     /// <inheritdoc />
-    public bool Equals(GitLabProjectInfo? other)
+    public bool Equals(GitLabProjectIdentity? other)
     {
         return other is not null &&
             StringComparer.OrdinalIgnoreCase.Equals(Host, other.Host) &&

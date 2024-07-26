@@ -10,7 +10,7 @@
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId) { }
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static Cake.GitLab.GitLabProjectInfo? GitLabGetProjectFromRemoteUrl(this Cake.Core.ICakeContext context, string remoteUrl) { }
+        public static Cake.GitLab.GitLabProjectIdentity? GitLabGetProjectFromRemoteUrl(this Cake.Core.ICakeContext context, string remoteUrl) { }
         public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.GitLab.IGitLabConnectionCakeContext context, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabConnection connection, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
@@ -28,14 +28,14 @@
         public string AccessToken { get; init; }
         public string ServerUrl { get; init; }
     }
-    public sealed class GitLabProjectInfo : System.IEquatable<Cake.GitLab.GitLabProjectInfo>
+    public sealed class GitLabProjectIdentity : System.IEquatable<Cake.GitLab.GitLabProjectIdentity>
     {
-        public GitLabProjectInfo(string host, string @namespace, string project) { }
+        public GitLabProjectIdentity(string host, string @namespace, string project) { }
         public string Host { get; init; }
         public string Namespace { get; init; }
         public string ProjectPath { get; init; }
         public string Project { get; init; }
-        public bool Equals(Cake.GitLab.GitLabProjectInfo? other) { }
+        public bool Equals(Cake.GitLab.GitLabProjectIdentity? other) { }
         public override int GetHashCode() { }
     }
     public interface IGitLabConnectionCakeContext : Cake.Core.ICakeContext

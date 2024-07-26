@@ -40,7 +40,7 @@ public partial class GitLabAliasesTest
             // ARRANGE
             var context = new FakeContext(testOutputHelper);
 
-            var expected = new GitLabProjectInfo(host, @namespace, projectName);
+            var expected = new GitLabProjectIdentity(host, @namespace, projectName);
 
             // ACT 
             var projectInfo = context.GitLabGetProjectFromRemoteUrl(url);
