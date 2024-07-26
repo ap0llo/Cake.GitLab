@@ -9,8 +9,6 @@
         public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabConnection connection, NGitLab.Models.ProjectId project, int pipelineId) { }
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId) { }
-        [Cake.Core.Annotations.CakeMethodAlias]
-        public static Cake.GitLab.GitLabProjectIdentity? GitLabGetProjectFromRemoteUrl(this Cake.Core.ICakeContext context, string remoteUrl) { }
         public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.GitLab.IGitLabConnectionCakeContext context, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabConnection connection, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
@@ -37,6 +35,8 @@
         public string Project { get; init; }
         public bool Equals(Cake.GitLab.GitLabProjectIdentity? other) { }
         public override int GetHashCode() { }
+        public static Cake.GitLab.GitLabProjectIdentity FromGitRemoteUrl(string remoteUrl) { }
+        public static bool TryGetFromGitRemoteUrl(string remoteUrl, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Cake.GitLab.GitLabProjectIdentity? projectIdentity) { }
     }
     public interface IGitLabConnectionCakeContext : Cake.Core.ICakeContext
     {

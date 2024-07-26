@@ -1,7 +1,13 @@
-﻿// Derived from https://github.com/ap0llo/changelog/blob/97d0d3111510dae9f4222704a50d88938be8debe/src/ChangeLog/Integrations/GitLab/GitLabProjectInfo.cs
+﻿//
+// Derived from:
+//  - https://github.com/ap0llo/changelog/blob/97d0d3111510dae9f4222704a50d88938be8debe/src/ChangeLog/Integrations/GitLab/GitLabProjectIdentity.cs
+//  - https://github.com/ap0llo/changelog/blob/97d0d3111510dae9f4222704a50d88938be8debe/src/ChangeLog/Integrations/GitLab/GitLabUrlParser.cs
+//
 // Licensed under the MIT License
+//
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Cake.GitLab.Internal;
 
 namespace Cake.GitLab;
@@ -58,7 +64,14 @@ public sealed record GitLabProjectIdentity : IEquatable<GitLabProjectIdentity>
     public string ProjectPath
     {
         get => $"{Namespace}/{Project}";
-        init => (m_Namespace, m_Project) = ParseProjectPath(value);
+        init
+        {
+            if (!TryParseProjectPath(value, out var @namespace, out var project, out var error))
+            {
+                throw new ArgumentException(error, nameof(value));
+            }
+            (m_Namespace, m_Project) = (@namespace, project);
+        }
     }
 
 
@@ -98,34 +111,119 @@ public sealed record GitLabProjectIdentity : IEquatable<GitLabProjectIdentity>
     }
 
 
-    private (string @namespace, string project) ParseProjectPath(string projectPath)
+    /// <summary>
+    /// Determines the GitLab server and project path based on a git repository's remote url
+    /// </summary>
+    /// <param name="remoteUrl">A git remote url. Supports both HTTP and SSH urls (including urls in the SCP format, e.g. <c>git@github.com:ap0llo/Cake.GitLab.git</c>)</param>
+    /// <returns>Returns a <see cref="GitLabProjectIdentity"/> with the information extracted from the url or <c>null</c> if not project data could be read from the remote url.</returns>
+    public static GitLabProjectIdentity FromGitRemoteUrl(string remoteUrl)
     {
-        projectPath = Guard.NotNullOrWhitespace(projectPath);
+        Guard.NotNullOrWhitespace(remoteUrl);
+
+        if (TryParseRemoteUrl(remoteUrl, out var projectInfo, out var errorMessage))
+        {
+            return projectInfo;
+        }
+        else
+        {
+            throw new ArgumentException(errorMessage, nameof(remoteUrl));
+        }
+    }
+
+    /// <summary>
+    /// Attempts to determine the GitLab server and project path based on a git repository's remote url
+    /// </summary>    
+    public static bool TryGetFromGitRemoteUrl(string remoteUrl, [NotNullWhen(true)] out GitLabProjectIdentity? projectIdentity) =>
+        TryParseRemoteUrl(remoteUrl, out projectIdentity, out var _);
+
+
+    private static bool TryParseProjectPath(string projectPath, [NotNullWhen(true)] out string? @namespace, [NotNullWhen(true)] out string? project, [NotNullWhen(false)] out string? errorMessage)
+    {
+        @namespace = null;
+        project = null;
+
+        if (String.IsNullOrWhiteSpace(projectPath))
+        {
+            errorMessage = "Value must not be null or whitespace";
+            return false;
+        }
 
         if (!projectPath.Contains('/'))
         {
-            throw new ArgumentException($"Cannot parse '{projectPath}' as GitLab project path. Expected the path to contain at least one '/' character", nameof(projectPath));
+            errorMessage = $"Cannot parse '{projectPath}' as GitLab project path. Expected the path to contain at least one '/' character";
+            return false;
         }
 
         if (projectPath.StartsWith('/') || projectPath.EndsWith("/"))
         {
-            throw new ArgumentException($"Cannot parse '{projectPath}' as GitLab project path. Path must not start or end with a '/' character", nameof(projectPath));
+            errorMessage = $"Cannot parse '{projectPath}' as GitLab project path. Path must not start or end with a '/' character";
+            return false;
         }
 
         var splitIndex = projectPath.LastIndexOf('/');
-        var @namespace = projectPath.Substring(0, splitIndex);
-        var project = projectPath.Substring(splitIndex + 1);
+        @namespace = projectPath.Substring(0, splitIndex);
+        project = projectPath.Substring(splitIndex + 1);
 
         if (String.IsNullOrWhiteSpace(@namespace))
         {
-            throw new ArgumentException($"Cannot parse '{projectPath}' as GitLab project path. Project namespace is empty", nameof(projectPath));
+            errorMessage = $"Cannot parse '{projectPath}' as GitLab project path. Project namespace is empty";
         }
 
         if (String.IsNullOrWhiteSpace(project))
         {
-            throw new ArgumentException($"Cannot parse '{projectPath}' as GitLab project path. Project name is empty", nameof(projectPath));
+            errorMessage = $"Cannot parse '{projectPath}' as GitLab project path. Project name is empty";
         }
 
-        return (@namespace, project);
+        errorMessage = null;
+        return true;
+    }
+
+    private static bool TryParseRemoteUrl(string url, [NotNullWhen(true)] out GitLabProjectIdentity? projectInfo, [NotNullWhen(false)] out string? errorMessage)
+    {
+        projectInfo = null;
+        errorMessage = null;
+
+        if (String.IsNullOrWhiteSpace(url))
+        {
+            errorMessage = "Value must not be null or empty";
+            return false;
+        }
+
+        if (!GitUrl.TryGetUri(url, out var uri))
+        {
+            errorMessage = $"Value '{url}' is not a valid uri";
+            return false;
+        }
+
+        switch (uri.Scheme.ToLower())
+        {
+            case "http":
+            case "https":
+            case "ssh":
+                var projectPath = uri.AbsolutePath.Trim('/');
+
+                if (projectPath.EndsWith(".git"))
+                {
+                    projectPath = projectPath.Substring(0, projectPath.Length - ".git".Length);
+                }
+
+
+                if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out errorMessage))
+                {
+                    return false;
+                }
+                if (String.IsNullOrWhiteSpace(projectPath))
+                {
+                    errorMessage = $"Cannot parse '{url}' as GitLab url: Project path is empty";
+                    return false;
+                }
+
+                projectInfo = new GitLabProjectIdentity(uri.Host, @namespace, project);
+                return true;
+
+            default:
+                errorMessage = $"Cannot parse '{url}' as GitLab url: Unsupported scheme '{uri.Scheme}'";
+                return false;
+        }
     }
 }
