@@ -15,20 +15,10 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsualtes the identity of a project on a GitLab server
 /// </summary>
-public sealed record GitLabProjectIdentity : IEquatable<GitLabProjectIdentity>
+public sealed record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabProjectIdentity>
 {
-    private readonly string m_Host;
     private readonly string m_Namespace;
     private readonly string m_Project;
-
-    /// <summary>
-    /// Gets of sets the host name of the GitLab server.
-    /// </summary>
-    public string Host
-    {
-        get => m_Host;
-        init => m_Host = Guard.NotNullOrWhitespace(value);
-    }
 
     /// <summary>
     /// Gets or sets the project namespace (the user or group (incl. subgroups) the project belongs to).
@@ -82,9 +72,8 @@ public sealed record GitLabProjectIdentity : IEquatable<GitLabProjectIdentity>
     /// <param name="namespace">The GitLab project's namespace (user name or group and subgroup)</param>
     /// <param name="project">The GitLab project's name</param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="host"/>, <paramref name="namespace"/> or <paramref name="project"/> is null or whitespace</exception>
-    public GitLabProjectIdentity(string host, string @namespace, string project)
+    public GitLabProjectIdentity(string host, string @namespace, string project) : base(host)
     {
-        m_Host = Guard.NotNullOrWhitespace(host);
         m_Namespace = Guard.NotNullOrWhitespace(@namespace);
         m_Project = Guard.NotNullOrWhitespace(project);
     }
@@ -94,7 +83,7 @@ public sealed record GitLabProjectIdentity : IEquatable<GitLabProjectIdentity>
     {
         unchecked
         {
-            var hash = StringComparer.OrdinalIgnoreCase.GetHashCode(Host) * 397;
+            var hash = base.GetHashCode() * 397;
             hash ^= StringComparer.OrdinalIgnoreCase.GetHashCode(Namespace);
             hash ^= StringComparer.OrdinalIgnoreCase.GetHashCode(Project);
             return hash;
@@ -105,7 +94,7 @@ public sealed record GitLabProjectIdentity : IEquatable<GitLabProjectIdentity>
     public bool Equals(GitLabProjectIdentity? other)
     {
         return other is not null &&
-            StringComparer.OrdinalIgnoreCase.Equals(Host, other.Host) &&
+            base.Equals(other) &&
             StringComparer.OrdinalIgnoreCase.Equals(Namespace, other.Namespace) &&
             StringComparer.OrdinalIgnoreCase.Equals(Project, other.Project);
     }

@@ -26,10 +26,9 @@
         public string AccessToken { get; init; }
         public string ServerUrl { get; init; }
     }
-    public sealed class GitLabProjectIdentity : System.IEquatable<Cake.GitLab.GitLabProjectIdentity>
+    public sealed class GitLabProjectIdentity : Cake.GitLab.GitLabServerIdentity, System.IEquatable<Cake.GitLab.GitLabProjectIdentity>
     {
         public GitLabProjectIdentity(string host, string @namespace, string project) { }
-        public string Host { get; init; }
         public string Namespace { get; init; }
         public string ProjectPath { get; init; }
         public string Project { get; init; }
@@ -37,6 +36,13 @@
         public override int GetHashCode() { }
         public static Cake.GitLab.GitLabProjectIdentity FromGitRemoteUrl(string remoteUrl) { }
         public static bool TryGetFromGitRemoteUrl(string remoteUrl, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Cake.GitLab.GitLabProjectIdentity? projectIdentity) { }
+    }
+    public class GitLabServerIdentity : System.IEquatable<Cake.GitLab.GitLabServerIdentity>
+    {
+        public GitLabServerIdentity(string host) { }
+        public string Host { get; init; }
+        public virtual bool Equals(Cake.GitLab.GitLabServerIdentity? other) { }
+        public override int GetHashCode() { }
     }
     public interface IGitLabConnectionCakeContext : Cake.Core.ICakeContext
     {
