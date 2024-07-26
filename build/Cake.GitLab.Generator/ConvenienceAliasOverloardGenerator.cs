@@ -30,12 +30,12 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         /// <summary>
         /// Gets the symbol for the <c>Cake.GitLab.GitLabConnection</c> type
         /// </summary>
-        public INamedTypeSymbol GitLabConnection { get; set; } = null!;
+        public INamedTypeSymbol GitLabServerConnection { get; set; } = null!;
 
         /// <summary>
         /// Gets the symbol for the <c>Cake.GitLab.IGitLabConnectionCakeContext</c> type
         /// </summary>
-        public INamedTypeSymbol GitLabConnectionCakeContext { get; set; } = null!;
+        public INamedTypeSymbol GitLabServerConnectionCakeContext { get; set; } = null!;
 
         /// <summary>
         /// Gets the symbol for the <c>Cake.Core.ICakeContext</c> type
@@ -61,8 +61,8 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         {
             // Find required type symbols
             if (!TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabAliases", out var gitLabAliasesSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabConnection", out var gitlabConnectionSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.IGitLabConnectionCakeContext", out var gitlabConnectionCakeContextSymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabServerConnection", out var gitlabServerConnectionSymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.IGitLabServerConnectionCakeContext", out var gitlabServerConnectionCakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.ICakeContext", out var cakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeMethodAliasAttribute", out var cakeMethodAliasAttributeSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol) ||
@@ -75,8 +75,8 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             return new Symbols()
             {
                 GitLabAliases = gitLabAliasesSymbol!,
-                GitLabConnection = gitlabConnectionSymbol!,
-                GitLabConnectionCakeContext = gitlabConnectionCakeContextSymbol!,
+                GitLabServerConnection = gitlabServerConnectionSymbol!,
+                GitLabServerConnectionCakeContext = gitlabServerConnectionCakeContextSymbol!,
                 CakeContext = cakeContextSymbol!,
                 CakeMethodAliasAttribute = cakeMethodAliasAttributeSymbol!,
                 SystemThreadingTasksTask = systemThreadingTasksTaskSymbol!,
@@ -233,7 +233,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 
         // Parameters (first parameter of type IGitLabConnectionCakeContext replaces the first two parameters of the original declaration)
         context.Output.Append("(this ");
-        context.Output.Append(context.Symbols.GitLabConnectionCakeContext);
+        context.Output.Append(context.Symbols.GitLabServerConnectionCakeContext);
         context.Output.Append(" context");
 
         // Add remaining parameters unchanged
@@ -269,7 +269,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             // Pass first two parameters (context and the connection details provided by the context)
             context.Output.Append("(");
             var arguments = Enumerable.Concat(
-                ["context", "context.Connection.ServerUrl", "context.Connection.AccessToken"],
+                ["context", "context.Connection.Url", "context.Connection.AccessToken"],
                 alias.Parameters.Skip(3).Select(x => x.Name)
             );
             context.Output.AppendArguments(arguments);
@@ -337,7 +337,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 
         // Second and third parameters (serverUrl and accessToken) are replaced with a single parameter of type GitLabConnection
         context.Output.Append(", ");
-        context.Output.Append(context.Symbols.GitLabConnection);
+        context.Output.Append(context.Symbols.GitLabServerConnection);
         context.Output.Append(" @connection");
 
         // Add remaining parameters unchanged
@@ -381,7 +381,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 
             // Pass remaining parameter
             var arguments = Enumerable.Concat(
-              ["context", "connection.ServerUrl", "connection.AccessToken"],
+              ["context", "connection.Url", "connection.AccessToken"],
               alias.Parameters.Skip(3).Select(x => x.Name)
             );
             context.Output.AppendArguments(arguments);

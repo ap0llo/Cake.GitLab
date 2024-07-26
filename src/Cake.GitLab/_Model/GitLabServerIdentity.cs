@@ -3,6 +3,9 @@ using Cake.GitLab.Internal;
 
 namespace Cake.GitLab;
 
+/// <summary>
+/// Encapsualtes the identity of GitLab server
+/// </summary>
 public record GitLabServerIdentity : IEquatable<GitLabServerIdentity>
 {
     private readonly string m_Host;
@@ -15,6 +18,12 @@ public record GitLabServerIdentity : IEquatable<GitLabServerIdentity>
         get => m_Host;
         init => m_Host = Guard.NotNullOrWhitespace(value);
     }
+
+    /// <summary>
+    /// Gets the GitLab server's https URL
+    /// </summary>
+    public string Url => $"https://{Host}/";
+
 
     /// <summary>
     /// Initializes a new instance of <see cref="GitLabProjectIdentity"/>
