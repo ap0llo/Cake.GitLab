@@ -47,11 +47,6 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         public INamedTypeSymbol GitLabProjectConnection { get; set; } = null!;
 
         /// <summary>
-        /// Gets the symbol for the <c>Cake.GitLab.IGitLabConnectionCakeContext</c> type
-        /// </summary>
-        public INamedTypeSymbol GitLabServerConnectionCakeContext { get; set; } = null!;
-
-        /// <summary>
         /// Gets the symbol for the <c>Cake.Core.ICakeContext</c> type
         /// </summary>
         public INamedTypeSymbol CakeContext { get; set; } = null!;
@@ -79,7 +74,6 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabServerConnection", out var gitlabServerConnectionSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabProjectIdentity", out var gitlabProjectIdentitySymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabProjectConnection", out var gitlabProjectConnectionSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.IGitLabServerConnectionCakeContext", out var gitlabServerConnectionCakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.ICakeContext", out var cakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeMethodAliasAttribute", out var cakeMethodAliasAttributeSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol) ||
@@ -96,7 +90,6 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                 GitLabServerConnection = gitlabServerConnectionSymbol!,
                 GitLabProjectIdentity = gitlabProjectIdentitySymbol!,
                 GitLabProjectConnection = gitlabProjectConnectionSymbol!,
-                GitLabServerConnectionCakeContext = gitlabServerConnectionCakeContextSymbol!,
                 CakeContext = cakeContextSymbol!,
                 CakeMethodAliasAttribute = cakeMethodAliasAttributeSymbol!,
                 SystemThreadingTasksTask = systemThreadingTasksTaskSymbol!,
@@ -218,35 +211,6 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         {
             foreach (var alias in aliases)
             {
-                //
-                // Generate an overload that uses IGitLabServerConnectionCakeContext instead of ICakeContext
-                //
-                GenerateOverload(context, alias,
-                [
-                    new ParameterReplacement()
-                    {
-                        OriginalParameterName = "context",
-                        NewParameterType = context.Symbols.GitLabServerConnectionCakeContext,
-                        NewParameterName = "context",
-                        ConversionExpression = "context"
-                    },
-                    new ParameterReplacement()
-                    {
-                        OriginalParameterName = "serverUrl",
-                        NewParameterType = context.Symbols.GitLabServerConnectionCakeContext,
-                        NewParameterName = "context",
-                        ConversionExpression = "context.Connection.Url"
-                    },
-                    new ParameterReplacement()
-                    {
-                        OriginalParameterName = "accessToken",
-                        NewParameterType = context.Symbols.GitLabServerConnectionCakeContext,
-                        NewParameterName = "context",
-                        ConversionExpression = "context.Connection.AccessToken"
-                    }
-                ]);
-
-
                 //
                 // Generate an overload that uses a GitLabServerIdentity instead of the serverUrl string
                 //
