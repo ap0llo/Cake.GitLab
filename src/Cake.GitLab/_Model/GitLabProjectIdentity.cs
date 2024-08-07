@@ -15,7 +15,7 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsualtes the identity of a project on a GitLab server
 /// </summary>
-public sealed record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabProjectIdentity>
+public record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabProjectIdentity>
 {
     private readonly string m_Namespace;
     private readonly string m_Project;
@@ -91,7 +91,7 @@ public sealed record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<Gi
     }
 
     /// <inheritdoc />
-    public bool Equals(GitLabProjectIdentity? other)
+    public virtual bool Equals(GitLabProjectIdentity? other)
     {
         return other is not null &&
             base.Equals(other) &&

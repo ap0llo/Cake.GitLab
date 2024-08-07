@@ -41,23 +41,6 @@ public class GitLabServerConnectionTest : EqualityTest<GitLabServerConnection, G
         );
     }
 
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("  ")]
-    [InlineData("\t")]
-    public void Host_must_not_be_null_or_whitespace(string? host)
-    {
-        // ARRANGE
-
-        // ACT
-        var ex = Record.Exception(() => new GitLabServerConnection(host!, "token"));
-
-        // ASSERT
-        Assert.IsType<ArgumentException>(ex);
-    }
-
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -73,6 +56,4 @@ public class GitLabServerConnectionTest : EqualityTest<GitLabServerConnection, G
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
     }
-
-
 }

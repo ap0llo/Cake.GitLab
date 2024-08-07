@@ -20,13 +20,20 @@
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
     }
-    public sealed class GitLabProjectIdentity : Cake.GitLab.GitLabServerIdentity, System.IEquatable<Cake.GitLab.GitLabProjectIdentity>
+    public class GitLabProjectConnection : Cake.GitLab.GitLabProjectIdentity, System.IEquatable<Cake.GitLab.GitLabProjectConnection>
+    {
+        public GitLabProjectConnection(string host, string @namespace, string project, string accessToken) { }
+        public string AccessToken { get; init; }
+        public virtual bool Equals(Cake.GitLab.GitLabProjectConnection? other) { }
+        public override int GetHashCode() { }
+    }
+    public class GitLabProjectIdentity : Cake.GitLab.GitLabServerIdentity, System.IEquatable<Cake.GitLab.GitLabProjectIdentity>
     {
         public GitLabProjectIdentity(string host, string @namespace, string project) { }
         public string Namespace { get; init; }
         public string ProjectPath { get; init; }
         public string Project { get; init; }
-        public bool Equals(Cake.GitLab.GitLabProjectIdentity? other) { }
+        public virtual bool Equals(Cake.GitLab.GitLabProjectIdentity? other) { }
         public override int GetHashCode() { }
         public static Cake.GitLab.GitLabProjectIdentity FromGitRemoteUrl(string remoteUrl) { }
         public static bool TryGetFromGitRemoteUrl(string remoteUrl, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Cake.GitLab.GitLabProjectIdentity? projectIdentity) { }
