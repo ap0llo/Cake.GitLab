@@ -23,10 +23,22 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
             new GitLabProjectIdentity("example.com", "user", "repo"),
             new GitLabProjectIdentity("example.com", "user", "repo")
         );
+
+        yield return (
+            new GitLabProjectIdentity("example.com", "user", "repo"),
+            new GitLabProjectIdentity("example.com", "user/repo")
+        );
+
         yield return (
             new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
             new GitLabProjectIdentity("example.com", "group/subgroup", "repo")
         );
+
+        yield return (
+            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
+            new GitLabProjectIdentity("example.com", "group/subgroup/repo")
+        );
+
 
         // Comparisons must be case-insensitive
         yield return (
@@ -137,6 +149,31 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
         Assert.IsType<ArgumentException>(ex);
     }
 
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("  ")]
+    [InlineData("\t")]
+    public void ProjectPath_must_not_be_null_or_whitespace(string? projectPath)
+    {
+        // ARRANGE
+
+        // ACT
+        var ex = Record.Exception(() => new GitLabProjectIdentity("example.com", projectPath!));
+
+        // ASSERT
+        Assert.IsType<ArgumentException>(ex);
+    }
+
+    [Fact]
+    public void Can_be_initialized_from_project_path()
+    {
+        var fromNamespaceAndProjectName = new GitLabProjectIdentity("example.com", "some-group", "some-project");
+        var fromProjectPath = new GitLabProjectIdentity("example.com", "some-group/some-project");
+
+        Assert.Equal(fromNamespaceAndProjectName, fromProjectPath);
+    }
 
     [Fact]
     public void Setting_Project_updates_project_path()

@@ -16,8 +16,26 @@ public class GitLabProjectConnectionTest : EqualityTest<GitLabProjectConnection,
             new GitLabProjectConnection("example.com", "user", "repo", "ACCESSTOKEN")
         );
         yield return (
+            new GitLabProjectConnection("example.com", "user", "repo", "ACCESSTOKEN"),
+            new GitLabProjectConnection("example.com", "user/repo", "ACCESSTOKEN")
+        );
+        yield return (
+            new GitLabProjectConnection("example.com", "user", "repo", "ACCESSTOKEN"),
+            new GitLabProjectConnection(new GitLabProjectIdentity("example.com", "user", "repo"), "ACCESSTOKEN")
+        );
+
+        yield return (
             new GitLabProjectConnection("example.com", "group/subgroup", "repo", "ACCESSTOKEN"),
             new GitLabProjectConnection("example.com", "group/subgroup", "repo", "ACCESSTOKEN")
+        );
+        yield return (
+            new GitLabProjectConnection("example.com", "group/subgroup", "repo", "ACCESSTOKEN"),
+            new GitLabProjectConnection("example.com", "group/subgroup/repo", "ACCESSTOKEN")
+        );
+
+        yield return (
+            new GitLabProjectConnection("example.com", "group/subgroup", "repo", "ACCESSTOKEN"),
+            new GitLabProjectConnection(new GitLabProjectIdentity("example.com", "group/subgroup", "repo"), "ACCESSTOKEN")
         );
 
         // Comparisons must be case-insensitive (except for the access token)

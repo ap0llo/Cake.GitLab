@@ -24,6 +24,11 @@ public record GitLabServerConnection : GitLabServerIdentity, IEquatable<GitLabSe
         m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
     }
 
+    public GitLabServerConnection(GitLabServerIdentity identity, string accessToken) : base(identity)
+    {
+        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
     /// <inheritdoc />
     public override int GetHashCode()
     {

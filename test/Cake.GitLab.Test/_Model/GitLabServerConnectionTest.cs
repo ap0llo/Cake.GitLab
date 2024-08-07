@@ -16,6 +16,11 @@ public class GitLabServerConnectionTest : EqualityTest<GitLabServerConnection, G
             new GitLabServerConnection("example.com", "someAccessToken")
         );
 
+        yield return (
+            new GitLabServerConnection("example.com", "someAccessToken"),
+            new GitLabServerConnection(new GitLabServerIdentity("example.com"), "someAccessToken")
+        );
+
         // Comparisons of host name must be case-insensitive
         yield return (
             new GitLabServerConnection("example.com", "someAccessToken"),

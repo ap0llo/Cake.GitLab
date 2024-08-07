@@ -78,6 +78,17 @@ public record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabPro
         m_Project = Guard.NotNullOrWhitespace(project);
     }
 
+
+    public GitLabProjectIdentity(string host, string projectPath) : base(host)
+    {
+        if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
+        {
+            throw new ArgumentException(error, nameof(projectPath));
+        }
+        (m_Namespace, m_Project) = (@namespace, project);
+    }
+
+
     /// <inheritdoc />
     public override int GetHashCode()
     {

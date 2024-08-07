@@ -24,6 +24,16 @@ public record GitLabProjectConnection : GitLabProjectIdentity, IEquatable<GitLab
         m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
     }
 
+    public GitLabProjectConnection(string host, string projectPath, string accessToken) : base(host, projectPath)
+    {
+        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
+    public GitLabProjectConnection(GitLabProjectIdentity projectIdentity, string accessToken) : base(projectIdentity)
+    {
+        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
     /// <inheritdoc />
     public override int GetHashCode()
     {
