@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cake.Frosting" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Cake.GitLab/Cake.GitLab.csproj" />
+    <ProjectReference Include="../../deps/NGitLab/NGitLab/NGitLab.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Using Include="Cake.Core" />
+    <Using Include="Cake.Common" />
+    <Using Include="Cake.Frosting" />
+    <Using Include="Cake.GitLab" />
+  </ItemGroup>
+
+</Project>
