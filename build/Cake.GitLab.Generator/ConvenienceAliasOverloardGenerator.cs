@@ -66,6 +66,14 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         /// </summary>
         public INamedTypeSymbol SystemString { get; set; } = null!;
 
+
+        /// <summary>
+        /// Gets the symbol for the <c>System.CodeDom.Compiler.GeneratedCodeAttribute</c> type
+        /// </summary>
+        public INamedTypeSymbol GeneratedCodeAttribute { get; set; } = null!;
+
+
+
         public static Symbols? TryGet(GeneratorExecutionContext generatorContext)
         {
             // Find required type symbols
@@ -77,7 +85,8 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.ICakeContext", out var cakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeMethodAliasAttribute", out var cakeMethodAliasAttributeSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "System.String", out var systemStringSymbol)
+               !TryGetSymbolByMetadataName(generatorContext, "System.String", out var systemStringSymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "System.CodeDom.Compiler.GeneratedCodeAttribute", out var generatedCodeAttributeSymbol)
             )
             {
                 return null;
@@ -93,7 +102,8 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                 CakeContext = cakeContextSymbol!,
                 CakeMethodAliasAttribute = cakeMethodAliasAttributeSymbol!,
                 SystemThreadingTasksTask = systemThreadingTasksTaskSymbol!,
-                SystemString = systemStringSymbol!
+                SystemString = systemStringSymbol!,
+                GeneratedCodeAttribute = generatedCodeAttributeSymbol!,
             };
         }
 
@@ -328,6 +338,15 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         context.Output.BeginLine();
         context.Output.Append("[");
         context.Output.Append(context.Symbols.CakeMethodAliasAttribute);
+        context.Output.Append("]");
+        context.Output.EndLine();
+
+        context.Output.BeginLine();
+        context.Output.Append("[");
+        context.Output.Append(context.Symbols.GeneratedCodeAttribute);
+        context.Output.Append("(\"");
+        context.Output.Append(nameof(ConvenienceAliasOverloardGenerator));
+        context.Output.Append("\", \"\")");
         context.Output.Append("]");
         context.Output.EndLine();
 
