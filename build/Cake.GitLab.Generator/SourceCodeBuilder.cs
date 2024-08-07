@@ -37,6 +37,14 @@ public class SourceCodeBuilder
         Append(parameter.Name);
     }
 
+    public void AppendParameter(ITypeSymbol parameterType, string parameterName)
+    {
+        Append(parameterType);
+        Append(" ");
+        Append("@");
+        Append(parameterName);
+    }
+
     public void AppendArgument(IParameterSymbol parameter)
     {
         Append("@");

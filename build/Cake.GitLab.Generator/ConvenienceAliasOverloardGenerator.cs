@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Grynwald.XmlDocs;
 using Microsoft.CodeAnalysis;
@@ -119,9 +120,6 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         }
     }
 
-
-
-
     private class Context : IDisposable
     {
         public GeneratorExecutionContext GeneratorContext { get; }
@@ -154,6 +152,26 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             }
 
             return new Context(generatorContext, symbols);
+        }
+    }
+
+    private class ParameterReplacement
+    {
+        public string OriginalParameterName { get; set; } = null!;
+
+        public ITypeSymbol NewParameterType { get; set; } = null!;
+
+        public string NewParameterName { get; set; } = null!;
+
+        /// <summary>
+        /// Gets the expression to use as as argument for the replaced parameter when calling the original method
+        /// </summary>
+        public string ConversionExpression { get; set; } = null!;
+
+
+        public bool MatchesOrigrinalParameter(IParameterSymbol parameter)
+        {
+            return parameter.Name == OriginalParameterName;
         }
     }
 
@@ -200,11 +218,123 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         {
             foreach (var alias in aliases)
             {
-                GenerateOverloadForGitLabConnectionCakeContext(context, alias);
-                GenerateOverloadForGitLabServerIdentity(context, alias);
-                GenerateOverloadForGitLabServerConnection(context, alias);
-                GenerateOverloadForGitLabProjectIdentity(context, alias);
-                GenerateOverloadForGitLabProjectConnection(context, alias);
+                //
+                // Generate an overload that uses IGitLabServerConnectionCakeContext instead of ICakeContext
+                //
+                GenerateOverload(context, alias,
+                [
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "context",
+                        NewParameterType = context.Symbols.GitLabServerConnectionCakeContext,
+                        NewParameterName = "context",
+                        ConversionExpression = "context"
+                    },
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "serverUrl",
+                        NewParameterType = context.Symbols.GitLabServerConnectionCakeContext,
+                        NewParameterName = "context",
+                        ConversionExpression = "context.Connection.Url"
+                    },
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "accessToken",
+                        NewParameterType = context.Symbols.GitLabServerConnectionCakeContext,
+                        NewParameterName = "context",
+                        ConversionExpression = "context.Connection.AccessToken"
+                    }
+                ]);
+
+
+                //
+                // Generate an overload that uses a GitLabServerIdentity instead of the serverUrl string
+                //
+                GenerateOverload(context, alias,
+                [
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "serverUrl",
+                        NewParameterType = context.Symbols.GitLabServerIdentity,
+                        NewParameterName = "serverIdentity",
+                        ConversionExpression = "serverIdentity.Url"
+                    }
+                ]);
+
+                //
+                // Generate an overload that uses a GitLabServerConnection instead of the serverUrl and accessToken strings
+                //
+                GenerateOverload(context, alias,
+                [
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "serverUrl",
+                        NewParameterType = context.Symbols.GitLabServerConnection,
+                        NewParameterName = "serverConnection",
+                        ConversionExpression = "serverConnection.Url"
+                    },
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "accessToken",
+                        NewParameterType = context.Symbols.GitLabServerConnection,
+                        NewParameterName = "serverConnection",
+                        ConversionExpression = "serverConnection.AccessToken"
+                    }
+                ]);
+
+
+
+                //
+                // Generate an overload that uses a GitLabProjectIdentity instead of the serverUrl and project parameters
+                //
+                GenerateOverload(context, alias,
+                [
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "serverUrl",
+                        NewParameterType = context.Symbols.GitLabProjectIdentity,
+                        NewParameterName = "projectIdentity",
+                        ConversionExpression = "projectIdentity.Url"
+                    },
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "project",
+                        NewParameterType = context.Symbols.GitLabProjectIdentity,
+                        NewParameterName = "projectIdentity",
+                        ConversionExpression = "projectIdentity.ProjectPath"
+                    }
+                ]);
+
+
+
+                //
+                // Generate an overload that uses a GitLabProjectConnection instead of the serverUrl, project and accessToken parameters
+                //
+                GenerateOverload(context, alias,
+                [
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "serverUrl",
+                        NewParameterType = context.Symbols.GitLabProjectConnection,
+                        NewParameterName = "projectConnection",
+                        ConversionExpression = "projectConnection.Url"
+                    },
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "accessToken",
+                        NewParameterType = context.Symbols.GitLabProjectConnection,
+                        NewParameterName = "projectConnection",
+                        ConversionExpression = "projectConnection.AccessToken"
+                    },
+                    new ParameterReplacement()
+                    {
+                        OriginalParameterName = "project",
+                        NewParameterType = context.Symbols.GitLabProjectConnection,
+                        NewParameterName = "projectConnection",
+                        ConversionExpression = "projectConnection.ProjectPath"
+                    }
+                ]);
+
             }
 
         }
@@ -212,213 +342,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
     }
 
 
-    private static void GenerateOverloadForGitLabConnectionCakeContext(Context context, IMethodSymbol alias)
-    {
-        var originalDocumentation = GetDocumentation(alias) as MethodMemberElement;
-        var newDocumentation = default(MethodMemberElement);
-
-        if (originalDocumentation is not null)
-        {
-            newDocumentation = new MethodMemberElement(originalDocumentation.Id)
-            {
-                Summary = originalDocumentation.Summary,
-                Remarks = originalDocumentation.Remarks,
-                Returns = originalDocumentation.Returns,
-            };
-
-            //TODO: Copy and adapt list members (Parameters, TypeParameters, Exceptions, SeeAlso)
-
-            context.Output.Append(newDocumentation);
-        }
-
-        context.Output.BeginLine();
-        context.Output.Append("public static ");
-
-        // Return Type
-        if (alias.IsAsync)
-        {
-            context.Output.Append("async ");
-        }
-
-        if (alias.ReturnsVoid)
-        {
-            context.Output.Append("void ");
-        }
-        else
-        {
-            context.Output.Append(alias.ReturnType);
-            context.Output.Append(" ");
-        }
-
-        // Method Name
-        context.Output.Append(alias.Name);
-
-        // Parameters (first parameter of type IGitLabConnectionCakeContext replaces the first two parameters of the original declaration)
-        context.Output.Append("(this ");
-        context.Output.Append(context.Symbols.GitLabServerConnectionCakeContext);
-        context.Output.Append(" context");
-
-        // Add remaining parameters unchanged
-        foreach (var parameter in alias.Parameters.Skip(3))
-        {
-            context.Output.Append(", ");
-            context.Output.AppendParameter(parameter);
-        }
-        context.Output.Append(")");
-        context.Output.EndLine();
-
-        context.Output.BeginBlock();
-        {
-            context.Output.BeginLine();
-
-            // add "return" if alias returns a value, otherwise omit it
-            if (!alias.ReturnsVoid && !(alias.IsAsync && SymbolEqualityComparer.Default.Equals(alias.ReturnType, context.Symbols.SystemThreadingTasksTask)))
-            {
-                context.Output.Append("return ");
-            }
-
-            // Add "await" is alias is async
-            if (alias.IsAsync)
-            {
-                context.Output.Append("await ");
-            }
-
-            // Call original alias
-            context.Output.Append(context.Symbols.GitLabAliases);
-            context.Output.Append(".");
-            context.Output.Append(alias.Name);
-
-            // Pass first two parameters (context and the connection details provided by the context)
-            context.Output.Append("(");
-            var arguments = Enumerable.Concat(
-                ["context", "context.Connection.Url", "context.Connection.AccessToken"],
-                alias.Parameters.Skip(3).Select(x => x.Name)
-            );
-            context.Output.AppendArguments(arguments);
-            context.Output.Append(");");
-
-            context.Output.EndLine();
-        }
-        context.Output.EndBlock();
-
-        // For readability, add empty line between methods
-        context.Output.AppendLine();
-    }
-
-    private static void GenerateOverloadForGitLabServerConnection(Context context, IMethodSymbol alias)
-    {
-        var originalDocumentation = GetDocumentation(alias) as MethodMemberElement;
-        var newDocumentation = default(MethodMemberElement);
-
-        if (originalDocumentation is not null)
-        {
-            newDocumentation = new MethodMemberElement(originalDocumentation.Id)
-            {
-                Summary = originalDocumentation.Summary,
-                Remarks = originalDocumentation.Remarks,
-                Returns = originalDocumentation.Returns,
-            };
-
-            //TODO: Copy and adapt list members (Parameters, TypeParameters, Exceptions, SeeAlso)
-
-            context.Output.Append(newDocumentation);
-        }
-
-        context.Output.BeginLine();
-        context.Output.Append("[");
-        context.Output.Append(context.Symbols.CakeMethodAliasAttribute);
-        context.Output.Append("]");
-        context.Output.EndLine();
-
-        context.Output.BeginLine();
-        context.Output.Append("public static ");
-
-
-        // Return Type
-        if (alias.IsAsync)
-        {
-            context.Output.Append("async ");
-        }
-
-        if (alias.ReturnsVoid)
-        {
-            context.Output.Append("void ");
-        }
-        else
-        {
-            context.Output.Append(alias.ReturnType);
-            context.Output.Append(" ");
-        }
-
-        // Method Name
-        context.Output.Append(alias.Name);
-
-        // First parameter is unchanged (ICakeContext)        
-        context.Output.Append("(this ");
-        context.Output.AppendParameter(alias.Parameters[0]);
-
-        // Second and third parameters (serverUrl and accessToken) are replaced with a single parameter of type GitLabServerConnection
-        context.Output.Append(", ");
-        context.Output.Append(context.Symbols.GitLabServerConnection);
-        context.Output.Append(" @connection");
-
-        // Add remaining parameters unchanged
-        foreach (var parameter in alias.Parameters.Skip(3))
-        {
-            context.Output.Append(", ");
-            context.Output.AppendParameter(parameter);
-        }
-        context.Output.Append(")");
-        context.Output.EndLine();
-
-        context.Output.BeginBlock();
-        {
-            // Add null check for "connection" parameter
-            context.Output.BeginLine();
-            context.Output.Append("global::System.ArgumentNullException.ThrowIfNull(@connection);");
-            context.Output.EndLine();
-
-            context.Output.BeginLine();
-
-            // add "return" if alias returns a value, otherwise omit it
-            if (!alias.ReturnsVoid && !(alias.IsAsync && SymbolEqualityComparer.Default.Equals(alias.ReturnType, context.Symbols.SystemThreadingTasksTask)))
-            {
-                context.Output.Append("return ");
-            }
-
-            // Add "await" is alias is asnc
-            if (alias.IsAsync)
-            {
-                context.Output.Append("await ");
-            }
-
-            // Call original alias
-            context.Output.Append(context.Symbols.GitLabAliases);
-            context.Output.Append(".");
-            context.Output.Append(alias.Name);
-
-
-            // Pass first three parameters (context and the connection details provided by the GitLabServerConnection)
-            context.Output.Append("(");
-
-            // Pass remaining parameter
-            var arguments = Enumerable.Concat(
-              ["context", "connection.Url", "connection.AccessToken"],
-              alias.Parameters.Skip(3).Select(x => x.Name)
-            );
-            context.Output.AppendArguments(arguments);
-
-            context.Output.Append(");");
-
-            context.Output.EndLine();
-        }
-        context.Output.EndBlock();
-
-        // For readability, add empty line between methods
-        context.Output.AppendLine();
-    }
-
-    private static void GenerateOverloadForGitLabServerIdentity(Context context, IMethodSymbol alias)
+    private static void GenerateOverload(Context context, IMethodSymbol alias, IReadOnlyList<ParameterReplacement> parameterReplacements)
     {
         var originalDocumentation = GetDocumentation(alias) as MethodMemberElement;
         var newDocumentation = default(MethodMemberElement);
@@ -466,262 +390,52 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         // Method Name
         context.Output.Append(alias.Name);
 
-        // First parameter is unchanged (ICakeContext)        
-        context.Output.Append("(this ");
-        context.Output.AppendParameter(alias.Parameters[0]);
+        //
+        // Generate new parameter list: If a replacement is defined, omit parameter and add replacement instead, otherwise, add parameter unchanged
+        //
+        var addedParameters = new HashSet<string>();
 
-        // Second parameter (serverUrl) is replaced with a parameter of type GitLabServerIdentity
-        context.Output.Append(", ");
-        context.Output.Append(context.Symbols.GitLabServerIdentity);
-        context.Output.Append(" @serverIdentity");
-
-        // Add remaining parameters unchanged
-        foreach (var parameter in alias.Parameters.Skip(2))
+        context.Output.Append("(this "); // assume, the overload if still an extension method
+        foreach (var parameter in alias.Parameters)
         {
-            context.Output.Append(", ");
-            context.Output.AppendParameter(parameter);
-        }
-        context.Output.Append(")");
-        context.Output.EndLine();
-
-        context.Output.BeginBlock();
-        {
-            // Add null check for "serverIdentity" parameter
-            context.Output.BeginLine();
-            context.Output.Append("global::System.ArgumentNullException.ThrowIfNull(@serverIdentity);");
-            context.Output.EndLine();
-
-            context.Output.BeginLine();
-
-            // add "return" if alias returns a value, otherwise omit it
-            if (!alias.ReturnsVoid && !(alias.IsAsync && SymbolEqualityComparer.Default.Equals(alias.ReturnType, context.Symbols.SystemThreadingTasksTask)))
+            if (parameterReplacements.SingleOrDefault(replacement => replacement.MatchesOrigrinalParameter(parameter)) is { } replacement)
             {
-                context.Output.Append("return ");
-            }
-
-            // Add "await" is alias is asnc
-            if (alias.IsAsync)
-            {
-                context.Output.Append("await ");
-            }
-
-            // Call original alias
-            context.Output.Append(context.Symbols.GitLabAliases);
-            context.Output.Append(".");
-            context.Output.Append(alias.Name);
-
-
-            // Pass first two parameters (context and the connection details provided by the GitLabServerIdentity)
-            context.Output.Append("(");
-
-            // Pass remaining parameter
-            var arguments = Enumerable.Concat(
-              ["context", "serverIdentity.Url"],
-              alias.Parameters.Skip(2).Select(x => x.Name)
-            );
-            context.Output.AppendArguments(arguments);
-
-            context.Output.Append(");");
-
-            context.Output.EndLine();
-        }
-        context.Output.EndBlock();
-
-        // For readability, add empty line between methods
-        context.Output.AppendLine();
-    }
-
-    private static void GenerateOverloadForGitLabProjectIdentity(Context context, IMethodSymbol alias)
-    {
-        var originalDocumentation = GetDocumentation(alias) as MethodMemberElement;
-        var newDocumentation = default(MethodMemberElement);
-
-        if (originalDocumentation is not null)
-        {
-            newDocumentation = new MethodMemberElement(originalDocumentation.Id)
-            {
-                Summary = originalDocumentation.Summary,
-                Remarks = originalDocumentation.Remarks,
-                Returns = originalDocumentation.Returns,
-            };
-
-            //TODO: Copy and adapt list members (Parameters, TypeParameters, Exceptions, SeeAlso)
-
-            context.Output.Append(newDocumentation);
-        }
-
-        context.Output.BeginLine();
-        context.Output.Append("[");
-        context.Output.Append(context.Symbols.CakeMethodAliasAttribute);
-        context.Output.Append("]");
-        context.Output.EndLine();
-
-        context.Output.BeginLine();
-        context.Output.Append("public static ");
-
-
-        // Return Type
-        if (alias.IsAsync)
-        {
-            context.Output.Append("async ");
-        }
-
-        if (alias.ReturnsVoid)
-        {
-            context.Output.Append("void ");
-        }
-        else
-        {
-            context.Output.Append(alias.ReturnType);
-            context.Output.Append(" ");
-        }
-
-        // Method Name
-        context.Output.Append(alias.Name);
-
-        // First parameter is unchanged (ICakeContext)        
-        context.Output.Append("(this ");
-        context.Output.AppendParameter(alias.Parameters[0]);
-
-        // Parameters serverUrl and "project" are replaced with a parameter of type GitLabProjectIdentity
-        context.Output.Append(", ");
-        context.Output.Append(context.Symbols.GitLabProjectIdentity);
-        context.Output.Append(" @projectIdentity");
-
-        // Add remaining parameters unchanged
-        foreach (var parameter in alias.Parameters.Skip(1).Where(x => x.Name != "serverUrl" && x.Name != "project"))
-        {
-            context.Output.Append(", ");
-            context.Output.AppendParameter(parameter);
-        }
-        context.Output.Append(")");
-        context.Output.EndLine();
-
-        context.Output.BeginBlock();
-        {
-            // Add null check for "serverIdentity" parameter
-            context.Output.BeginLine();
-            context.Output.Append("global::System.ArgumentNullException.ThrowIfNull(@projectIdentity);");
-            context.Output.EndLine();
-
-            context.Output.BeginLine();
-
-            // add "return" if alias returns a value, otherwise omit it
-            if (!alias.ReturnsVoid && !(alias.IsAsync && SymbolEqualityComparer.Default.Equals(alias.ReturnType, context.Symbols.SystemThreadingTasksTask)))
-            {
-                context.Output.Append("return ");
-            }
-
-            // Add "await" is alias is asnc
-            if (alias.IsAsync)
-            {
-                context.Output.Append("await ");
-            }
-
-            // Call original alias
-            context.Output.Append(context.Symbols.GitLabAliases);
-            context.Output.Append(".");
-            context.Output.Append(alias.Name);
-
-
-            // Pass replaced parameters (context and the connection details provided by the GitLabServerIdentity)
-            context.Output.Append("(");
-
-            // Pass remaining parameter
-            var arguments = alias.Parameters.Select(x =>
-            {
-                return x.Name switch
+                // multiple parameter may have the same replacement => only add replacement once
+                if (!addedParameters.Contains(replacement.NewParameterName))
                 {
-                    "serverUrl" => "projectIdentity.Url",
-                    "project" => "projectIdentity.ProjectPath",
-                    _ => x.Name
-                };
-            });
-
-            context.Output.AppendArguments(arguments);
-
-            context.Output.Append(");");
-
-            context.Output.EndLine();
-        }
-        context.Output.EndBlock();
-
-        // For readability, add empty line between methods
-        context.Output.AppendLine();
-    }
-
-    private static void GenerateOverloadForGitLabProjectConnection(Context context, IMethodSymbol alias)
-    {
-        var originalDocumentation = GetDocumentation(alias) as MethodMemberElement;
-        var newDocumentation = default(MethodMemberElement);
-
-        if (originalDocumentation is not null)
-        {
-            newDocumentation = new MethodMemberElement(originalDocumentation.Id)
+                    if (addedParameters.Count > 0)
+                    {
+                        context.Output.Append(", ");
+                    }
+                    context.Output.AppendParameter(replacement.NewParameterType, replacement.NewParameterName);
+                    addedParameters.Add(replacement.NewParameterName);
+                }
+            }
+            else
             {
-                Summary = originalDocumentation.Summary,
-                Remarks = originalDocumentation.Remarks,
-                Returns = originalDocumentation.Returns,
-            };
+                // add parameter unchanged
+                if (addedParameters.Count > 0)
+                {
+                    context.Output.Append(", ");
+                }
+                context.Output.AppendParameter(parameter);
+                addedParameters.Add(parameter.Name);
+            }
 
-            //TODO: Copy and adapt list members (Parameters, TypeParameters, Exceptions, SeeAlso)
-
-            context.Output.Append(newDocumentation);
-        }
-
-        context.Output.BeginLine();
-        context.Output.Append("[");
-        context.Output.Append(context.Symbols.CakeMethodAliasAttribute);
-        context.Output.Append("]");
-        context.Output.EndLine();
-
-        context.Output.BeginLine();
-        context.Output.Append("public static ");
-
-
-        // Return Type
-        if (alias.IsAsync)
-        {
-            context.Output.Append("async ");
-        }
-
-        if (alias.ReturnsVoid)
-        {
-            context.Output.Append("void ");
-        }
-        else
-        {
-            context.Output.Append(alias.ReturnType);
-            context.Output.Append(" ");
-        }
-
-        // Method Name
-        context.Output.Append(alias.Name);
-
-        // First parameter is unchanged (ICakeContext)        
-        context.Output.Append("(this ");
-        context.Output.AppendParameter(alias.Parameters[0]);
-
-        // Parameters "serverUrl", "accessToken" and "project" are replaced with a parameter of type GitLabProjectConnection
-        context.Output.Append(", ");
-        context.Output.Append(context.Symbols.GitLabProjectConnection);
-        context.Output.Append(" @projectConnection");
-
-        // Add remaining parameters unchanged
-        foreach (var parameter in alias.Parameters.Skip(1).Where(x => x.Name != "serverUrl" && x.Name != "project" && x.Name != "accessToken"))
-        {
-            context.Output.Append(", ");
-            context.Output.AppendParameter(parameter);
         }
         context.Output.Append(")");
         context.Output.EndLine();
 
+
         context.Output.BeginBlock();
         {
-            // Add null check for "serverIdentity" parameter
-            context.Output.BeginLine();
-            context.Output.Append("global::System.ArgumentNullException.ThrowIfNull(@projectConnection);");
-            context.Output.EndLine();
+            // Add null check for replacement parameters
+            foreach (var parameterName in parameterReplacements.Where(x => x.NewParameterType.IsReferenceType).Select(x => x.NewParameterName).Distinct())
+            {
+                context.Output.BeginLine();
+                context.Output.Append($"global::System.ArgumentNullException.ThrowIfNull(@{parameterName});");
+                context.Output.EndLine();
+            }
 
             context.Output.BeginLine();
 
@@ -743,23 +457,21 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             context.Output.Append(alias.Name);
 
 
-            // Pass replaced parameters (context and the connection details provided by the GitLabServerIdentity)
+            // Pass parameters or replacements as arguments
             context.Output.Append("(");
-
-            // Pass remaining parameter
-            var arguments = alias.Parameters.Select(x =>
-            {
-                return x.Name switch
+            context.Output.AppendArguments(
+                alias.Parameters.Select(x =>
                 {
-                    "serverUrl" => "projectConnection.Url",
-                    "accessToken" => "projectConnection.AccessToken",
-                    "project" => "projectConnection.ProjectPath",
-                    _ => x.Name
-                };
-            });
-
-            context.Output.AppendArguments(arguments);
-
+                    if (parameterReplacements.SingleOrDefault(replacement => replacement.MatchesOrigrinalParameter(x)) is { } replacement)
+                    {
+                        return replacement.ConversionExpression;
+                    }
+                    else
+                    {
+                        return x.Name;
+                    }
+                })
+            );
             context.Output.Append(");");
 
             context.Output.EndLine();
@@ -769,7 +481,6 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         // For readability, add empty line between methods
         context.Output.AppendLine();
     }
-
 
     private static MemberElement? GetDocumentation(ISymbol symbol)
     {
