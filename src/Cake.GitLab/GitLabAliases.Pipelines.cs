@@ -18,6 +18,7 @@ public static partial class GitLabAliases
     /// <param name="project">The path (name and namespace) or id of the project to get the pipeline data for.</param>
     /// <param name="pipelineId">The id of the pipeline to load data for.</param>    
     [CakeMethodAlias]
+    [CakeAliasCategory("Pipelines")]
     public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId)
     {
         var gitLabClient = GetClient(context, serverUrl, accessToken);

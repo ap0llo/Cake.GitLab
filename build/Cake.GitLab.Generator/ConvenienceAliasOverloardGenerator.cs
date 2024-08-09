@@ -57,6 +57,11 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         public INamedTypeSymbol CakeMethodAliasAttribute { get; set; } = null!;
 
         /// <summary>
+        /// Gets the symbol for the <c>Cake.Core.Annotations.CakeAliasCategoryAttribute</c> type
+        /// </summary>
+        public INamedTypeSymbol CakeAliasCategoryAttribute { get; set; } = null!;
+
+        /// <summary>
         /// Gets the symbol for the <c>System.Threading.Tasks.Task</c> type
         /// </summary>
         public INamedTypeSymbol SystemThreadingTasksTask { get; set; } = null!;
@@ -66,12 +71,10 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         /// </summary>
         public INamedTypeSymbol SystemString { get; set; } = null!;
 
-
         /// <summary>
         /// Gets the symbol for the <c>System.CodeDom.Compiler.GeneratedCodeAttribute</c> type
         /// </summary>
         public INamedTypeSymbol GeneratedCodeAttribute { get; set; } = null!;
-
 
 
         public static Symbols? TryGet(GeneratorExecutionContext generatorContext)
@@ -84,6 +87,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabProjectConnection", out var gitlabProjectConnectionSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.ICakeContext", out var cakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeMethodAliasAttribute", out var cakeMethodAliasAttributeSymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeAliasCategoryAttribute", out var cakeAliasCategoryAttributeSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "System.String", out var systemStringSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "System.CodeDom.Compiler.GeneratedCodeAttribute", out var generatedCodeAttributeSymbol)
@@ -101,11 +105,13 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                 GitLabProjectConnection = gitlabProjectConnectionSymbol!,
                 CakeContext = cakeContextSymbol!,
                 CakeMethodAliasAttribute = cakeMethodAliasAttributeSymbol!,
+                CakeAliasCategoryAttribute = cakeAliasCategoryAttributeSymbol!,
                 SystemThreadingTasksTask = systemThreadingTasksTaskSymbol!,
                 SystemString = systemStringSymbol!,
                 GeneratedCodeAttribute = generatedCodeAttributeSymbol!,
             };
         }
+
 
         private static bool TryGetSymbolByMetadataName(GeneratorExecutionContext generatorContext, string metadataName, out INamedTypeSymbol? symbol)
         {
@@ -350,9 +356,20 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         context.Output.Append("]");
         context.Output.EndLine();
 
+        var aliasCategoryAttributes = alias.GetAttributes().Where(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, context.Symbols.CakeAliasCategoryAttribute));
+        foreach (var attribute in aliasCategoryAttributes)
+        {
+            context.Output.BeginLine();
+            context.Output.Append("[");
+            context.Output.Append(context.Symbols.CakeAliasCategoryAttribute);
+            context.Output.Append("(\"");
+            context.Output.Append(attribute.ConstructorArguments.First().Value!.ToString());
+            context.Output.Append("\")]");
+            context.Output.EndLine();
+        }
+
         context.Output.BeginLine();
         context.Output.Append("public static ");
-
 
         // Return Type
         if (alias.IsAsync)

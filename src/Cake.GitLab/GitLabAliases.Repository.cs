@@ -41,6 +41,7 @@ public static partial class GitLabAliases
     /// ]]>
     /// </example>
     [CakeMethodAlias]
+    [CakeAliasCategory("Repository")]
     public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
     {
         if (String.IsNullOrWhiteSpace(filePath))
@@ -81,6 +82,7 @@ public static partial class GitLabAliases
     /// ]]>
     /// </example>
     [CakeMethodAlias]
+    [CakeAliasCategory("Repository")]
     public static IReadOnlyCollection<Branch> GitLabRepositoryGetBranches(this ICakeContext context, string serverUrl, string accessToken, ProjectId project)
     {
         var gitLabClient = GetClient(context, serverUrl, accessToken);
