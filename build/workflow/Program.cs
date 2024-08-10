@@ -12,25 +12,20 @@ return new CakeHost()
     .UseSharedBuild<BuildContext>()
     .Run(args);
 
-
-public class BuildContext : DefaultBuildContext
+public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
 {
-    public override IReadOnlyCollection<IPushTarget> PushTargets { get; } = new IPushTarget[]
-    {
+    public override IReadOnlyCollection<IPushTarget> PushTargets { get; } =
+    [
+        new PushTarget(
+            type: PushTargetType.AzureArtifacts,
+            feedUrl: "https://pkgs.dev.azure.com/ap0llo/OSS/_packaging/PublicCI/nuget/v3/index.json",
+            isActive: context => context.Git.IsMainBranch || context.Git.IsReleaseBranch
+        ),
         // TODO
-        // new PushTarget(
-        //     type: PushTargetType.AzureArtifacts,
-        //     feedUrl: "https://pkgs.dev.azure.com/ap0llo/OSS/_packaging/PublicCI/nuget/v3/index.json",
-        //     isActive: context => context.Git.IsMainBranch || context.Git.IsReleaseBranch
-        // ),
         // new PushTarget(
         //     PushTargetType.NuGetOrg,
         //     "https://api.nuget.org/v3/index.json",
         //     context => context.Git.IsReleaseBranch
         // )
-    };
-
-
-    public BuildContext(ICakeContext context) : base(context)
-    { }
+    ];
 }
