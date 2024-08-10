@@ -16,11 +16,11 @@
     <PackageReference Include="xunit" Version="2.9.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" PrivateAssets="all" />
     <PackageReference Include="Moq" Version="4.18.4" />
+    <PackageReference Include="NGitLab.Mock" Version="6.53.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../../src/Cake.GitLab/Cake.GitLab.csproj" />
-    <ProjectReference Include="../../deps/NGitLab/NGitLab/NGitLab.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,18 +28,5 @@
     <Using Include="Cake.Common" />    
     <Using Include="Cake.GitLab" />
   </ItemGroup>
-
-  <Choose>
-    <When Condition=" '$(NGitLabUseSubmodule)' == 'true' ">
-      <ItemGroup>
-        <ProjectReference Include="..\..\deps\NGitLab\NGitLab.Mock\NGitLab.Mock.csproj" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <PackageReference Include="NGitLab.Mock" Version="6.50.1" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
-
+  
 </Project>

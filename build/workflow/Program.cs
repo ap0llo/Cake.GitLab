@@ -32,10 +32,5 @@ public class BuildContext : DefaultBuildContext
 
 
     public BuildContext(ICakeContext context) : base(context)
-    {
-        CodeFormattingSettings.ExcludedDirectories =
-        [
-            RootDirectory.Combine("deps")
-        ];
-    }
+    { }
 }

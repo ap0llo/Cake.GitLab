@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="4.0.0" PrivateAssets="All" />
     <PackageReference Include="Cake.Common" Version="4.0.0" PrivateAssets="All" />
+    <PackageReference Include="NGitLab" Version="6.53.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,23 +33,6 @@
     <PackageIcon>cake-contrib-addin-medium.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
-
-  <Choose>
-    <When Condition=" '$(NGitLabUseSubmodule)' == 'true' ">
-      <ItemGroup>
-        <ProjectReference Include="..\..\deps\NGitLab\NGitLab\NGitLab.csproj" PrivateAssets="all" />
-        <!-- Include the custom version of NGitLab in the package -->
-        <None Include="$(OutputPath)/**/NGitLab.dll" PackagePath="lib/$(TargetFramework)" Pack="true" />
-      </ItemGroup>
-    </When>    
-    <Otherwise>
-      <ItemGroup>
-        <PackageReference Include="NGitLab" Version="6.50.1" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
-
 
   <ItemGroup>
     <ProjectReference Include="../../build/Cake.GitLab.Generator/Cake.GitLab.Generator.csproj"

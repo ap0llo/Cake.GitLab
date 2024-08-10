@@ -14,24 +14,11 @@
     <PackageReference Include="coverlet.collector" Version="6.0.0" PrivateAssets="all" />
     <PackageReference Include="PublicApiGenerator" Version="11.1.0" />
     <PackageReference Include="Verify.Xunit" Version="26.0.1" />    
+    <PackageReference Include="NGitLab.Mock" Version="6.53.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../../src/Cake.GitLab/Cake.GitLab.csproj" />
   </ItemGroup>
-
-  <Choose>
-    <When Condition=" '$(NGitLabUseSubmodule)' == 'true' ">
-      <ItemGroup>
-        <ProjectReference Include="..\..\deps\NGitLab\NGitLab.Mock\NGitLab.Mock.csproj" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <PackageReference Include="NGitLab.Mock" Version="6.50.1" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
-
 
 </Project>
