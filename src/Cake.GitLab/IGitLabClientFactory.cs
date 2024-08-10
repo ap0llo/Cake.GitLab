@@ -13,7 +13,7 @@ namespace Cake.GitLab;
 /// It can also be used for testing by returingin a mock instance.
 /// </para>
 /// </remarks>
-public interface IGitlabClientFactory
+public interface IGitLabClientFactory
 {
     IGitLabClient GetClient(string serverUrl, string accessToken);
 }

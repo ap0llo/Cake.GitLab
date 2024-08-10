@@ -4,6 +4,7 @@ using Cake.Core.IO;
 using NGitLab;
 
 namespace Cake.GitLab.Internal;
+
 internal class ClientBase
 {
     protected readonly ICakeLog m_Log;

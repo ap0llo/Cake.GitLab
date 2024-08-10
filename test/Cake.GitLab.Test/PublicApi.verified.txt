@@ -50,6 +50,10 @@
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
     }
+    public static class GitLabClientFactory
+    {
+        public static readonly Cake.GitLab.IGitLabClientFactory Default;
+    }
     public class GitLabProjectConnection : Cake.GitLab.GitLabProjectIdentity, System.IEquatable<Cake.GitLab.GitLabProjectConnection>
     {
         public GitLabProjectConnection(Cake.GitLab.GitLabProjectIdentity projectIdentity, string accessToken) { }
@@ -87,7 +91,7 @@
         public virtual bool Equals(Cake.GitLab.GitLabServerIdentity? other) { }
         public override int GetHashCode() { }
     }
-    public interface IGitlabClientFactory
+    public interface IGitLabClientFactory
     {
         NGitLab.IGitLabClient GetClient(string serverUrl, string accessToken);
     }

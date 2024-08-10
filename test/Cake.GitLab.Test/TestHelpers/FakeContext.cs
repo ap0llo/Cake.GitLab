@@ -14,7 +14,7 @@ using Xunit.Abstractions;
 
 namespace Cake.GitLab.Test;
 
-public class FakeContext : ICakeContext, IGitlabClientFactory
+public class FakeContext : ICakeContext, IGitLabClientFactory
 {
     private readonly CompositeCakeLog m_LogWithXunitOutput;
     private readonly Dictionary<string, GitLabServer> m_GitLabServers = new(StringComparer.OrdinalIgnoreCase);

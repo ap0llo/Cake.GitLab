@@ -22,15 +22,19 @@ public static partial class GitLabAliases
             throw new ArgumentException("Value must not be null or whitespace", nameof(accessToken));
 
         context.Debug($"Creating GitLab client for server url '{serverUrl}'");
-        if (context is IGitlabClientFactory clientFactory)
+
+        IGitLabClientFactory clientFactory;
+        if (context is IGitLabClientFactory)
         {
-            context.Debug($"Context of type '{context.GetType().FullName}' implements {nameof(IGitlabClientFactory)}. Delegating client creation to context");
-            return clientFactory.GetClient(serverUrl, accessToken);
+            context.Debug($"Context of type '{context.GetType().FullName}' implements {nameof(IGitLabClientFactory)}. Delegating client creation to context");
+            clientFactory = (IGitLabClientFactory)context;
         }
         else
         {
             context.Debug($"Creating default GitLab client {typeof(GitLabClient).FullName}");
-            return new GitLabClient(serverUrl, accessToken);
+            clientFactory = GitLabClientFactory.Default;
         }
+
+        return clientFactory.GetClient(serverUrl, accessToken);
     }
 }
