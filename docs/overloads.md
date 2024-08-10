@@ -23,7 +23,7 @@ context.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", "examp
 // or using the project's numeric id
 context.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", 12345);
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L16-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Individual-Parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L17-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Individual-Parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 However, passing all required values individually can become repetitive, especially when calling multiple GitLab API functions.
@@ -51,7 +51,7 @@ context.GitLabRepositoryGetBranches(serverIdentity, "ACCESSTOKEN", "example-grou
 var projectIdentity = new GitLabProjectIdentity("example.com", "example-group", "example-project");
 context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L25-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Identity-Objects' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L26-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Identity-Objects' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## "Connection" objects
@@ -74,7 +74,7 @@ context.GitLabRepositoryGetBranches(serverConnection, "example-group/example-pro
 var projectConnection = new GitLabProjectConnection("example.com", "example-group", "example-project", "ACCESSTOKEN");
 context.GitLabRepositoryGetBranches(projectConnection);
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L36-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Connection-Objects' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L37-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Connection-Objects' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Mix and Match
@@ -92,5 +92,5 @@ context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN", "another-gro
 context.GitLabRepositoryGetBranches(projectConnection);
 context.GitLabRepositoryGetBranches(projectConnection, "another-group/another-project");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L46-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-MixAndMatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L47-L53' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-MixAndMatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
