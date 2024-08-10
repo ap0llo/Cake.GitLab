@@ -9,7 +9,7 @@ return new CakeHost()
     .UseModule<AzurePipelinesModule>()
     .UseModule<LocalToolsModule>()
     .InstallToolsFromManifest(".config/dotnet-tools.json")
-    .UseSharedBuild<BuildContext>(task => task != typeof(Grynwald.SharedBuild.Tasks.PushTask))
+    .UseSharedBuild<BuildContext>()
     .Run(args);
 
 public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
