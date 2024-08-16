@@ -10,7 +10,7 @@
 :url-nuget-badge: https://img.shields.io/nuget/v/Cake.GitLab.svg
 :url-nuget-package: https://www.nuget.org/packages/Cake.GitLab
 
-Cake.GitLab is a {link-cake} Addin that provides aliases for interaction with the [GitLab API](https://docs.gitlab.com/ee/api/rest/).
+Cake.GitLab is a {link-cake} Addin that provides aliases for interaction with the link:https://docs.gitlab.com/ee/api/rest/[GitLab API].
 
 It is based on {link-ngitlab}.
 
