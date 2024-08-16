@@ -2,13 +2,6 @@
 
 Cake.GitLab is a [Cake](https://cakebuild.net/) Addin that provides aliases for interaction with the [GitLab API](https://docs.gitlab.com/ee/api/rest/).
 
-You can read the latest documentation at https://github.com/ap0llo/Cake.GitLab.
-
-## Table of Contents
-
-- [Usage](#usage)
-- [License](#license)
-
 ## Usage
 
 ### Install the Addin
