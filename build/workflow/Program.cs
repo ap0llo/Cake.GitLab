@@ -20,12 +20,11 @@ public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
             type: PushTargetType.AzureArtifacts,
             feedUrl: "https://pkgs.dev.azure.com/ap0llo/OSS/_packaging/PublicCI/nuget/v3/index.json",
             isActive: context => context.Git.IsMainBranch || context.Git.IsReleaseBranch
-        ),
-        // TODO
-        // new PushTarget(
-        //     PushTargetType.NuGetOrg,
-        //     "https://api.nuget.org/v3/index.json",
-        //     context => context.Git.IsReleaseBranch
-        // )
+        ),        
+        new PushTarget(
+            type: PushTargetType.NuGetOrg,
+            feedUrl: "https://api.nuget.org/v3/index.json",
+            isActive: context => context.Git.IsReleaseBranch
+        )
     ];
 }
