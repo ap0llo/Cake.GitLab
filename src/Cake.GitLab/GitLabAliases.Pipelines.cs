@@ -10,7 +10,7 @@ namespace Cake.GitLab;
 public static partial class GitLabAliases
 {
     /// <summary>
-    /// Gets data about the specified pipeline
+    /// Gets data about a GitLab CI pipeline
     /// </summary>
     /// <param name="context">The current Cake context</param>
     /// <param name="serverUrl">The url of the GitLab server</param>

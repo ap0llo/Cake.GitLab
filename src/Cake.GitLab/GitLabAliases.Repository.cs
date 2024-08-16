@@ -91,7 +91,7 @@ public static partial class GitLabAliases
     }
 
     /// <summary>
-    /// Creates a new tag in the project repository that points to the specified ref.
+    /// Creates a new tag in the project repository
     /// </summary>
     /// <param name="context">The current Cake context.</param>
     /// <param name="serverUrl">The url of the GitLab server</param>
