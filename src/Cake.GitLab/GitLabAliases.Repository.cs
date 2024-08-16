@@ -59,7 +59,7 @@ public static partial class GitLabAliases
     }
 
     /// <summary>
-    /// Get the branches that exist in a GitLab-hosted repository
+    /// Lists all of a project's branches
     /// </summary>
     /// <param name="context">The current Cake context.</param>
     /// <param name="serverUrl">The url of the GitLab server</param>

@@ -2,27 +2,50 @@
 
 :link-cake: link:https://cakebuild.net[Cake]
 :link-cakefrosting: link:https://cakebuild.net/docs/running-builds/runners/cake-frosting[Cake Frosting]
+:link-ngitlab: link:https://github.com/ubisoft/NGitLab[NGitLab]
 
-:url-build-statusbadge: TODO
-:url-build-latest: TODO
+:url-build-statusbadge: https://dev.azure.com/ap0llo/OSS/_apis/build/status%2FCake.GitLab?branchName=main
+:url-build-latest: https://dev.azure.com/ap0llo/OSS/_build/latest?definitionId=28&branchName=main
 
 :url-nuget-badge: https://img.shields.io/nuget/v/Cake.GitLab.svg
 :url-nuget-package: https://www.nuget.org/packages/Cake.GitLab
 
-IMPORTANT::TODO: Provide a description of the Addin
+Cake.GitLab is a {link-cake} Addin that provides aliases for interaction with the [GitLab API](https://docs.gitlab.com/ee/api/rest/).
+
+It is based on {link-ngitlab}.
 
 image:{url-build-statusbadge}[link={url-build-latest}]
 
 image:{url-nuget-badge}[link={url-nuget-package}]
 
+== Usage
 
-IMPORTANT:: TODO
+=== Install the Addin
 
-## License
+Install the addin into your Cake build.
+
+* If you are using Cake scripting, use the `#addin` preprocessor directive:
++
+[source,cs]
+----
+#addin nuget:?package=Cake.GitLab&version=VERSION
+----
+* If you are using {link-cakefrosting}, install the addin by adding a package reference to your project:
++
+[source,xml]
+----
+<PackageReference Include="Cake.GitLab" Version="VERSION" /> 
+----
+
+=== Available Aliases
+
+For a list of aliases provided by the addin, please refer to the link:./docs/README.md[documentation].
+
+== License
 
 Cake.GitLab is licensed under the MIT License.
 
-For details see link:LICENSE[]
+For details see link:https://github.com/ap0llo/Cake.GitLab/blob/main/LICENSE[]
 
 
 == Building from source
