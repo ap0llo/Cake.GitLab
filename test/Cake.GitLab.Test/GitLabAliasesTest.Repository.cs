@@ -5,6 +5,7 @@ using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
+using Newtonsoft.Json.Serialization;
 using NGitLab.Mock.Config;
 using NGitLab.Models;
 using Xunit;
@@ -144,6 +145,56 @@ public partial class GitLabAliasesTest
                 branches.OrderBy(x => x.Name, StringComparer.Ordinal),
                 branch => Assert.Equal("main", branch.Name),
                 branch => Assert.Equal("some-other-branch", branch.Name)
+            );
+        }
+    }
+
+    public class GitLabRepositoryCreateTag(ITestOutputHelper testOutputHelper)
+    {
+        private readonly GitLabConfig m_GitLabConfig =
+            new GitLabConfig() { Url = "https://example.gitlab.com" }
+                .WithUser("user1", isDefault: true)
+                .WithGroup(s_GroupName)
+                .WithProjectOfFullPath(
+                    fullPath: s_ProjectPath,
+                    id: (int)s_ProjectId
+                );
+
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public void Creates_expected_tag(object projectIdOrPath)
+        {
+            // ARRANGE
+            ProjectId projectId = projectIdOrPath is string
+                ? (string)projectIdOrPath
+                : (long)projectIdOrPath;
+
+
+
+            m_GitLabConfig.Projects.Single()
+                .Configure(project =>
+                {
+                    project.DefaultBranch = "main";
+                    project.WithCommit("Intial commit");
+                    project.WithUserPermission("user1", AccessLevel.Maintainer);
+                });
+
+            var server = m_GitLabConfig.BuildServer();
+            var project = server.AllProjects.Single();
+            var commit = project.Repository.CreateBranch("some-other-branch").Commits.Single();
+
+            var context = new FakeContext(testOutputHelper);
+            context.AddServer(server);
+
+            // ACT
+            var branches = context.GitLabRepositoryCreateTag(server.Url.ToString(), "SomeAccessToken", projectId, commit.Sha, "tag-name");
+
+            // ASSERT
+            Assert.Collection(
+                project.Repository.GetTags(),
+                tag => Assert.Equal("tag-name", tag.FriendlyName)
             );
         }
     }

@@ -9,13 +9,6 @@ namespace Cake.GitLab.Generator;
 /// <summary>
 /// Source generator that generates additional overloads for all Cake aliases in the GitLabAliases class
 /// </summary>
-/// <remarks>
-/// By default, Cake aliases are extension methods or ICakeContext and the GitLabAliases require a <c>GitLabConnection</c> to be passed in.
-/// To make it more convenient to call the GitLab aliases from a Cake script, the <c>connection</c> parameter may be omitted of the cotext implements <c>IGitLabConnectionCakeContext</c>.
-/// <para>
-/// To avoid having to define aditionall overloads manually, this generator generates an extension method on <c>IGitLabConnectionCakeContext</c> for each alias method and call the original alaias with the conenction retrieed from the <c>IGitLabConnectionCakeContext</c> context.
-/// </para>
-/// </remarks>
 [Generator]
 public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 {
@@ -485,13 +478,13 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
     private static MemberElement? GetDocumentation(ISymbol symbol)
     {
         var xmlString = symbol.GetDocumentationCommentXml();
-        if (xmlString is null)
+        if (String.IsNullOrWhiteSpace(xmlString))
         {
             return null;
         }
         else
         {
-            return MemberElement.FromXml(xmlString);
+            return MemberElement.FromXml(xmlString!);
         }
     }
 }

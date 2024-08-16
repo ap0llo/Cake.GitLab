@@ -21,6 +21,21 @@
         public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
+        public static NGitLab.Models.Tag GitLabRepositoryCreateTag(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectConnection projectConnection, string @ref, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static NGitLab.Models.Tag GitLabRepositoryCreateTag(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectIdentity projectIdentity, string accessToken, string @ref, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static NGitLab.Models.Tag GitLabRepositoryCreateTag(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerConnection serverConnection, NGitLab.Models.ProjectId project, string @ref, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static NGitLab.Models.Tag GitLabRepositoryCreateTag(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static NGitLab.Models.Tag GitLabRepositoryCreateTag(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
+        [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectConnection projectConnection, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]

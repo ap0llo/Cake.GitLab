@@ -59,4 +59,22 @@ internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGi
 
         return branches;
     }
+
+    public Tag CreateTag(ProjectId project, string @ref, string name)
+    {
+        m_Log.Debug($"Creating tag '{name}' for reference '{@ref}' in GitLab project {project}");
+
+        var repo = m_GitLabClient.GetRepository(project);
+        Tag tag;
+        try
+        {
+            tag = repo.Tags.Create(new TagCreate() { Ref = @ref, Name = name });
+        }
+        catch (GitLabException ex)
+        {
+            throw new CakeException($"Failed to create tag '{name}' for reference '{@ref}' in GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
+        }
+
+        return tag;
+    }
 }
