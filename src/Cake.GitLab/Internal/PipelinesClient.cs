@@ -11,7 +11,7 @@ internal sealed class PipelinesClient(ICakeLog log, IFileSystem fileSystem, IGit
 {
     public async Task<Pipeline> GetPipelineAsync(ProjectId project, int pipelineId)
     {
-        m_Log.Debug($"Getting pipeline from GitLab. Project {project}, Pipeline Id: {pipelineId}");
+        m_Log.Verbose($"Getting pipeline {pipelineId} from GitLab project {project}");
 
         var pipelinesClient = m_GitLabClient.GetPipelines(project);
         try
