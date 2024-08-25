@@ -20,9 +20,15 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Pipelines")]
     public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId)
     {
+        var pipelinesClient = GetPipelinesClient(context, serverUrl, accessToken);
+        return await pipelinesClient.GetPipelineAsync(project, pipelineId);
+    }
+
+
+    private static PipelinesClient GetPipelinesClient(ICakeContext context, string serverUrl, string accessToken)
+    {
         var gitLabClient = GetClient(context, serverUrl, accessToken);
         var pipelinesClient = new PipelinesClient(context.Log, context.FileSystem, gitLabClient);
-
-        return await pipelinesClient.GetPipelineAsync(project, pipelineId);
+        return pipelinesClient;
     }
 }

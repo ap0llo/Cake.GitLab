@@ -426,7 +426,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             foreach (var parameterName in parameterReplacements.Where(x => x.NewParameterType.IsReferenceType).Select(x => x.NewParameterName).Distinct())
             {
                 context.Output.BeginLine();
-                context.Output.Append($"global::System.ArgumentNullException.ThrowIfNull(@{parameterName});");
+                context.Output.Append($"global::Cake.GitLab.Internal.Guard.NotNull(@{parameterName});");
                 context.Output.EndLine();
             }
 

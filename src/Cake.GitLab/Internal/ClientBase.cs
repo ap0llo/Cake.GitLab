@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.Diagnostics;
+﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NGitLab;
 
@@ -13,8 +12,8 @@ internal class ClientBase
 
     public ClientBase(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient)
     {
-        m_Log = log ?? throw new ArgumentNullException(nameof(log));
-        m_FileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        m_GitLabClient = gitLabClient ?? throw new ArgumentNullException(nameof(gitLabClient));
+        m_Log = Guard.NotNull(log);
+        m_FileSystem = Guard.NotNull(fileSystem);
+        m_GitLabClient = Guard.NotNull(gitLabClient);
     }
 }

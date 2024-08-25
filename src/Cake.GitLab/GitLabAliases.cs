@@ -1,7 +1,7 @@
-﻿using System;
-using Cake.Common.Diagnostics;
+﻿using Cake.Common.Diagnostics;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.GitLab.Internal;
 using NGitLab;
 
 namespace Cake.GitLab;
@@ -15,11 +15,8 @@ public static partial class GitLabAliases
 {
     private static IGitLabClient GetClient(ICakeContext context, string serverUrl, string accessToken)
     {
-        if (String.IsNullOrWhiteSpace(serverUrl))
-            throw new ArgumentException("Value must not be null or whitespace", nameof(serverUrl));
-
-        if (String.IsNullOrWhiteSpace(accessToken))
-            throw new ArgumentException("Value must not be null or whitespace", nameof(accessToken));
+        Guard.NotNullOrWhitespace(serverUrl);
+        Guard.NotNullOrWhitespace(accessToken);
 
         context.Debug($"Creating GitLab client for server url '{serverUrl}'");
 

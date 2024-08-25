@@ -43,18 +43,11 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Repository")]
     public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
     {
-        if (String.IsNullOrWhiteSpace(filePath))
-            throw new ArgumentException("Value must not be null or whitespace", nameof(filePath));
+        Guard.NotNullOrWhitespace(filePath);
+        Guard.NotNullOrWhitespace(@ref);
+        Guard.NotNull(destination);
 
-        if (String.IsNullOrWhiteSpace(@ref))
-            throw new ArgumentException("Value must not be null or whitespace", nameof(@ref));
-
-        if (destination is null)
-            throw new ArgumentNullException(nameof(destination));
-
-        var gitLabClient = GetClient(context, serverUrl, accessToken);
-        var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
-
+        var repositoryClient = GetRepositoryClient(context, serverUrl, accessToken);
         await repositoryClient.DownloadFileAsync(project, filePath, @ref, destination);
     }
 
@@ -84,9 +77,7 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Repository")]
     public static async Task<IReadOnlyCollection<Branch>> GitLabRepositoryGetBranchesAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project)
     {
-        var gitLabClient = GetClient(context, serverUrl, accessToken);
-        var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
-
+        var repositoryClient = GetRepositoryClient(context, serverUrl, accessToken);
         return await repositoryClient.GetBranchesAsync(project);
     }
 
@@ -125,9 +116,17 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Repository")]
     public static async Task<Tag> GitLabRepositoryCreateTagAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref, string name)
     {
+        Guard.NotNullOrWhitespace(@ref);
+        Guard.NotNullOrWhitespace(name);
+
+        var repositoryClient = GetRepositoryClient(context, serverUrl, accessToken);
+        return await repositoryClient.CreateTagAsync(project, @ref, name);
+    }
+
+    private static RepositoryClient GetRepositoryClient(ICakeContext context, string serverUrl, string accessToken)
+    {
         var gitLabClient = GetClient(context, serverUrl, accessToken);
         var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
-
-        return await repositoryClient.CreateTagAsync(project, @ref, name);
+        return repositoryClient;
     }
 }

@@ -14,4 +14,14 @@ internal static class Guard
 
         return value;
     }
+
+    public static T NotNull<T>(T? value, [CallerArgumentExpression(nameof(value))] string valueExpression = "") where T : class
+    {
+        if (value is null)
+        {
+            throw new ArgumentNullException(valueExpression);
+        }
+
+        return value;
+    }
 }
