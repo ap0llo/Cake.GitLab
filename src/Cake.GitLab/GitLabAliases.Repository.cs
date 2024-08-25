@@ -93,11 +93,15 @@ public static partial class GitLabAliases
     /// <summary>
     /// Creates a new tag in the project repository
     /// </summary>
+    /// <remarks>
+    /// Creates a tag with the specified name for the specified target reference (commit SHA, branch name or tag name).
+    /// If the specified tag already exists for the target commit, creation of the tag is skipped and no error is thrown.
+    /// </remarks>
     /// <param name="context">The current Cake context.</param>
     /// <param name="serverUrl">The url of the GitLab server</param>
     /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
     /// <param name="project">The path (name and namespace) or id of the project to create a tag in.</param>
-    /// <param name="ref">The ref to create the tag from. Can be a commit id, branch name or existing tag name</param>
+    /// <param name="ref">The ref to create the tag from. Can be a commit SHA, branch name or existing tag name</param>
     /// <param name="name"></param>
     /// <example language="cs"><![CDATA[
     /// [TaskName("Create-Tag")]   
@@ -119,11 +123,11 @@ public static partial class GitLabAliases
     /// <seealso href="https://docs.gitlab.com/ee/api/tags.html#create-a-new-tag">Create a new tag (GitLab REST API documentation)</seealso>
     [CakeMethodAlias]
     [CakeAliasCategory("Repository")]
-    public static Tag GitLabRepositoryCreateTag(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref, string name)
+    public static async Task<Tag> GitLabRepositoryCreateTagAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref, string name)
     {
         var gitLabClient = GetClient(context, serverUrl, accessToken);
         var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
 
-        return repositoryClient.CreateTag(project, @ref, name);
+        return await repositoryClient.CreateTagAsync(project, @ref, name);
     }
 }

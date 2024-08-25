@@ -4,14 +4,15 @@ using System.Threading.Tasks;
 using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.GitLab.Test.TestHelpers;
 using Cake.Testing;
-using Newtonsoft.Json.Serialization;
 using NGitLab.Mock.Config;
 using NGitLab.Models;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Cake.GitLab.Test;
+
 public partial class GitLabAliasesTest
 {
     private const string s_GroupName = "group1";
@@ -112,7 +113,6 @@ public partial class GitLabAliasesTest
                     id: (int)s_ProjectId
                 );
 
-
         [Theory]
         [InlineData(s_ProjectId)]
         [InlineData(s_ProjectPath)]
@@ -149,10 +149,19 @@ public partial class GitLabAliasesTest
         }
     }
 
-    public class GitLabRepositoryCreateTag(ITestOutputHelper testOutputHelper)
+    public class GitLabRepositoryCreateTagAsync
     {
-        private readonly GitLabConfig m_GitLabConfig =
-            new GitLabConfig() { Url = "https://example.gitlab.com" }
+        private readonly GitLabConfig m_GitLabConfig;
+        private readonly ITestOutputHelper m_TestOutputHelper;
+        private readonly FakeContext m_Context;
+        private readonly NGitLab.Mock.Project m_Project;
+        private readonly NGitLab.Mock.User m_User;
+
+        public GitLabRepositoryCreateTagAsync(ITestOutputHelper testOutputHelper)
+        {
+            m_TestOutputHelper = testOutputHelper;
+
+            m_GitLabConfig = new GitLabConfig() { Url = "https://example.gitlab.com" }
                 .WithUser("user1", isDefault: true)
                 .WithGroup(s_GroupName)
                 .WithProjectOfFullPath(
@@ -160,20 +169,9 @@ public partial class GitLabAliasesTest
                     id: (int)s_ProjectId
                 );
 
-
-        [Theory]
-        [InlineData(s_ProjectId)]
-        [InlineData(s_ProjectPath)]
-        public void Creates_expected_tag(object projectIdOrPath)
-        {
-            // ARRANGE
-            ProjectId projectId = projectIdOrPath is string
-                ? (string)projectIdOrPath
-                : (long)projectIdOrPath;
-
-
-
-            m_GitLabConfig.Projects.Single()
+            m_GitLabConfig
+                .Projects
+                .Single()
                 .Configure(project =>
                 {
                     project.DefaultBranch = "main";
@@ -181,20 +179,108 @@ public partial class GitLabAliasesTest
                     project.WithUserPermission("user1", AccessLevel.Maintainer);
                 });
 
-            var server = m_GitLabConfig.BuildServer();
-            var project = server.AllProjects.Single();
-            var commit = project.Repository.CreateBranch("some-other-branch").Commits.Single();
 
-            var context = new FakeContext(testOutputHelper);
-            context.AddServer(server);
+            var server = m_GitLabConfig.BuildServer();
+            m_Context = new FakeContext(m_TestOutputHelper);
+            m_Context.AddServer(server);
+
+            m_Project = server.AllProjects.Single();
+
+            m_User = server.Users.Single();
+        }
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Creates_expected_tag_from_commit_sha(object projectId)
+        {
+            // ARRANGE
+            var commit = m_Project.Repository.Commit(m_User, "Some commit");
 
             // ACT
-            var branches = context.GitLabRepositoryCreateTag(server.Url.ToString(), "SomeAccessToken", projectId, commit.Sha, "tag-name");
+            var branches = await m_Context.GitLabRepositoryCreateTagAsync(m_Project.Server.Url.ToString(), "SomeAccessToken", projectId.AsProjectId(), commit.Sha, "tag-name");
 
             // ASSERT
             Assert.Collection(
-                project.Repository.GetTags(),
-                tag => Assert.Equal("tag-name", tag.FriendlyName)
+                m_Project.Repository.GetTags(),
+                tag =>
+                {
+                    Assert.Equal("tag-name", tag.FriendlyName);
+                    Assert.Equal(commit.Sha, tag.Target.Sha);
+                }
+            );
+        }
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Creates_expected_tag_from_branch_name(object projectId)
+        {
+            // ARRANGE
+            var commit = m_Project.Repository.Commit(m_User, "Some commit");
+            var branch = m_Project.Repository.CreateBranch("some-other-branch", commit.Sha);
+
+            // ACT
+            var branches = await m_Context.GitLabRepositoryCreateTagAsync(m_Project.Server.Url.ToString(), "SomeAccessToken", projectId.AsProjectId(), branch.FriendlyName, "tag-name");
+
+            // ASSERT
+            Assert.Collection(
+                m_Project.Repository.GetTags(),
+                tag =>
+                {
+                    Assert.Equal("tag-name", tag.FriendlyName);
+                    Assert.Equal(commit.Sha, tag.Target.Sha);
+                }
+            );
+        }
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Succeeds_if_tag_already_exists_for_the_target_commit(object projectId)
+        {
+            // ARRANGE
+            var commit = m_Project.Repository.Commit(m_User, "Some commit");
+            var branch = m_Project.Repository.CreateBranch("some-other-branch", commit.Sha);
+
+            m_Project.Repository.CreateTag("tag-name", commit.Sha);
+
+            // ACT
+            var branches = await m_Context.GitLabRepositoryCreateTagAsync(m_Project.Server.Url.ToString(), "SomeAccessToken", projectId.AsProjectId(), branch.FriendlyName, "tag-name");
+
+            // ASSERT
+            Assert.Collection(
+                m_Project.Repository.GetTags(),
+                tag =>
+                {
+                    Assert.Equal("tag-name", tag.FriendlyName);
+                    Assert.Equal(commit.Sha, tag.Target.Sha);
+                }
+            );
+        }
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Fails_if_tag_already_exists_for_the_different_commit(object projectId)
+        {
+            // ARRANGE
+            var commit1 = m_Project.Repository.Commit(m_User, "Commit 1");
+            var commit2 = m_Project.Repository.Commit(m_User, "Commit 2");
+            m_Project.Repository.CreateTag("tag-name", commit1.Sha);
+
+            // ACT
+            var ex = await Record.ExceptionAsync(async () => await m_Context.GitLabRepositoryCreateTagAsync(m_Project.Server.Url.ToString(), "SomeAccessToken", projectId.AsProjectId(), commit2.Sha, "tag-name"));
+
+            // ASSERT
+            Assert.NotNull(ex);
+            Assert.Collection(
+                m_Project.Repository.GetTags(),
+                tag =>
+                {
+                    Assert.Equal("tag-name", tag.FriendlyName);
+                    Assert.Equal(commit1.Sha, tag.Target.Sha);
+                }
             );
         }
     }
