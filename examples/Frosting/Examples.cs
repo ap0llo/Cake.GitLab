@@ -1,59 +1,56 @@
-﻿using Cake.GitLab;
-using NGitLab;
+﻿using NGitLab;
 
 return new CakeHost().Run(args);
 
-
 [TaskName("OverloadsExamples")]
 [TaskDescription("Example that shows the different available overloads to specify the GitLab Server, project and access token")]
-public class OverloadsExamplesTask : FrostingTask
+public class OverloadsExamplesTask : AsyncFrostingTask
 {
     //
     // Snippets defined here are used in docs/overloads.source.md.
     // See that document for additional explanations of the samples.
     //
-    public override void Run(ICakeContext context)
+    public override async Task RunAsync(ICakeContext context)
     {
         // begin-snippet: Overloads-Individual-Parameters
         // The project may be specified as either a string with the full project path 
-        context.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", "example-group/example-project");
+        await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", "example-group/example-project");
 
         // or using the project's numeric id
-        context.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", 12345);
+        await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", 12345);
         // end-snippet
 
 
         // begin-snippet: Overloads-Identity-Objects
         // GitLabServerIdentity can be used instead of the "serverUrl" string
         var serverIdentity = new GitLabServerIdentity("example.com");
-        context.GitLabRepositoryGetBranches(serverIdentity, "ACCESSTOKEN", "example-group/example-project");
+        await context.GitLabRepositoryGetBranchesAsync(serverIdentity, "ACCESSTOKEN", "example-group/example-project");
 
         // GitLabProjectIdentity replaces both the serverUrl and project parameters
         var projectIdentity = new GitLabProjectIdentity("example.com", "example-group", "example-project");
-        context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN");
+        await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN");
         // end-snippet
 
 
         // begin-snippet: Overloads-Connection-Objects
         // GitLabServerConnection replaces the serverUrl and accessToken parameters
         var serverConnection = new GitLabServerConnection("example.com", "ACCESSTOKEN");
-        context.GitLabRepositoryGetBranches(serverConnection, "example-group/example-project");
+        await context.GitLabRepositoryGetBranchesAsync(serverConnection, "example-group/example-project");
 
         // GitLabProjectConnection replaces the serverUrl, accessToken and project parameters
         var projectConnection = new GitLabProjectConnection("example.com", "example-group", "example-project", "ACCESSTOKEN");
-        context.GitLabRepositoryGetBranches(projectConnection);
+        await context.GitLabRepositoryGetBranchesAsync(projectConnection);
         // end-snippet
 
         // begin-snippet: Overloads-MixAndMatch
-        context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN");
-        context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN", "another-group/another-project");
+        await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN");
+        await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN", "another-group/another-project");
 
-        context.GitLabRepositoryGetBranches(projectConnection);
-        context.GitLabRepositoryGetBranches(projectConnection, "another-group/another-project");
+        await context.GitLabRepositoryGetBranchesAsync(projectConnection);
+        await context.GitLabRepositoryGetBranchesAsync(projectConnection, "another-group/another-project");
         // end-snippet
     }
 }
-
 
 [TaskName("IdentityAndConnectionExamples")]
 [TaskDescription("Example that shows ways to work with identity and connection object")]

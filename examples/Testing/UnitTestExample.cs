@@ -9,7 +9,7 @@ public class UnitTestExample
     //begin-snippet: Example-Testing
 
     [Fact]
-    public void GitLab_mocking_example()
+    public async Task GitLab_mocking_example()
     {
         //
         // ARRANGE
@@ -49,7 +49,7 @@ public class UnitTestExample
         //
         // ACT
         //
-        var branches = contextMock.Object.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", 23);
+        var branches = await contextMock.Object.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", 23);
 
         //
         // ASSERT

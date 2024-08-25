@@ -38,7 +38,7 @@ public class BuildContext(ICakeContext context) : FrostingContext(context), IGit
     }
 }
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L170-L187' title='Snippet source file'>snippet source</a> | <a href='#snippet-Example-GitLabClientFactory' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L167-L184' title='Snippet source file'>snippet source</a> | <a href='#snippet-Example-GitLabClientFactory' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## See Also

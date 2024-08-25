@@ -67,11 +67,11 @@ public static partial class GitLabAliases
     /// <param name="project">The path (name and namespace) or id of the project to get the branches for.</param>
     /// <example language="cs"><![CDATA[
     /// [TaskName("Get-Branches")]   
-    /// public class GetBranchesTask : FrostingTask
+    /// public class GetBranchesTask : AsyncFrostingTask
     /// {
-    ///    public override void Run(ICakeContext context)
+    ///    public override Task RunAsync(ICakeContext context)
     ///    {
-    ///      context.GitLabRepositoryGetBranches(
+    ///      await context.GitLabRepositoryGetBranchesAsync(
     ///          "https://gitlab.com",
     ///          "ACCESSTOKEN"
     ///          "owner/repository"
@@ -82,12 +82,12 @@ public static partial class GitLabAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Repository")]
-    public static IReadOnlyCollection<Branch> GitLabRepositoryGetBranches(this ICakeContext context, string serverUrl, string accessToken, ProjectId project)
+    public static async Task<IReadOnlyCollection<Branch>> GitLabRepositoryGetBranchesAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project)
     {
         var gitLabClient = GetClient(context, serverUrl, accessToken);
         var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
 
-        return repositoryClient.GetBranches(project);
+        return await repositoryClient.GetBranchesAsync(project);
     }
 
     /// <summary>

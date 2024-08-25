@@ -18,12 +18,12 @@ The most basic overloads allows specifying all values as individual parameters:
 <a id='snippet-Overloads-Individual-Parameters'></a>
 ```cs
 // The project may be specified as either a string with the full project path 
-context.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", "example-group/example-project");
+await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", "example-group/example-project");
 
 // or using the project's numeric id
-context.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", 12345);
+await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", 12345);
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L17-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Individual-Parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L15-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Individual-Parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 However, passing all required values individually can become repetitive, especially when calling multiple GitLab API functions.
@@ -45,13 +45,13 @@ There are two identity objects supported:
 ```cs
 // GitLabServerIdentity can be used instead of the "serverUrl" string
 var serverIdentity = new GitLabServerIdentity("example.com");
-context.GitLabRepositoryGetBranches(serverIdentity, "ACCESSTOKEN", "example-group/example-project");
+await context.GitLabRepositoryGetBranchesAsync(serverIdentity, "ACCESSTOKEN", "example-group/example-project");
 
 // GitLabProjectIdentity replaces both the serverUrl and project parameters
 var projectIdentity = new GitLabProjectIdentity("example.com", "example-group", "example-project");
-context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN");
+await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L26-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Identity-Objects' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L24-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Identity-Objects' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## "Connection" objects
@@ -68,13 +68,13 @@ There are two connection objects supported:
 ```cs
 // GitLabServerConnection replaces the serverUrl and accessToken parameters
 var serverConnection = new GitLabServerConnection("example.com", "ACCESSTOKEN");
-context.GitLabRepositoryGetBranches(serverConnection, "example-group/example-project");
+await context.GitLabRepositoryGetBranchesAsync(serverConnection, "example-group/example-project");
 
 // GitLabProjectConnection replaces the serverUrl, accessToken and project parameters
 var projectConnection = new GitLabProjectConnection("example.com", "example-group", "example-project", "ACCESSTOKEN");
-context.GitLabRepositoryGetBranches(projectConnection);
+await context.GitLabRepositoryGetBranchesAsync(projectConnection);
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L37-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Connection-Objects' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L35-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Connection-Objects' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Mix and Match
@@ -86,11 +86,11 @@ For example, use a GitLabProjectConnection object to hold data about the default
 <!-- snippet: Overloads-MixAndMatch -->
 <a id='snippet-Overloads-MixAndMatch'></a>
 ```cs
-context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN");
-context.GitLabRepositoryGetBranches(projectIdentity, "ACCESSTOKEN", "another-group/another-project");
+await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN");
+await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN", "another-group/another-project");
 
-context.GitLabRepositoryGetBranches(projectConnection);
-context.GitLabRepositoryGetBranches(projectConnection, "another-group/another-project");
+await context.GitLabRepositoryGetBranchesAsync(projectConnection);
+await context.GitLabRepositoryGetBranchesAsync(projectConnection, "another-group/another-project");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L47-L53' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-MixAndMatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L45-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-MixAndMatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

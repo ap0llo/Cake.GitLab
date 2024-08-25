@@ -51,19 +51,19 @@
         public static System.Threading.Tasks.Task GitLabRepositoryDownloadFileAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectConnection projectConnection) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> GitLabRepositoryGetBranchesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectConnection projectConnection) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectIdentity projectIdentity, string accessToken) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> GitLabRepositoryGetBranchesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectIdentity projectIdentity, string accessToken) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerConnection serverConnection, NGitLab.Models.ProjectId project) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> GitLabRepositoryGetBranchesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerConnection serverConnection, NGitLab.Models.ProjectId project) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> GitLabRepositoryGetBranchesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch> GitLabRepositoryGetBranches(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> GitLabRepositoryGetBranchesAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
     }
     public static class GitLabClientFactory
     {

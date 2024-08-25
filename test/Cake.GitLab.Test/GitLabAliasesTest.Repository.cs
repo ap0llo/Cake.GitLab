@@ -116,7 +116,7 @@ public partial class GitLabAliasesTest
         [Theory]
         [InlineData(s_ProjectId)]
         [InlineData(s_ProjectPath)]
-        public void Returns_expected_branches(object projectIdOrPath)
+        public async Task Returns_expected_branches(object projectIdOrPath)
         {
             // ARRANGE
             ProjectId projectId = projectIdOrPath is string
@@ -138,7 +138,7 @@ public partial class GitLabAliasesTest
             context.AddServer(server);
 
             // ACT
-            var branches = context.GitLabRepositoryGetBranches(server.Url.ToString(), "SomeAccessToken", projectId);
+            var branches = await context.GitLabRepositoryGetBranchesAsync(server.Url.ToString(), "SomeAccessToken", projectId);
 
             // ASSERT
             Assert.Collection(

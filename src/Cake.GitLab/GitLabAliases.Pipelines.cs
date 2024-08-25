@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.GitLab.Internal;

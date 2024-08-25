@@ -21,7 +21,7 @@ The following snippet shows an example of an (xunit-based) unit test that follow
 <a id='snippet-Example-Testing'></a>
 ```cs
 [Fact]
-public void GitLab_mocking_example()
+public async Task GitLab_mocking_example()
 {
     //
     // ARRANGE
@@ -61,7 +61,7 @@ public void GitLab_mocking_example()
     //
     // ACT
     //
-    var branches = contextMock.Object.GitLabRepositoryGetBranches("https://example.com", "ACCESSTOKEN", 23);
+    var branches = await contextMock.Object.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", 23);
 
     //
     // ASSERT

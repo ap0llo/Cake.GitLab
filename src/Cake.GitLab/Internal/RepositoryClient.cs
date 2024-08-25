@@ -44,7 +44,7 @@ internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGi
         outStream.Write(Convert.FromBase64String(fileData.Content));
     }
 
-    public IReadOnlyCollection<Branch> GetBranches(ProjectId project)
+    public ValueTask<IReadOnlyCollection<Branch>> GetBranchesAsync(ProjectId project)
     {
         m_Log.Debug($"Getting branches from GitLab project {project}");
 
@@ -59,7 +59,7 @@ internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGi
             throw new CakeException($"Failed to get branches for from GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
         }
 
-        return branches;
+        return new ValueTask<IReadOnlyCollection<Branch>>(branches);
     }
 
     public async Task<Tag> CreateTagAsync(ProjectId project, string @ref, string name)

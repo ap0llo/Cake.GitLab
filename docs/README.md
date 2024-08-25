@@ -7,7 +7,7 @@ For each alias, multiple overloads are available, see [Overloads](./overloads.md
 |------------|---------------------------------------|--------------------------------------------------|
 | Pipelines  | `GitLabGetPipelineAsync()`            | Gets data about a GitLab CI pipeline             |
 | Repository | `GitLabRepositoryDownloadFileAsync()` | Downloads a file from a GitLab-hosted repository |
-|            | `GitLabRepositoryGetBranches()`       | Lists all of a project's branches                |
+|            | `GitLabRepositoryGetBranchesAsync()`  | Lists all of a project's branches                |
 |            | `GitLabRepositoryCreateTagAsync()`    | Creates a new tag in the project repository      |
 
 ## Additional Information
