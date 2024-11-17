@@ -14,6 +14,8 @@ To change this file edit the source file and then run MarkdownSnippets.
   * ["Identity" objects](#identity-objects)
     * [GitLabServerIdentity](#gitlabserveridentity)
     * [GitLabProjectIdentity](#gitlabprojectidentity)
+    * [Get identity from a git remote url](#get-identity-from-a-git-remote-url)
+    * [Get identity from environment variables](#get-identity-from-environment-variables)
   * ["Connection" objects](#connection-objects)
     * [GitLabServerConnection](#gitlabserverconnection)
     * [GitLabProjectConnection](#gitlabprojectconnection)<!-- endToc -->
@@ -66,20 +68,6 @@ projectIdentity = new GitLabProjectIdentity("example.com", "example-group/exampl
 <sup><a href='/examples/Frosting/Examples.cs#L77-L86' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-Simple' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-Further, the project identity can be extracted from the git remote url of a (local) git repository.
-This can be useful to e.g. avoid hard-coding GitLab project information in a Cake build script and instead retrieve the data from the local git repository.
-
-<!-- snippet: GitLabProjectIdentity-FromRemoteUrl -->
-<a id='snippet-GitLabProjectIdentity-FromRemoteUrl'></a>
-```cs
-// The project identity can also be constructed from a git remote url (either SSH or HTTP urls)
-GitLabProjectIdentity projectIdentity;
-projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
-projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("https://example.com/example-group/example-project.git");
-```
-<sup><a href='/examples/Frosting/Examples.cs#L90-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-FromRemoteUrl' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
-
 Project identity objects are immutable record types, modified copies can be created using C#'s `with` expression. 
 
 <!-- snippet: GitLabProjectIdentity-CopyAndModify -->
@@ -98,6 +86,34 @@ otherProjectIdentity = projectIdentity with { Namespace = "another-group/subgrou
 ```
 <sup><a href='/examples/Frosting/Examples.cs#L99-L112' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-CopyAndModify' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+### Get identity from a git remote url
+
+The project identity can be extracted from the git remote url of a (local) git repository.
+This can be useful to e.g. avoid hard-coding GitLab project information in a Cake build script and instead retrieve the data from the local git repository.
+
+<!-- snippet: GitLabProjectIdentity-FromRemoteUrl -->
+<a id='snippet-GitLabProjectIdentity-FromRemoteUrl'></a>
+```cs
+// The project identity can also be constructed from a git remote url (either SSH or HTTP urls)
+GitLabProjectIdentity projectIdentity;
+projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
+projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("https://example.com/example-group/example-project.git");
+```
+<sup><a href='/examples/Frosting/Examples.cs#L90-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-FromRemoteUrl' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Get identity from environment variables
+
+If a build is running on GitLab CI, the current server and project identities can be determined automatically from [GitLab CI's predefined variables](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html).
+
+A build running on GitLab CI can use the following aliases to determine the current server or project identity:
+
+- `GitLabTryGetCurrentServerIdentity()`: Creates a `GitLabServerIdentity` for the current build
+- `GitLabTryGetCurrentProjectIdentity()`: Creates a `GitLabProjectIdentity` for the current build
+
+If the build is not running in a GitLab CI pipeline, both aliases will return `null`.
 
 ## "Connection" objects
 

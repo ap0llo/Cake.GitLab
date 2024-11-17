@@ -38,7 +38,10 @@ public class FakeContext : ICakeContext, IGitLabClientFactory
 
     ICakeArguments ICakeContext.Arguments => throw new NotImplementedException();
 
-    IProcessRunner ICakeContext.ProcessRunner => throw new NotImplementedException();
+    public FakeProcessRunner ProcessRunner { get; } = new();
+
+    /// <inheritdoc />
+    IProcessRunner ICakeContext.ProcessRunner => ProcessRunner;
 
     IRegistry ICakeContext.Registry => throw new NotImplementedException();
 
@@ -68,7 +71,6 @@ public class FakeContext : ICakeContext, IGitLabClientFactory
         if (m_GitLabServers.TryGetValue(serverUrl, out var server))
         {
             return server.CreateClient(server.Users.First());
-
         }
         else
         {

@@ -136,6 +136,26 @@ public record GitLabProjectIdentity : GitLabServerIdentity
     public static bool TryGetFromGitRemoteUrl(string remoteUrl, [NotNullWhen(true)] out GitLabProjectIdentity? projectIdentity) =>
         TryParseRemoteUrl(remoteUrl, out projectIdentity, out var _);
 
+    /// <summary>
+    /// Attempts to create a <see cref="GitLabProjectIdentity"/> from a host name and a project path.
+    /// </summary>
+    internal static bool TryGetFromHostAndProjectPath(string host, string projectPath, [NotNullWhen(true)] out GitLabProjectIdentity? projectIdentity)
+    {
+        if (String.IsNullOrWhiteSpace(host))
+        {
+            projectIdentity = null;
+            return false;
+        }
+
+        if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
+        {
+            projectIdentity = null;
+            return false;
+        }
+
+        projectIdentity = new GitLabProjectIdentity(host, @namespace, project);
+        return true;
+    }
 
     private static bool TryParseProjectPath(string projectPath, [NotNullWhen(true)] out string? @namespace, [NotNullWhen(true)] out string? project, [NotNullWhen(false)] out string? errorMessage)
     {

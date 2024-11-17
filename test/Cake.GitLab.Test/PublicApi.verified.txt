@@ -79,6 +79,12 @@
         [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task GitLabSetPipelineNameAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Helpers")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static Cake.GitLab.GitLabProjectIdentity? GitLabTryGetCurrentProjectIdentity(this Cake.Core.ICakeContext context) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Helpers")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static Cake.GitLab.GitLabServerIdentity? GitLabTryGetCurrentServerIdentity(this Cake.Core.ICakeContext context) { }
     }
     public static class GitLabClientFactory
     {

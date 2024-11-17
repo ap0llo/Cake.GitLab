@@ -32,14 +32,28 @@ A project identity can be constructed from these individual values:
 
 snippet: GitLabProjectIdentity-Simple
 
-Further, the project identity can be extracted from the git remote url of a (local) git repository.
+Project identity objects are immutable record types, modified copies can be created using C#'s `with` expression. 
+
+snippet: GitLabProjectIdentity-CopyAndModify
+
+### Get identity from a git remote url
+
+The project identity can be extracted from the git remote url of a (local) git repository.
 This can be useful to e.g. avoid hard-coding GitLab project information in a Cake build script and instead retrieve the data from the local git repository.
 
 snippet: GitLabProjectIdentity-FromRemoteUrl
 
-Project identity objects are immutable record types, modified copies can be created using C#'s `with` expression. 
 
-snippet: GitLabProjectIdentity-CopyAndModify
+### Get identity from environment variables
+
+If a build is running on GitLab CI, the current server and project identities can be determined automatically from [GitLab CI's predefined variables](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html).
+
+A build running on GitLab CI can use the following aliases to determine the current server or project identity:
+
+- `GitLabTryGetCurrentServerIdentity()`: Creates a `GitLabServerIdentity` for the current build
+- `GitLabTryGetCurrentProjectIdentity()`: Creates a `GitLabProjectIdentity` for the current build
+
+If the build is not running in a GitLab CI pipeline, both aliases will return `null`.
 
 ## "Connection" objects
 

@@ -13,7 +13,7 @@ using Xunit.Abstractions;
 
 namespace Cake.GitLab.Test;
 
-public partial class GitLabAliasesTest
+public static partial class GitLabAliasesTest
 {
     private const string s_GroupName = "group1";
     private const string s_ProjectName = "project1";
@@ -92,7 +92,7 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            // ACT            
+            // ACT
             var ex = await Record.ExceptionAsync(async () => await context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, "does-not-exist", "main", "output.txt"));
 
             // ASSERT

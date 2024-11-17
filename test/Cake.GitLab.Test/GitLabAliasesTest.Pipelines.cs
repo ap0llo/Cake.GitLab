@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace Cake.GitLab.Test;
 
-public partial class GitLabAliasesTest
+public static partial class GitLabAliasesTest
 {
     public class GitLabGetPipelineAsync(ITestOutputHelper testOutputHelper)
     {
@@ -68,7 +68,7 @@ public partial class GitLabAliasesTest
             var context = new FakeContext(testOutputHelper);
             context.AddServer(server);
 
-            // ACT            
+            // ACT
             var ex = await Record.ExceptionAsync(async () => await context.GitLabGetPipelineAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, s_PipelineId + 10));
 
             // ASSERT
