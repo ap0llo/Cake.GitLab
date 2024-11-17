@@ -6,7 +6,7 @@ using Cake.Frosting;
 using Grynwald.SharedBuild;
 
 return new CakeHost()
-    .UseModule<AzurePipelinesModule>()
+    //.UseModule<AzurePipelinesModule>()
     .UseModule<LocalToolsModule>()
     .InstallToolsFromManifest(".config/dotnet-tools.json")
     .UseSharedBuild<BuildContext>()
