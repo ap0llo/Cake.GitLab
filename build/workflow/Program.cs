@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.AzurePipelines.Module;
 using Cake.Core;
 using Cake.DotNetLocalTools.Module;
@@ -28,4 +29,19 @@ public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
             isActive: context => context.Git.IsReleaseBranch
         )
     ];
+}
+
+
+[TaskName(TaskNames.Test)]
+[IsDependentOn(typeof(BuildTask))]
+public class CustomTestTask : TestTask
+{
+    public override void Run(IBuildContext context)
+    {
+
+    }
+
+    public override void OnError(Exception exception, IBuildContext context)
+    {
+    }
 }
