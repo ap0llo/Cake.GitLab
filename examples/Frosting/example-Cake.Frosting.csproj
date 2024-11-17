@@ -8,6 +8,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- 
+      Keep NuGet vulnerability warnings as errors (not practical to force package updates when unrelated changes are implemented)
+      See Also: https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu1901-nu1904  
+    -->
+    <NoWarn>$(WarningsNotAsErrors);NU1901;NU1902;NU1903;NU1904</NoWarn>    
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Cake.Frosting" Version="4.0.0" />
   </ItemGroup>
@@ -15,13 +23,12 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Cake.GitLab/Cake.GitLab.csproj" />
   </ItemGroup>
-
-
+  
   <ItemGroup>
     <Using Include="Cake.Core" />
     <Using Include="Cake.Common" />
     <Using Include="Cake.Frosting" />
     <Using Include="Cake.GitLab" />
   </ItemGroup>
-
+  
 </Project>
