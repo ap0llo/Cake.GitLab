@@ -6,7 +6,7 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsulates the identity of GitLab server
 /// </summary>
-public record GitLabServerIdentity : IEquatable<GitLabServerIdentity>
+public record GitLabServerIdentity
 {
     private readonly string m_Host;
 

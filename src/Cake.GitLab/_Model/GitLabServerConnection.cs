@@ -6,7 +6,7 @@ namespace Cake.GitLab;
 /// <summary>
 /// Provides both the identity and credentials for a GitLab server
 /// </summary>
-public record GitLabServerConnection : GitLabServerIdentity, IEquatable<GitLabServerConnection>
+public record GitLabServerConnection : GitLabServerIdentity
 {
     private readonly string m_AccessToken = "";
 

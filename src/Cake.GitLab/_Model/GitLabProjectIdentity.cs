@@ -15,7 +15,7 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsulates the identity of a project on a GitLab server
 /// </summary>
-public record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabProjectIdentity>
+public record GitLabProjectIdentity : GitLabServerIdentity
 {
     private readonly string m_Namespace;
     private readonly string m_Project;
