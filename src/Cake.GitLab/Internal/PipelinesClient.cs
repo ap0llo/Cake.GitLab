@@ -24,4 +24,18 @@ internal sealed class PipelinesClient(ICakeLog log, IFileSystem fileSystem, IGit
             throw new CakeException($"Error while getting pipeline {pipelineId} from GitLab project {project}: {ex.Message}", ex);
         }
     }
+
+    public async Task SetPipelineNameAsync(ProjectId project, int pipelineId, string name)
+    {
+        m_Log.Verbose($"Setting name of pipeline {pipelineId} in GitLab project {project} to {name}");
+        var pipelinesClient = m_GitLabClient.GetPipelines(project);
+        try
+        {
+            await pipelinesClient.UpdateMetadataAsync(pipelineId, new PipelineMetadataUpdate() { Name = name });
+        }
+        catch (GitLabException ex)
+        {
+            throw new CakeException($"Error while setting name of pipeline {pipelineId} in GitLab project {project}: {ex.Message}", ex);
+        }
+    }
 }

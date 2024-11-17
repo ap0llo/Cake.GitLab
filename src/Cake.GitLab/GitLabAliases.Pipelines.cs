@@ -15,7 +15,7 @@ public static partial class GitLabAliases
     /// <param name="serverUrl">The url of the GitLab server</param>
     /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
     /// <param name="project">The path (name and namespace) or id of the project to get the pipeline data for.</param>
-    /// <param name="pipelineId">The id of the pipeline to load data for.</param>    
+    /// <param name="pipelineId">The id of the pipeline to load data for.</param>
     [CakeMethodAlias]
     [CakeAliasCategory("Pipelines")]
     public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId)
@@ -24,6 +24,22 @@ public static partial class GitLabAliases
         return await pipelinesClient.GetPipelineAsync(project, pipelineId);
     }
 
+    /// <summary>
+    /// Updates the name of the specified pipeline
+    /// </summary>
+    /// <param name="context">The current Cake context</param>
+    /// <param name="serverUrl">The url of the GitLab server</param>
+    /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
+    /// <param name="project">The path (name and namespace) or id of the project to get the pipeline data for.</param>
+    /// <param name="pipelineId">The id of the pipeline to load data for.</param>
+    /// <param name="name">The name to set the pipeline name to.</param>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Pipelines")]
+    public static async Task GitLabSetPipelineNameAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId, string name)
+    {
+        var pipelinesClient = GetPipelinesClient(context, serverUrl, accessToken);
+        await pipelinesClient.SetPipelineNameAsync(project, pipelineId, name);
+    }
 
     private static PipelinesClient GetPipelinesClient(ICakeContext context, string serverUrl, string accessToken)
     {

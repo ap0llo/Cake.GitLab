@@ -64,6 +64,21 @@
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> GitLabRepositoryGetBranchesAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task GitLabSetPipelineNameAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectConnection projectConnection, int pipelineId, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task GitLabSetPipelineNameAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabProjectIdentity projectIdentity, string accessToken, int pipelineId, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task GitLabSetPipelineNameAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerConnection serverConnection, NGitLab.Models.ProjectId project, int pipelineId, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task GitLabSetPipelineNameAsync(this Cake.Core.ICakeContext context, Cake.GitLab.GitLabServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project, int pipelineId, string name) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task GitLabSetPipelineNameAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId, string name) { }
     }
     public static class GitLabClientFactory
     {
