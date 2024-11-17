@@ -25,7 +25,7 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Helpers")]
     public static GitLabServerIdentity? GitLabTryGetCurrentServerIdentity(this ICakeContext context)
     {
-        var log = CreateLog(context);
+        var log = GetLogForCurrentAlias(context);
 
         log.Debug("Attempting to determine the current GitLab server identity");
 
@@ -62,7 +62,7 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Helpers")]
     public static GitLabProjectIdentity? GitLabTryGetCurrentProjectIdentity(this ICakeContext context)
     {
-        var log = CreateLog(context);
+        var log = GetLogForCurrentAlias(context);
 
         log.Debug("Attempting to determine the current GitLab project identity");
 

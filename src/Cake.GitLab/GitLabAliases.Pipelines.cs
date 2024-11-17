@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.GitLab.Internal;
@@ -41,10 +42,11 @@ public static partial class GitLabAliases
         await pipelinesClient.SetPipelineNameAsync(project, pipelineId, name);
     }
 
-    private static PipelinesClient GetPipelinesClient(ICakeContext context, string serverUrl, string accessToken)
+    private static PipelinesClient GetPipelinesClient(ICakeContext context, string serverUrl, string accessToken, [CallerMemberName] string aliasName = "")
     {
         var gitLabClient = GetClient(context, serverUrl, accessToken);
-        var pipelinesClient = new PipelinesClient(context.Log, context.FileSystem, gitLabClient);
+        var log = GetLogForCurrentAlias(context, aliasName);
+        var pipelinesClient = new PipelinesClient(log, context.FileSystem, gitLabClient);
         return pipelinesClient;
     }
 }

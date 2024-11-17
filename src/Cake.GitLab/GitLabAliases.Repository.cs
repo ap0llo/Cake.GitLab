@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -22,7 +23,7 @@ public static partial class GitLabAliases
     /// <param name="ref">The name of the branch, a git tag or commit specifying the version of the file to get.</param>
     /// <param name="destination">The path to save the file's content to.</param>
     /// <example language="cs"><![CDATA[
-    /// [TaskName("Download-File")]   
+    /// [TaskName("Download-File")]
     /// public class DownloadRepositoryFileTask : AsyncFrostingTask
     /// {
     ///    public override async Task RunAsync(ICakeContext context)
@@ -59,7 +60,7 @@ public static partial class GitLabAliases
     /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
     /// <param name="project">The path (name and namespace) or id of the project to get the branches for.</param>
     /// <example language="cs"><![CDATA[
-    /// [TaskName("Get-Branches")]   
+    /// [TaskName("Get-Branches")]
     /// public class GetBranchesTask : AsyncFrostingTask
     /// {
     ///    public override Task RunAsync(ICakeContext context)
@@ -95,7 +96,7 @@ public static partial class GitLabAliases
     /// <param name="ref">The ref to create the tag from. Can be a commit SHA, branch name or existing tag name</param>
     /// <param name="name"></param>
     /// <example language="cs"><![CDATA[
-    /// [TaskName("Create-Tag")]   
+    /// [TaskName("Create-Tag")]
     /// public class CreateTagTask : FrostingTask
     /// {
     ///    public override void Run(ICakeContext context)
@@ -104,7 +105,7 @@ public static partial class GitLabAliases
     ///          "https://gitlab.com",
     ///          "ACCESSTOKEN"
     ///          "owner/repository",
-    ///          "b5d7135",    
+    ///          "b5d7135",
     ///          "tagName"
     ///      );
     ///    }
@@ -123,10 +124,11 @@ public static partial class GitLabAliases
         return await repositoryClient.CreateTagAsync(project, @ref, name);
     }
 
-    private static RepositoryClient GetRepositoryClient(ICakeContext context, string serverUrl, string accessToken)
+    private static RepositoryClient GetRepositoryClient(ICakeContext context, string serverUrl, string accessToken, [CallerMemberName] string aliasName = "")
     {
         var gitLabClient = GetClient(context, serverUrl, accessToken);
-        var repositoryClient = new RepositoryClient(context.Log, context.FileSystem, gitLabClient);
+        var log = GetLogForCurrentAlias(context, aliasName);
+        var repositoryClient = new RepositoryClient(log, context.FileSystem, gitLabClient);
         return repositoryClient;
     }
 }
