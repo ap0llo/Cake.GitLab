@@ -4,7 +4,7 @@ using Cake.GitLab.Internal;
 namespace Cake.GitLab;
 
 /// <summary>
-/// Encapsualtes the identity of GitLab server
+/// Encapsulates the identity of GitLab server
 /// </summary>
 public record GitLabServerIdentity : IEquatable<GitLabServerIdentity>
 {

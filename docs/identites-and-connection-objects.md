@@ -20,7 +20,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 ## Overview
 
-The connections aprameters for a GitLab Server or proejct may be specified as a "Identity" or "Connection" objects.
+The connections parameters for a GitLab Server or project may be specified as "Identity" or "Connection" objects.
 
 - An "identity" object encapsulates all data required to identify a server or a project.
 - A "connection" object combines the data to identify a project or server with an access token required to authenticate.
@@ -29,7 +29,7 @@ The connections aprameters for a GitLab Server or proejct may be specified as a 
 
 ### GitLabServerIdentity
 
-A `GitLabServerIdentity` object encapsualtes all data to identify a Gitlab server.
+A `GitLabServerIdentity` object encapsulates all data to identify a Gitlab server.
 
 It can be created from the GitLab server's host name.
 
@@ -43,11 +43,11 @@ var serverIdentity = new GitLabServerIdentity("example.com");
 
 ### GitLabProjectIdentity
 
-A `GitLabProjectIdentity` object encapsualtes all data to identify a project on a Gitlab server.
+A `GitLabProjectIdentity` object encapsulates all data to identify a project on a Gitlab server.
 This includes
 
 - The server's host name
-- The project namespace (i.e. the name of the user or group (including sub-gropus) that owns the project)
+- The project namespace (i.e. the name of the user or group (including subgroups) that owns the project)
 - The project name
 
 A project identity can be constructed from these individual values:
@@ -67,7 +67,7 @@ projectIdentity = new GitLabProjectIdentity("example.com", "example-group/exampl
 <!-- endSnippet -->
 
 Further, the project identity can be extracted from the git remote url of a (local) git repository.
-This can be useful to e.g. avoid hard-coding GitLab projeet information in a Cake build script and instead retrieve the data from the local git reporsitory.
+This can be useful to e.g. avoid hard-coding GitLab project information in a Cake build script and instead retrieve the data from the local git repository.
 
 <!-- snippet: GitLabProjectIdentity-FromRemoteUrl -->
 <a id='snippet-GitLabProjectIdentity-FromRemoteUrl'></a>
@@ -82,8 +82,8 @@ projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("https://example.com/ex
 
 Project identity objects are immutable record types, modified copies can be created using C#'s `with` expression. 
 
-<!-- snippet: GitLabProjectIdentity-CopyAndModifiy -->
-<a id='snippet-GitLabProjectIdentity-CopyAndModifiy'></a>
+<!-- snippet: GitLabProjectIdentity-CopyAndModify -->
+<a id='snippet-GitLabProjectIdentity-CopyAndModify'></a>
 ```cs
 var projectIdentity = new GitLabProjectIdentity("example.com", "example-group", "example-project");
 
@@ -96,7 +96,7 @@ otherProjectIdentity = projectIdentity with { ProjectPath = "another-group/subgr
 // This is equivalent to
 otherProjectIdentity = projectIdentity with { Namespace = "another-group/subgroup", Project = "another-project" };
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L99-L112' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-CopyAndModifiy' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L99-L112' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-CopyAndModify' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## "Connection" objects

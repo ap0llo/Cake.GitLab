@@ -13,7 +13,7 @@ using Cake.GitLab.Internal;
 namespace Cake.GitLab;
 
 /// <summary>
-/// Encapsualtes the identity of a project on a GitLab server
+/// Encapsulates the identity of a project on a GitLab server
 /// </summary>
 public record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabProjectIdentity>
 {
@@ -69,7 +69,7 @@ public record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabPro
     /// Initializes a new instance of <see cref="GitLabProjectIdentity"/>
     /// </summary>
     /// <param name="host">The host name of the GitLab server.</param>
-    /// <param name="namespace">The GitLab project's namespace (user name or group and subgroup)</param>
+    /// <param name="namespace">The GitLab project's namespace (username or group and subgroup)</param>
     /// <param name="project">The GitLab project's name</param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="host"/>, <paramref name="namespace"/> or <paramref name="project"/> is null or whitespace</exception>
     public GitLabProjectIdentity(string host, string @namespace, string project) : base(host)
@@ -132,7 +132,7 @@ public record GitLabProjectIdentity : GitLabServerIdentity, IEquatable<GitLabPro
 
     /// <summary>
     /// Attempts to determine the GitLab server and project path based on a git repository's remote url
-    /// </summary>    
+    /// </summary>
     public static bool TryGetFromGitRemoteUrl(string remoteUrl, [NotNullWhen(true)] out GitLabProjectIdentity? projectIdentity) =>
         TryParseRemoteUrl(remoteUrl, out projectIdentity, out var _);
 

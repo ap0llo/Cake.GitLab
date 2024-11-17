@@ -13,7 +13,7 @@ public class OverloadsExamplesTask : AsyncFrostingTask
     public override async Task RunAsync(ICakeContext context)
     {
         // begin-snippet: Overloads-Individual-Parameters
-        // The project may be specified as either a string with the full project path 
+        // The project may be specified as either a string with the full project path
         await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", "example-group/example-project");
 
         // or using the project's numeric id
@@ -96,7 +96,7 @@ public class IdentityAndConnectionExamplesTask : FrostingTask
         }
 
         {
-            // begin-snippet: GitLabProjectIdentity-CopyAndModifiy
+            // begin-snippet: GitLabProjectIdentity-CopyAndModify
             var projectIdentity = new GitLabProjectIdentity("example.com", "example-group", "example-project");
 
             // Changing the "Project" property creates the identity of a project in the same group/subgroup on the same GitLab server
@@ -116,14 +116,14 @@ public class IdentityAndConnectionExamplesTask : FrostingTask
     private void ServerConnectionExamples()
     {
         {
-            // begin-snippet: GitLabServerConnection-Simple            
+            // begin-snippet: GitLabServerConnection-Simple
             var serverConnection = new GitLabServerConnection("example.com", "ACCESSTOKEN");
             // end-snippet
         }
 
         {
 
-            // begin-snippet: GitLabServerConnection-FromIdentity     
+            // begin-snippet: GitLabServerConnection-FromIdentity
             var serverIdentity = new GitLabServerIdentity("example.com");
 
             GitLabServerConnection serverConnection;
@@ -154,7 +154,7 @@ public class IdentityAndConnectionExamplesTask : FrostingTask
 
         {
 
-            // begin-snippet: GitLabProjectConnection-FromIdentity            
+            // begin-snippet: GitLabProjectConnection-FromIdentity
             var projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
 
             var projectConnection = new GitLabProjectConnection(projectIdentity, "ACCESSTOKEN");
@@ -169,7 +169,7 @@ public class BuildContext(ICakeContext context) : FrostingContext(context), IGit
 {
     public IGitLabClient GetClient(string serverUrl, string accessToken)
     {
-        // Intercept creation of client 
+        // Intercept creation of client
         if (serverUrl == "https://example.com")
         {
             // Create a custom client here

@@ -11,11 +11,11 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 This packages provides test doubles for many of `NGitLab`'s types and can be used to mock a GitLab server in your application or Cake Build.
 
-`Cake.GitLab` provides the `IGitLabClientFactory` interface, which - when implemented by the Cake context - allows controlling the initializaiton of the `IGitLabClient` that is used by the GitLab aliases.
+`Cake.GitLab` provides the `IGitLabClientFactory` interface, which - when implemented by the Cake context - allows controlling the initialization of the `IGitLabClient` that is used by the GitLab aliases.
 
 This can be used to inject a mocked GitLab client into the aliases in unit tests.
 
-The following snippet shows an example of an (xunit-based) unit test that follows this approach.
+The following snippet shows an example of a (xunit-based) unit test that follows this approach.
 
 <!-- snippet: Example-Testing -->
 <a id='snippet-Example-Testing'></a>

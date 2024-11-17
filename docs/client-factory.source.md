@@ -2,7 +2,7 @@
 
 `Cake.GitLab` is based on the [NGitLab library](https://github.com/ubisoft/NGitLab) and performs all interactions with GitLab through NGitLab's `IGitLabClient` interface.
 
-`Cake.GitLab` will create an instance of the default implementation (`GitLabClient`) for every operatation.
+`Cake.GitLab` will create an instance of the default implementation (`GitLabClient`) for every operation.
 This should work in almost all cases.
 
 In case you want to intercept the creation of the client (e.g. to use a custom implementation of `IGitLabClient` or for [testing](./testing.md)), add an implementation of the `IGitLabClientFactory` interface to your build context class (this will only work for `Cake.Frosting` projects.)

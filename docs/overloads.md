@@ -17,7 +17,7 @@ The most basic overloads allows specifying all values as individual parameters:
 <!-- snippet: Overloads-Individual-Parameters -->
 <a id='snippet-Overloads-Individual-Parameters'></a>
 ```cs
-// The project may be specified as either a string with the full project path 
+// The project may be specified as either a string with the full project path
 await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", "example-group/example-project");
 
 // or using the project's numeric id
