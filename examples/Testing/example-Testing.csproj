@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
     <IsPackable>false</IsPackable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Testing" Version="4.0.0" />
-    <PackageReference Include="Cake.Core" Version="4.0.0" />
+    <PackageReference Include="Cake.Testing" Version="5.0.0" />
+    <PackageReference Include="Cake.Core" Version="5.0.0" />
     <PackageReference Include="Cake.Common" Version="4.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageReference Include="xunit" Version="2.9.0" />
