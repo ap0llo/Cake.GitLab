@@ -4,12 +4,13 @@ using Cake.Core;
 using Cake.DotNetLocalTools.Module;
 using Cake.Frosting;
 using Grynwald.SharedBuild;
+using Grynwald.SharedBuild.Tasks;
 
 return new CakeHost()
     //.UseModule<AzurePipelinesModule>()
     .UseModule<LocalToolsModule>()
     .InstallToolsFromManifest(".config/dotnet-tools.json")
-    .UseSharedBuild<BuildContext>()
+    .UseSharedBuild<BuildContext>(taskFilter: type => type != typeof(TestTask))
     .Run(args);
 
 public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
