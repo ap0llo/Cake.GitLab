@@ -33,7 +33,6 @@ public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
 
 
 [TaskName(TaskNames.Test)]
-[IsDependentOn(typeof(BuildTask))]
 public class CustomTestTask : TestTask
 {
     public override void Run(IBuildContext context)
