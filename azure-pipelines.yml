@@ -20,7 +20,7 @@ jobs:
     displayName: Cake Build
     inputs:
       filePath: ./build.ps1
-      arguments: --target CI --configuration $(buildConfiguration)
+      arguments: --target CI --configuration $(buildConfiguration) --verbosity Diagnostic
     env:
      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
      GITHUB_ACCESSTOKEN: $(GitHub.AccessToken)
