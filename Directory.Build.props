@@ -57,14 +57,5 @@
     <!-- When running in Azure Pipelines, use locked mode -->
     <RestoreLockedMode Condition=" '$(TF_BUILD)' == 'true' ">true</RestoreLockedMode>
   </PropertyGroup>
-
-
-  <!-- 
-    There are some unmerged changes into NGitLab that this repo needs.
-    Until then, reference NGitLab as git submodule instead of NuGet
-  -->
-  <PropertyGroup>
-    <NGitLabUseSubmodule>true</NGitLabUseSubmodule>
-  </PropertyGroup>
-
+  
 </Project>
