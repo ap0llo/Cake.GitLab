@@ -1,0 +1,13 @@
+name: Cake.GitLab CI
+
+# Trigger build for pushes to the main branch and all release branches
+# As well as all Pull Requests targeting these branches
+on:
+  push:
+    branches: 
+      - $default-branch 
+      - release/*
+  pull_request:
+    branches: 
+      - $default-branch
+      - release/*
