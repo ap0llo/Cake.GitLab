@@ -1,26 +1,60 @@
-name: Cake.GitLab CI
+﻿name: CI
 
 # Trigger build for pushes to the main branch and all release branches
 # As well as all Pull Requests targeting these branches
 on:
   push:
-    branches: 
-      - $default-branch 
+    branches:
+      - main
       - release/*
   pull_request:
-    branches: 
-      - $default-branch
+    branches:
+      - main
       - release/*
+  # Adding the "workflow_dispatch" trigger allows the workflow to be started manually from the GitHub Web UI
   workflow_dispatch:
 
 
+permissions:
+  # Write permissions to issues and PRs is required for automatically setting the PR milestone  
+  issues: write
+  pull-requests: write
+  # Write permissions for actions is required for uploading pipeline artifacts
+  actions: write
+  # Read access to the repo is required for generating the change log
+  # Write access to the repo is required for creating/update GitHub releases
+  contents: write
+
+env:
+  BUILD_CONFIGURATION: Release
+  # Disable telemetry and "Welcome" message of dotnet CLI
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  # Expose the Pull Request number as environment variable (there is no predefined variable for this unfortunately)
+  PR_NUMBER: ${{ github.event.number }}
+  GITHUB_ACCESSTOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   build:
+    name: "Build"
     runs-on: ubuntu-latest
-    steps:      
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Run Build
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Disable shallow clones (Nerdbank.GitVersioning requires the full history to calculate the version)
+      - name: Set up environment variables
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // The 'ACTIONS_*' variables are required by the Cake build for uploading artifacts
+            // For some reason, these are available in process.env here but not in the regular environment variables for the job that calls Cake.
+            // core.exportVariable() adds the variables to the environment of the current and all following steps
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');          
+            core.exportVariable('ACTIONS_RUNTIME_URL', process.env.ACTIONS_RUNTIME_URL || '');          
+            core.exportVariable('ACTIONS_RESULTS_URL', process.env.ACTIONS_RESULTS_URL || '');          
+      - name: Run Cake Build
         run: |-
-          echo "Hello World"
-
+          ./build.sh --target CI --configuration $BUILD_CONFIGURATION
