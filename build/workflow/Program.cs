@@ -1,15 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.AzurePipelines.Module;
 using Cake.Core;
 using Cake.DotNetLocalTools.Module;
 using Cake.Frosting;
 using Grynwald.SharedBuild;
+using Grynwald.SharedBuild.Tasks;
 
 return new CakeHost()
     .UseModule<AzurePipelinesModule>()
     .UseModule<LocalToolsModule>()
     .InstallToolsFromManifest(".config/dotnet-tools.json")
-    .UseSharedBuild<BuildContext>()
+    .UseSharedBuild<BuildContext>(taskFilter:
+        // Running dotnet format on Azure Pipelines when using the .NET 9 SDK and Nerdbank.GitVersioning causes the build to hang
+        // See: https://github.com/dotnet/sdk/issues/44951
+        // To work around this, exclude the task when running on Azure Pipelines
+        task =>
+        {
+            if (StringComparer.OrdinalIgnoreCase.Equals(Environment.GetEnvironmentVariable("TF_BUILD"), "true") &&
+                task == typeof(ValidateCodeFormattingTask))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    )
     .Run(args);
 
 public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
