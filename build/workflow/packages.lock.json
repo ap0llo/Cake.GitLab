@@ -11,35 +11,6 @@
           "Newtonsoft.Json": "13.0.1"
         }
       },
-      "Cake.Frosting": {
-        "type": "Direct",
-        "requested": "[5.0.0, )",
-        "resolved": "5.0.0",
-        "contentHash": "jbukBg11yFrsa5dqmvVoMdkkQUlV7tAlYbBgorVwvB7iMKUu3kQj8Q38OEdAJYkAyxYiaBkRaQ/7UkiXbVkIJw==",
-        "dependencies": {
-          "Autofac": "8.1.1",
-          "Cake.Cli": "5.0.0",
-          "Cake.Common": "5.0.0",
-          "Cake.Core": "5.0.0",
-          "Cake.DotNetTool.Module": "5.0.0",
-          "Cake.NuGet": "5.0.0",
-          "Microsoft.CSharp": "4.7.0",
-          "Microsoft.Extensions.DependencyInjection": "9.0.0",
-          "Microsoft.IdentityModel.JsonWebTokens": "8.2.0",
-          "Microsoft.NETCore.Platforms": "7.0.4",
-          "Microsoft.Win32.Registry": "5.0.0",
-          "Newtonsoft.Json": "13.0.3",
-          "NuGet.Common": "6.11.1",
-          "NuGet.Frameworks": "6.11.1",
-          "NuGet.Packaging": "6.11.1",
-          "NuGet.Protocol": "6.11.1",
-          "NuGet.Resolver": "6.11.1",
-          "NuGet.Versioning": "6.11.1",
-          "Spectre.Console": "0.49.1",
-          "Spectre.Console.Cli": "0.49.1",
-          "System.Security.Cryptography.Pkcs": "9.0.0"
-        }
-      },
       "Grynwald.SharedBuild": {
         "type": "Direct",
         "requested": "[4.0.29, )",
@@ -125,6 +96,34 @@
         "type": "Transitive",
         "resolved": "7.0.0",
         "contentHash": "5h2rBYgH8IvmrA8K+/Qd9p38VjHgHH1iAYJriKdlfE5BjogQ4gm3v6Df+dTU1TwL7nkjTV7huvquFTmak2zKqw=="
+      },
+      "Cake.Frosting": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "jbukBg11yFrsa5dqmvVoMdkkQUlV7tAlYbBgorVwvB7iMKUu3kQj8Q38OEdAJYkAyxYiaBkRaQ/7UkiXbVkIJw==",
+        "dependencies": {
+          "Autofac": "8.1.1",
+          "Cake.Cli": "5.0.0",
+          "Cake.Common": "5.0.0",
+          "Cake.Core": "5.0.0",
+          "Cake.DotNetTool.Module": "5.0.0",
+          "Cake.NuGet": "5.0.0",
+          "Microsoft.CSharp": "4.7.0",
+          "Microsoft.Extensions.DependencyInjection": "9.0.0",
+          "Microsoft.IdentityModel.JsonWebTokens": "8.2.0",
+          "Microsoft.NETCore.Platforms": "7.0.4",
+          "Microsoft.Win32.Registry": "5.0.0",
+          "Newtonsoft.Json": "13.0.3",
+          "NuGet.Common": "6.11.1",
+          "NuGet.Frameworks": "6.11.1",
+          "NuGet.Packaging": "6.11.1",
+          "NuGet.Protocol": "6.11.1",
+          "NuGet.Resolver": "6.11.1",
+          "NuGet.Versioning": "6.11.1",
+          "Spectre.Console": "0.49.1",
+          "Spectre.Console.Cli": "0.49.1",
+          "System.Security.Cryptography.Pkcs": "9.0.0"
+        }
       },
       "Cake.Frosting.Git": {
         "type": "Transitive",
