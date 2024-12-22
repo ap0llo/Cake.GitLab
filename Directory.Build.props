@@ -48,7 +48,7 @@
 
   <!-- Nerdbank.GitVersioning -->
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning"  Version="3.6.133" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning"  Version="3.7.112" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Use NuGet lock file -->
