@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.AzurePipelines.Module;
 using Cake.Core;
 using Cake.DotNetLocalTools.Module;
 using Cake.Frosting;
@@ -8,7 +7,6 @@ using Grynwald.SharedBuild;
 using Grynwald.SharedBuild.Tasks;
 
 return new CakeHost()
-    .UseModule<AzurePipelinesModule>()
     .UseModule<LocalToolsModule>()
     .InstallToolsFromManifest(".config/dotnet-tools.json")
     .UseSharedBuild<BuildContext>(taskFilter:
