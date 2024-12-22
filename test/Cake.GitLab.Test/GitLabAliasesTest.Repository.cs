@@ -9,7 +9,6 @@ using Cake.Testing;
 using NGitLab.Mock.Config;
 using NGitLab.Models;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Cake.GitLab.Test;
 
@@ -93,7 +92,7 @@ public static partial class GitLabAliasesTest
             context.AddServer(server);
 
             // ACT
-            var ex = await Record.ExceptionAsync(async () => await context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, "does-not-exist", "main", "output.txt"));
+            var ex = await Record.ExceptionAsync(() => context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, "does-not-exist", "main", "output.txt"));
 
             // ASSERT
             Assert.IsType<CakeException>(ex);
