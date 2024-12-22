@@ -73,12 +73,12 @@
       },
       "PublicApiGenerator": {
         "type": "Direct",
-        "requested": "[11.1.0, )",
-        "resolved": "11.1.0",
-        "contentHash": "iHU9N149uYirtVxGZh8dKIGv1CpecHD+5E2NVx1c490LqGyWCORZ52DpVqgjNs1rGluT1LNasRNBBjARssGcIg==",
+        "requested": "[11.3.0, )",
+        "resolved": "11.3.0",
+        "contentHash": "v/OL9Tmeu9sDpTTIOI3dGWZxpH9PMtTDQng70Y6mn2NhNhxu8rooY93TY0+TPYV3OOfdrysUh3D5MF9uLg/iSg==",
         "dependencies": {
-          "Mono.Cecil": "0.11.5",
-          "System.CodeDom": "8.0.0"
+          "Mono.Cecil": "0.11.6",
+          "System.CodeDom": "9.0.0"
         }
       },
       "Verify.XunitV3": {
@@ -250,8 +250,8 @@
       },
       "Mono.Cecil": {
         "type": "Transitive",
-        "resolved": "0.11.5",
-        "contentHash": "fxfX+0JGTZ8YQeu1MYjbBiK2CYTSzDyEeIixt+yqKKTn7FW8rv7JMY70qevup4ZJfD7Kk/VG/jDzQQTpfch87g=="
+        "resolved": "0.11.6",
+        "contentHash": "f33RkDtZO8VlGXCtmQIviOtxgnUdym9xx/b1p9h91CRGOsJFxCFOFK1FDbVt1OCf1aWwYejUFa2MOQyFWTFjbA=="
       },
       "Newtonsoft.Json": {
         "type": "Transitive",
@@ -275,8 +275,8 @@
       },
       "System.CodeDom": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "WTlRjL6KWIMr/pAaq3rYqh0TJlzpouaQ/W1eelssHgtlwHAH25jXTkUphTYx9HaIIf7XA6qs/0+YhtLEQRkJ+Q=="
+        "resolved": "9.0.0",
+        "contentHash": "oTE5IfuMoET8yaZP/vdvy9xO47guAv/rOhe4DODuFBN3ySprcQOlXqO3j+e/H/YpKKR5sglrxRaZ2HYOhNJrqA=="
       },
       "System.ComponentModel.Annotations": {
         "type": "Transitive",
@@ -470,12 +470,12 @@
       },
       "PublicApiGenerator": {
         "type": "Direct",
-        "requested": "[11.1.0, )",
-        "resolved": "11.1.0",
-        "contentHash": "iHU9N149uYirtVxGZh8dKIGv1CpecHD+5E2NVx1c490LqGyWCORZ52DpVqgjNs1rGluT1LNasRNBBjARssGcIg==",
+        "requested": "[11.3.0, )",
+        "resolved": "11.3.0",
+        "contentHash": "v/OL9Tmeu9sDpTTIOI3dGWZxpH9PMtTDQng70Y6mn2NhNhxu8rooY93TY0+TPYV3OOfdrysUh3D5MF9uLg/iSg==",
         "dependencies": {
-          "Mono.Cecil": "0.11.5",
-          "System.CodeDom": "8.0.0"
+          "Mono.Cecil": "0.11.6",
+          "System.CodeDom": "9.0.0"
         }
       },
       "Verify.XunitV3": {
@@ -647,8 +647,8 @@
       },
       "Mono.Cecil": {
         "type": "Transitive",
-        "resolved": "0.11.5",
-        "contentHash": "fxfX+0JGTZ8YQeu1MYjbBiK2CYTSzDyEeIixt+yqKKTn7FW8rv7JMY70qevup4ZJfD7Kk/VG/jDzQQTpfch87g=="
+        "resolved": "0.11.6",
+        "contentHash": "f33RkDtZO8VlGXCtmQIviOtxgnUdym9xx/b1p9h91CRGOsJFxCFOFK1FDbVt1OCf1aWwYejUFa2MOQyFWTFjbA=="
       },
       "Newtonsoft.Json": {
         "type": "Transitive",
@@ -672,8 +672,8 @@
       },
       "System.CodeDom": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "WTlRjL6KWIMr/pAaq3rYqh0TJlzpouaQ/W1eelssHgtlwHAH25jXTkUphTYx9HaIIf7XA6qs/0+YhtLEQRkJ+Q=="
+        "resolved": "9.0.0",
+        "contentHash": "oTE5IfuMoET8yaZP/vdvy9xO47guAv/rOhe4DODuFBN3ySprcQOlXqO3j+e/H/YpKKR5sglrxRaZ2HYOhNJrqA=="
       },
       "System.ComponentModel.Annotations": {
         "type": "Transitive",
