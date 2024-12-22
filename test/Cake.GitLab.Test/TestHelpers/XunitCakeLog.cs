@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Cake.Core.Diagnostics;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Cake.GitLab.Test;
 

@@ -10,7 +10,7 @@ using Cake.Core.Tooling;
 using Cake.Testing;
 using NGitLab;
 using NGitLab.Mock;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Cake.GitLab.Test;
 

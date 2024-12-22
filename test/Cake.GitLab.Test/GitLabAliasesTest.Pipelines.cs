@@ -4,7 +4,6 @@ using NGitLab;
 using NGitLab.Mock.Config;
 using NGitLab.Models;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Cake.GitLab.Test;
 
