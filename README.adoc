@@ -41,17 +41,17 @@ Install the addin into your Cake build.
 
 * Releases of Cake.GitLab are available on  link:https://nuget.org/packages/Cake.GitLab[nuget.org]
 * Prerelease versions are available in the CI feed on [feedz.io](https://feedz.io/org/ap0llo/repository/cake-gitlab-ci)
-  To use prerelease packages, add the feed `https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json` to your `nuget.config`, e.g.  
-  +
-  [source,xml]
-  ----
-  <?xml version="1.0" encoding="utf-8"?>
-  <configuration>
-    <packageSources>
-      <add key="cake-gitlab-ci" value="https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json" />
-    </packageSources>
-  </configuration>
-  ----
+  To use prerelease packages, add the feed `https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json` to your `nuget.config`, e.g.
++
+[source,xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="cake-gitlab-ci" value="https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json" />
+  </packageSources>
+</configuration>
+----
 
 === Available Aliases
 
