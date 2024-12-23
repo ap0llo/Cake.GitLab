@@ -34,9 +34,9 @@
       },
       "NGitLab": {
         "type": "Direct",
-        "requested": "[6.56.0, )",
-        "resolved": "6.56.0",
-        "contentHash": "gZsKBvVPG9XrAq8VzYmcX9xPmLYomVWgtBTAIO+IZASLf+WCV0ks8S37QmnFCwJdCpKv7uBkUAmyUz3zv+FT0w==",
+        "requested": "[7.0.1, )",
+        "resolved": "7.0.1",
+        "contentHash": "sVis/Zalj8hHmkRFpI5kG2j1RBbYqSgyvG/sASsE4zoyISM/DUMMoCnSSJZKZcOKamYNkncZjmL/DfjjkmkDkA==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "8.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
@@ -167,9 +167,9 @@
       },
       "NGitLab": {
         "type": "Direct",
-        "requested": "[6.56.0, )",
-        "resolved": "6.56.0",
-        "contentHash": "gZsKBvVPG9XrAq8VzYmcX9xPmLYomVWgtBTAIO+IZASLf+WCV0ks8S37QmnFCwJdCpKv7uBkUAmyUz3zv+FT0w==",
+        "requested": "[7.0.1, )",
+        "resolved": "7.0.1",
+        "contentHash": "sVis/Zalj8hHmkRFpI5kG2j1RBbYqSgyvG/sASsE4zoyISM/DUMMoCnSSJZKZcOKamYNkncZjmL/DfjjkmkDkA==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "8.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
