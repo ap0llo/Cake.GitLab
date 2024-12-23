@@ -4,8 +4,8 @@
 :link-cakefrosting: link:https://cakebuild.net/docs/running-builds/runners/cake-frosting[Cake Frosting]
 :link-ngitlab: link:https://github.com/ubisoft/NGitLab[NGitLab]
 
-:url-build-statusbadge: https://dev.azure.com/ap0llo/OSS/_apis/build/status%2FCake.GitLab?branchName=main
-:url-build-latest: https://dev.azure.com/ap0llo/OSS/_build/latest?definitionId=28&branchName=main
+:url-build-statusbadge: https://github.com/ap0llo/Cake.GitLab/actions/workflows/build.yml/badge.svg
+:url-build-latest: https://github.com/ap0llo/Cake.GitLab/actions/workflows/build.yml
 
 :url-nuget-badge: https://img.shields.io/nuget/v/Cake.GitLab.svg
 :url-nuget-package: https://www.nuget.org/packages/Cake.GitLab
@@ -36,6 +36,22 @@ Install the addin into your Cake build.
 ----
 <PackageReference Include="Cake.GitLab" Version="VERSION" /> 
 ----
+
+==== Use prerelease version
+
+* Releases of Cake.GitLab are available on  link:https://nuget.org/packages/Cake.GitLab[nuget.org]
+* Prerelease versions are available in the CI feed on [feedz.io](https://feedz.io/org/ap0llo/repository/cake-gitlab-ci)
+  To use prerelease packages, add the feed `https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json` to your `nuget.config`, e.g.  
+  +
+  [source,xml]
+  ----
+  <?xml version="1.0" encoding="utf-8"?>
+  <configuration>
+    <packageSources>
+      <add key="cake-gitlab-ci" value="https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json" />
+    </packageSources>
+  </configuration>
+  ----
 
 === Available Aliases
 

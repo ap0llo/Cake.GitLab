@@ -31,8 +31,10 @@ public class BuildContext(ICakeContext context) : DefaultBuildContext(context)
     public override IReadOnlyCollection<IPushTarget> PushTargets { get; } =
     [
         new PushTarget(
-            type: PushTargetType.AzureArtifacts,
-            feedUrl: "https://pkgs.dev.azure.com/ap0llo/OSS/_packaging/PublicCI/nuget/v3/index.json",
+            // This is not actually a MyGet feed but a feedz.io feed
+            // However, uploading packages should work the same for both
+            type: PushTargetType.MyGet,
+            feedUrl: "https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json",
             isActive: context => context.Git.IsMainBranch || context.Git.IsReleaseBranch
         ),
         new PushTarget(

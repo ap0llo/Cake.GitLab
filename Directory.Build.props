@@ -51,11 +51,17 @@
     <PackageReference Include="Nerdbank.GitVersioning"  Version="3.7.112" PrivateAssets="all" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <IsRunningInCI>false</IsRunningInCI>
+    <IsRunningInCI Condition=" '$(TF_BUILD)' == 'true' ">true</IsRunningInCI>
+    <IsRunningInCI Condition=" '$(GITHUB_ACTIONS)' == 'true' ">true</IsRunningInCI>
+  </PropertyGroup>
+
   <!-- Use NuGet lock file -->
   <PropertyGroup>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <!-- When running in Azure Pipelines, use locked mode -->
-    <RestoreLockedMode Condition=" '$(TF_BUILD)' == 'true' ">true</RestoreLockedMode>
+    <!-- When running in CI, force lock files to be up-to-date -->
+    <RestoreLockedMode Condition=" '$(IsRunningInCI)' == 'true' ">true</RestoreLockedMode>
   </PropertyGroup>
   
 </Project>
