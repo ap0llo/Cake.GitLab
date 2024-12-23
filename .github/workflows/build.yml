@@ -33,7 +33,9 @@ env:
   DOTNET_NOLOGO: true
   # Expose the Pull Request number as environment variable (there is no predefined variable for this unfortunately)
   PR_NUMBER: ${{ github.event.number }}
-  GITHUB_ACCESSTOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_ACCESSTOKEN: ${{ secrets.GITHUB_TOKEN }}  
+  # The build uses feedz.io, not MyGet, but the Cake build expects the API Key to be provided via the MYGET_APIKEY environment variable
+  MYGET_APIKEY: ${{ secrets.FEEDZ_IO_ACCESS_TOKEN }} 
 
 jobs:
   build:
