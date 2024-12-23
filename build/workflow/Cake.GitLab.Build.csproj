@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\azure-pipelines.yml" Link="azure-pipelines.yml" />
+    <None Include="..\..\.github\workflows\build.yml" Link="build.yml" />
   </ItemGroup>
 
 </Project>
