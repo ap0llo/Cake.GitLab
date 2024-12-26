@@ -1,5 +1,16 @@
 ﻿namespace Cake.GitLab
 {
+    public class DefaultGitLabProvider : Cake.GitLab.IGitLabProvider
+    {
+        public DefaultGitLabProvider(Cake.Core.ICakeContext context) { }
+        public System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId) { }
+        public System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
+        public System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
+        public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
+        public System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId, string name) { }
+        public Cake.GitLab.GitLabProjectIdentity? TryGetCurrentProjectIdentity() { }
+        public Cake.GitLab.GitLabServerIdentity? TryGetCurrentServerIdentity() { }
+    }
     [Cake.Core.Annotations.CakeAliasCategory("GitLab")]
     [Cake.Core.Annotations.CakeNamespaceImport("Cake.GitLab")]
     public static class GitLabAliases
@@ -130,5 +141,15 @@
     public interface IGitLabClientFactory
     {
         NGitLab.IGitLabClient GetClient(string serverUrl, string accessToken);
+    }
+    public interface IGitLabProvider
+    {
+        System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId);
+        System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name);
+        System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project);
+        System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId, string name);
+        Cake.GitLab.GitLabProjectIdentity? TryGetCurrentProjectIdentity();
+        Cake.GitLab.GitLabServerIdentity? TryGetCurrentServerIdentity();
     }
 }

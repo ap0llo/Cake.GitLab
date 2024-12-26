@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
-using Cake.GitLab.Internal;
 using NGitLab.Models;
 
 namespace Cake.GitLab;
@@ -43,12 +41,7 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Repository")]
     public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
     {
-        Guard.NotNullOrWhitespace(filePath);
-        Guard.NotNullOrWhitespace(@ref);
-        Guard.NotNull(destination);
-
-        var repositoryClient = GetRepositoryClient(context, serverUrl, accessToken);
-        await repositoryClient.DownloadFileAsync(project, filePath, @ref, destination);
+        await context.GetGitLabProvider().RepositoryDownloadFileAsync(serverUrl, accessToken, project, filePath, @ref, destination);
     }
 
     /// <summary>
@@ -77,8 +70,7 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Repository")]
     public static async Task<IReadOnlyCollection<Branch>> GitLabRepositoryGetBranchesAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project)
     {
-        var repositoryClient = GetRepositoryClient(context, serverUrl, accessToken);
-        return await repositoryClient.GetBranchesAsync(project);
+        return await context.GetGitLabProvider().RepositoryGetBranchesAsync(serverUrl, accessToken, project);
     }
 
     /// <summary>
@@ -116,18 +108,7 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Repository")]
     public static async Task<Tag> GitLabRepositoryCreateTagAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref, string name)
     {
-        Guard.NotNullOrWhitespace(@ref);
-        Guard.NotNullOrWhitespace(name);
-
-        var repositoryClient = GetRepositoryClient(context, serverUrl, accessToken);
-        return await repositoryClient.CreateTagAsync(project, @ref, name);
+        return await context.GetGitLabProvider().RepositoryCreateTagAsync(serverUrl, accessToken, project, @ref, name);
     }
 
-    private static RepositoryClient GetRepositoryClient(ICakeContext context, string serverUrl, string accessToken, [CallerMemberName] string aliasName = "")
-    {
-        var gitLabClient = GetClient(context, serverUrl, accessToken);
-        var log = GetLogForCurrentAlias(context, aliasName);
-        var repositoryClient = new RepositoryClient(log, context.FileSystem, gitLabClient);
-        return repositoryClient;
-    }
 }

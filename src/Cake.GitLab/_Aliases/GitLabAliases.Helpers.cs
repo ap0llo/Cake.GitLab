@@ -1,8 +1,5 @@
-﻿using System;
-using Cake.Common.Build;
-using Cake.Core;
+﻿using Cake.Core;
 using Cake.Core.Annotations;
-using Cake.Core.Diagnostics;
 
 namespace Cake.GitLab;
 
@@ -25,27 +22,7 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Helpers")]
     public static GitLabServerIdentity? GitLabTryGetCurrentServerIdentity(this ICakeContext context)
     {
-        var log = GetLogForCurrentAlias(context);
-
-        log.Debug("Attempting to determine the current GitLab server identity");
-
-        var gitlabCi = context.GitLabCI();
-        if (!gitlabCi.IsRunningOnGitLabCI)
-        {
-            log.Debug("Failed to determine current server identity: Current build is not running on GitLab CI");
-            return null;
-        }
-        log.Debug("Current build is running on GitLab CI");
-
-        var host = context.Environment.GetEnvironmentVariable(CI_SERVER_HOST);
-        if (String.IsNullOrWhiteSpace(host))
-        {
-            log.Debug($"Failed to determine current server identity: {CI_SERVER_HOST} is null or whitespace");
-            return null;
-        }
-        log.Debug($"{CI_SERVER_HOST} is '{host}'");
-
-        return new GitLabServerIdentity(host);
+        return context.GetGitLabProvider().TryGetCurrentServerIdentity();
     }
 
     /// <summary>
@@ -62,43 +39,13 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Helpers")]
     public static GitLabProjectIdentity? GitLabTryGetCurrentProjectIdentity(this ICakeContext context)
     {
-        var log = GetLogForCurrentAlias(context);
-
-        log.Debug("Attempting to determine the current GitLab project identity");
-
-        var gitlabCi = context.GitLabCI();
-        if (!gitlabCi.IsRunningOnGitLabCI)
-        {
-            log.Debug("Failed to determine current project identity: Current build is not running on GitLab CI");
-            return null;
-        }
-        log.Debug("Current build is running on GitLab CI");
-
-        var host = context.Environment.GetEnvironmentVariable(CI_SERVER_HOST);
-        if (String.IsNullOrWhiteSpace(host))
-        {
-            log.Debug($"Failed to determine current project identity: {CI_SERVER_HOST} is null or whitespace");
-            return null;
-        }
-        log.Debug($"{CI_SERVER_HOST} is '{host}'");
-
-        var projectPath = gitlabCi.Environment.Project.Path;
-        if (String.IsNullOrWhiteSpace(projectPath))
-        {
-            log.Debug($"Failed to determine current project identity: Project path is null or whitespace");
-            return null;
-        }
-        log.Debug($"Project path is '{projectPath}'");
-
-
-        if (GitLabProjectIdentity.TryGetFromHostAndProjectPath(host, projectPath, out var identity))
-        {
-            return identity;
-        }
-        else
-        {
-            log.Debug($"Failed to determine current project identity: Project path could not be parsed");
-            return null;
-        }
+        return context.GetGitLabProvider().TryGetCurrentProjectIdentity();
     }
+
+
+    private static IGitLabProvider GetGitLabProvider(this ICakeContext context)
+    {
+        return new DefaultGitLabProvider(context);
+    }
+
 }
