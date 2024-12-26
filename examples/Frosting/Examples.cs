@@ -162,24 +162,3 @@ public class IdentityAndConnectionExamplesTask : FrostingTask
         }
     }
 }
-
-
-// begin-snippet: Example-GitLabClientFactory
-public class BuildContext(ICakeContext context) : FrostingContext(context), IGitLabClientFactory
-{
-    public IGitLabClient GetClient(string serverUrl, string accessToken)
-    {
-        // Intercept creation of client
-        if (serverUrl == "https://example.com")
-        {
-            // Create a custom client here
-            // ...
-        }
-
-        // To use the default client initalization logic,
-        // delegate call to GitLabClientFactory.Default
-        return GitLabClientFactory.Default.GetClient(serverUrl, accessToken);
-    }
-}
-// end-snippet
-

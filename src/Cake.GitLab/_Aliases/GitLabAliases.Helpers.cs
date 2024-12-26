@@ -5,9 +5,6 @@ namespace Cake.GitLab;
 
 public static partial class GitLabAliases
 {
-    // TODO: CI_SERVER_HOST is not available though Cake's IGitLabCIProvider => consider opening up a PR
-    private const string CI_SERVER_HOST = "CI_SERVER_HOST";
-
     /// <summary>
     /// Attempts to determine the <see cref="GitLabServerIdentity"/> from environment variables.
     /// </summary>
@@ -37,10 +34,4 @@ public static partial class GitLabAliases
     [CakeAliasCategory("Helpers")]
     public static GitLabProjectIdentity? GitLabTryGetCurrentProjectIdentity(this ICakeContext context) =>
         context.GetGitLabProvider().TryGetCurrentProjectIdentity();
-
-    private static IGitLabProvider GetGitLabProvider(this ICakeContext context)
-    {
-        return new DefaultGitLabProvider(context);
-    }
-
 }

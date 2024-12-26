@@ -3,7 +3,7 @@
     public class DefaultGitLabProvider : Cake.GitLab.IGitLabProvider
     {
         public DefaultGitLabProvider(Cake.Core.ICakeContext context) { }
-        protected virtual NGitLab.IGitLabClient GetClient(string serverUrl, string accessToken, [System.Runtime.CompilerServices.CallerMemberName] string operationName = "") { }
+        protected virtual NGitLab.IGitLabClient GetClient(string serverUrl, string accessToken) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
         public System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
@@ -98,10 +98,6 @@
         [Cake.Core.Annotations.CakeMethodAlias]
         public static Cake.GitLab.GitLabServerIdentity? GitLabTryGetCurrentServerIdentity(this Cake.Core.ICakeContext context) { }
     }
-    public static class GitLabClientFactory
-    {
-        public static readonly Cake.GitLab.IGitLabClientFactory Default;
-    }
     public class GitLabProjectConnection : Cake.GitLab.GitLabProjectIdentity, System.IEquatable<Cake.GitLab.GitLabProjectConnection>
     {
         public GitLabProjectConnection(Cake.GitLab.GitLabProjectIdentity projectIdentity, string accessToken) { }
@@ -139,10 +135,6 @@
         public virtual bool Equals(Cake.GitLab.GitLabServerIdentity? other) { }
         public override int GetHashCode() { }
     }
-    public interface IGitLabClientFactory
-    {
-        NGitLab.IGitLabClient GetClient(string serverUrl, string accessToken);
-    }
     public interface IGitLabProvider
     {
         System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId);
@@ -152,5 +144,12 @@
         System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, int pipelineId, string name);
         Cake.GitLab.GitLabProjectIdentity? TryGetCurrentProjectIdentity();
         Cake.GitLab.GitLabServerIdentity? TryGetCurrentServerIdentity();
+    }
+}
+namespace Cake.GitLab.Testing
+{
+    public interface IGitLabCakeContext : Cake.Core.ICakeContext
+    {
+        Cake.GitLab.IGitLabProvider GitLab { get; }
     }
 }

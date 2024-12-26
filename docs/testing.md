@@ -7,15 +7,18 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 # Testing
 
-`Cake.GitLab` is based on the [NGitLab library](https://github.com/ubisoft/NGitLab) which provides support for testing through the [NGitLab.Mock](https://www.nuget.org/packages/NGitLab.Mock) package.
+To facilitate testing of Cake build scripts and tasks, `Cake.GitLab` supports mocking of the aliases it provides.
 
-This packages provides test doubles for many of `NGitLab`'s types and can be used to mock a GitLab server in your application or Cake Build.
+This is realized through the `IGitLabProvider` interface.
+It defines methods for all `Cake.GitLab` aliases, decoupling the implementation of the Cake aliases from the aliases themselves.
 
-`Cake.GitLab` provides the `IGitLabClientFactory` interface, which - when implemented by the Cake context - allows controlling the initialization of the `IGitLabClient` that is used by the GitLab aliases.
-
-This can be used to inject a mocked GitLab client into the aliases in unit tests.
+- By default, the aliases will use the implementation in `DefaultGitLabProvider`
+- However, a different implementation of the interface can be provided by using a `ICakeContext` that implements `IGitLabCakeContext`.
+  - When an alias is used with a context that implements that interface, the `IGitLabProvider` returned by the context's `GitLab` property will be used instead of the default implementation
+  - This allows injecting alternative/test implementation of that interface
 
 The following snippet shows an example of a (xunit-based) unit test that follows this approach.
+A mock of `IGitLabProvider` is created dynamically using the [moq](https://github.com/devlooped/moq)
 
 <!-- snippet: Example-Testing -->
 <a id='snippet-Example-Testing'></a>
@@ -27,32 +30,23 @@ public async Task GitLab_mocking_example()
     // ARRANGE
     //
 
-    // Create a mock GitLab server (using NGitLab.Mock library)
-    var gitLabConfig =
-        new GitLabConfig() { Url = "https://example.com" }
-            .WithUser("user1", isDefault: true)
-            .WithGroup("example-group")
-            .WithProjectOfFullPath(
-                fullPath: "example-project",
-                id: 23,
-                configure: project =>
-                {
-                    project.DefaultBranch = "example-branch";
-                    project.WithCommit("Intial commit");
-                }
-            );
-
-    // Create a mock ICakeContext
-    var contextMock = new Mock<ICakeContext>();
+    // Create a mock of IGitLabProvider
+    var gitlabProviderMock = new Mock<IGitLabProvider>();
     {
-        // Add implementation of IGitlabClientFactory to the context
-        contextMock
-            .As<IGitLabClientFactory>()
-            .Setup(x => x.GetClient(It.IsAny<string>(), It.IsAny<string>()))
-            .Returns(gitLabConfig.BuildClient());
+        gitlabProviderMock
+            .Setup(x => x.RepositoryGetBranchesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ProjectId>()))
+            .ReturnsAsync(
+                [
+                    new Branch() { Name = "example-branch" }
+                ]);
+    }
 
-        var log = new FakeLog();
-        contextMock.Setup(x => x.Log).Returns(log);
+    // Create a mock IGitLabCakeContext
+    var contextMock = new Mock<IGitLabCakeContext>();
+    {
+        contextMock.Setup(x => x.GitLab).Returns(gitlabProviderMock.Object);
+
+        contextMock.Setup(x => x.Log).Returns(new FakeLog());
 
         var fileSystem = new FakeFileSystem(FakeEnvironment.CreateUnixEnvironment());
         contextMock.Setup(x => x.FileSystem).Returns(fileSystem);
@@ -72,9 +66,5 @@ public async Task GitLab_mocking_example()
     );
 }
 ```
-<sup><a href='/examples/Testing/UnitTestExample.cs#L9-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-Example-Testing' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Testing/UnitTestExample.cs#L9-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-Example-Testing' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
-
-## See Also
-
-- [GitLab Client Factory](./client-factory.md)

@@ -1,9 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using Cake.Core;
+﻿using Cake.Core;
 using Cake.Core.Annotations;
-using Cake.Core.Diagnostics;
-using Cake.GitLab.Internal;
-using NGitLab;
+using Cake.GitLab.Testing;
 
 namespace Cake.GitLab;
 
@@ -14,30 +11,17 @@ namespace Cake.GitLab;
 [CakeNamespaceImport("Cake.GitLab")]
 public static partial class GitLabAliases
 {
-    private static IGitLabClient GetClient(ICakeContext context, string serverUrl, string accessToken, [CallerMemberName] string aliasName = "")
+    /// <summary>
+    /// Gets the <see cref="IGitLabProvider"/> to use
+    /// </summary>
+    /// <returns>
+    /// Returns the <see cref="IGitLabProvider"/> provided by <paramref name="context"/> if it implements <see cref="IGitLabCakeContext"/>,
+    /// otherwise returns the default implementation.
+    /// </returns>
+    private static IGitLabProvider GetGitLabProvider(this ICakeContext context)
     {
-        Guard.NotNullOrWhitespace(serverUrl);
-        Guard.NotNullOrWhitespace(accessToken);
-
-        var log = GetLogForCurrentAlias(context, aliasName);
-
-        log.Debug($"Creating GitLab client for server url '{serverUrl}'");
-
-        IGitLabClientFactory clientFactory;
-        if (context is IGitLabClientFactory)
-        {
-            log.Debug($"Context of type '{context.GetType().FullName}' implements {nameof(IGitLabClientFactory)}. Delegating client creation to context");
-            clientFactory = (IGitLabClientFactory)context;
-        }
-        else
-        {
-            log.Debug($"Creating default GitLab client {typeof(GitLabClient).FullName}");
-            clientFactory = GitLabClientFactory.Default;
-        }
-
-        return clientFactory.GetClient(serverUrl, accessToken);
+        return context is IGitLabCakeContext { GitLab: { } provider }
+            ? provider
+            : new DefaultGitLabProvider(context);
     }
-
-
-    private static DebugLog GetLogForCurrentAlias(ICakeContext context, [CallerMemberName] string aliasName = "") => new DebugLog(context.Log, aliasName);
 }

@@ -250,28 +250,11 @@ public class DefaultGitLabProvider : IGitLabProvider
         return tag;
     }
 
-    protected virtual IGitLabClient GetClient(string serverUrl, string accessToken, [CallerMemberName] string operationName = "")
+    protected virtual IGitLabClient GetClient(string serverUrl, string accessToken)
     {
         Guard.NotNullOrWhitespace(serverUrl);
         Guard.NotNullOrWhitespace(accessToken);
-
-        var log = GetLogForCurrentOperation(operationName);
-
-        log.Debug($"Creating GitLab client for server url '{serverUrl}'");
-
-        IGitLabClientFactory clientFactory;
-        if (m_Context is IGitLabClientFactory)
-        {
-            log.Debug($"Context of type '{m_Context.GetType().FullName}' implements {nameof(IGitLabClientFactory)}. Delegating client creation to context");
-            clientFactory = (IGitLabClientFactory)m_Context;
-        }
-        else
-        {
-            log.Debug($"Creating default GitLab client {typeof(GitLabClient).FullName}");
-            clientFactory = GitLabClientFactory.Default;
-        }
-
-        return clientFactory.GetClient(serverUrl, accessToken);
+        return new GitLabClient(serverUrl, accessToken);
     }
 
     private DebugLog GetLogForCurrentOperation([CallerMemberName] string operationName = "") => new DebugLog(m_Context.Log, $"GitLab.{operationName}");
