@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using Cake.Common.Diagnostics;
+﻿using System.Runtime.CompilerServices;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
