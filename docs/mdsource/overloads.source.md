@@ -5,15 +5,15 @@ These overloads differ in the way that the GitLab server, project and access tok
 
 ## Individual Parameters
 
-The most basic overloads allows specifying all values as individual parameters:
+The most basic overloads allow specifying all values as individual parameters:
 
 snippet: Overloads-Individual-Parameters
 
-However, passing all required values individually can become repetitive, especially when calling multiple GitLab API functions.
+However, passing all required values individually can become repetitive, especially when calling multiple GitLab APIs.
 To improve on that, common parameters may be combined into a single object which can be passed instead:
 
-- ["Identity" object](#identity-objects)
-- ["Connection" object](#connection-objects)
+- ["Identity" objects](#identity-objects)
+- ["Connection" objects](#connection-objects)
 
 ## "Identity" objects
 
@@ -27,11 +27,11 @@ snippet: Overloads-Identity-Objects
 
 ## "Connection" objects
 
-A "connection" object combines the data to identify a project or server with an access token required to authenticate.
+A "connection" object combines the data to identify a project or server with an access token required to access the GitLab API.
 
 There are two connection objects supported:
   
-- `ServerConnection` specifies a GitLab server and an access token
+- `ServerConnection` identifies a GitLab server and provides an access token
 - `ProjectConnection` identifies a GitLab project and provides an access token
 
 snippet: Overloads-Connection-Objects

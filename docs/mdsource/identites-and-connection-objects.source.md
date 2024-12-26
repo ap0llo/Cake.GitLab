@@ -65,7 +65,7 @@ Initialization of `ServerConnection` is analogous to the initialization of `Serv
 
 snippet: ServerConnection-Simple
 
-A `ServerConnection` can also be created from an existing `GitLabServerdentity`.
+A `ServerConnection` can also be created from an existing `ServerIdentity`.
 
 snippet: ServerConnection-FromIdentity
 

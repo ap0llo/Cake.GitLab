@@ -131,7 +131,7 @@ var serverConnection = new ServerConnection("example.com", "ACCESSTOKEN");
 <sup><a href='/examples/Frosting/Examples.cs#L119-L121' title='Snippet source file'>snippet source</a> | <a href='#snippet-ServerConnection-Simple' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-A `ServerConnection` can also be created from an existing `GitLabServerdentity`.
+A `ServerConnection` can also be created from an existing `ServerIdentity`.
 
 <!-- snippet: ServerConnection-FromIdentity -->
 <a id='snippet-ServerConnection-FromIdentity'></a>

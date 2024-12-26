@@ -18,7 +18,7 @@ It defines methods for all `Cake.GitLab` aliases, decoupling the implementation 
   - This allows injecting alternative/test implementation of that interface
 
 The following snippet shows an example of a (xunit-based) unit test that follows this approach.
-A mock of `IGitLabProvider` is created dynamically using the [moq](https://github.com/devlooped/moq)
+A mock of `IGitLabProvider` is created dynamically using [moq](https://github.com/devlooped/moq)
 
 <!-- snippet: Example-Testing -->
 <a id='snippet-Example-Testing'></a>
