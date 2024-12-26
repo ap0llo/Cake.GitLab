@@ -39,10 +39,8 @@ public static partial class GitLabAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Repository")]
-    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
-    {
+    public static async Task GitLabRepositoryDownloadFileAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination) =>
         await context.GetGitLabProvider().RepositoryDownloadFileAsync(serverUrl, accessToken, project, filePath, @ref, destination);
-    }
 
     /// <summary>
     /// Lists all of a project's branches
@@ -68,10 +66,8 @@ public static partial class GitLabAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Repository")]
-    public static async Task<IReadOnlyCollection<Branch>> GitLabRepositoryGetBranchesAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project)
-    {
-        return await context.GetGitLabProvider().RepositoryGetBranchesAsync(serverUrl, accessToken, project);
-    }
+    public static async Task<IReadOnlyCollection<Branch>> GitLabRepositoryGetBranchesAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project) =>
+        await context.GetGitLabProvider().RepositoryGetBranchesAsync(serverUrl, accessToken, project);
 
     /// <summary>
     /// Creates a new tag in the project repository
@@ -92,7 +88,7 @@ public static partial class GitLabAliases
     /// {
     ///    public override void Run(ICakeContext context)
     ///    {
-    ///      context.GitLabRepositoryCreateTag(
+    ///      context.GitLabRepositoryCreateTagAsync(
     ///          "https://gitlab.com",
     ///          "ACCESSTOKEN"
     ///          "owner/repository",
@@ -106,9 +102,6 @@ public static partial class GitLabAliases
     /// <seealso href="https://docs.gitlab.com/ee/api/tags.html#create-a-new-tag">Create a new tag (GitLab REST API documentation)</seealso>
     [CakeMethodAlias]
     [CakeAliasCategory("Repository")]
-    public static async Task<Tag> GitLabRepositoryCreateTagAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref, string name)
-    {
-        return await context.GetGitLabProvider().RepositoryCreateTagAsync(serverUrl, accessToken, project, @ref, name);
-    }
-
+    public static async Task<Tag> GitLabRepositoryCreateTagAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref, string name) =>
+        await context.GetGitLabProvider().RepositoryCreateTagAsync(serverUrl, accessToken, project, @ref, name);
 }

@@ -20,10 +20,8 @@ public static partial class GitLabAliases
     /// <seealso href="https://docs.gitlab.com/ee/ci/variables/predefined_variables.html">Predefined CI/CD variables reference (GitLab Documentation)</seealso>
     [CakeMethodAlias]
     [CakeAliasCategory("Helpers")]
-    public static GitLabServerIdentity? GitLabTryGetCurrentServerIdentity(this ICakeContext context)
-    {
-        return context.GetGitLabProvider().TryGetCurrentServerIdentity();
-    }
+    public static GitLabServerIdentity? GitLabTryGetCurrentServerIdentity(this ICakeContext context) =>
+        context.GetGitLabProvider().TryGetCurrentServerIdentity();
 
     /// <summary>
     /// Attempts to determine the <see cref="GitLabProjectIdentity"/> from environment variables.
@@ -37,11 +35,8 @@ public static partial class GitLabAliases
     /// <seealso href="https://docs.gitlab.com/ee/ci/variables/predefined_variables.html">Predefined CI/CD variables reference (GitLab Documentation)</seealso>
     [CakeMethodAlias]
     [CakeAliasCategory("Helpers")]
-    public static GitLabProjectIdentity? GitLabTryGetCurrentProjectIdentity(this ICakeContext context)
-    {
-        return context.GetGitLabProvider().TryGetCurrentProjectIdentity();
-    }
-
+    public static GitLabProjectIdentity? GitLabTryGetCurrentProjectIdentity(this ICakeContext context) =>
+        context.GetGitLabProvider().TryGetCurrentProjectIdentity();
 
     private static IGitLabProvider GetGitLabProvider(this ICakeContext context)
     {

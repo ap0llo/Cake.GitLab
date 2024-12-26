@@ -36,10 +36,10 @@ public class DefaultGitLabProvider : IGitLabProvider
     }
 
 
-
+    /// <inheritdoc />
     public GitLabServerIdentity? TryGetCurrentServerIdentity()
     {
-        var log = GetLogForCurrentAlias();
+        var log = GetLogForCurrentOperation();
 
         log.Debug("Attempting to determine the current GitLab server identity");
 
@@ -48,6 +48,7 @@ public class DefaultGitLabProvider : IGitLabProvider
             log.Debug("Failed to determine current server identity: Current build is not running on GitLab CI");
             return null;
         }
+
         log.Debug("Current build is running on GitLab CI");
 
         var host = m_Context.Environment.GetEnvironmentVariable(CI_SERVER_HOST);
@@ -56,14 +57,16 @@ public class DefaultGitLabProvider : IGitLabProvider
             log.Debug($"Failed to determine current server identity: {CI_SERVER_HOST} is null or whitespace");
             return null;
         }
+
         log.Debug($"{CI_SERVER_HOST} is '{host}'");
 
         return new GitLabServerIdentity(host);
     }
 
+    /// <inheritdoc />
     public GitLabProjectIdentity? TryGetCurrentProjectIdentity()
     {
-        var log = GetLogForCurrentAlias();
+        var log = GetLogForCurrentOperation();
 
         log.Debug("Attempting to determine the current GitLab project identity");
 
@@ -72,6 +75,7 @@ public class DefaultGitLabProvider : IGitLabProvider
             log.Debug("Failed to determine current project identity: Current build is not running on GitLab CI");
             return null;
         }
+
         log.Debug("Current build is running on GitLab CI");
 
         var host = m_Context.Environment.GetEnvironmentVariable(CI_SERVER_HOST);
@@ -80,6 +84,7 @@ public class DefaultGitLabProvider : IGitLabProvider
             log.Debug($"Failed to determine current project identity: {CI_SERVER_HOST} is null or whitespace");
             return null;
         }
+
         log.Debug($"{CI_SERVER_HOST} is '{host}'");
 
         var projectPath = m_Context.GitLabCI().Environment.Project.Path;
@@ -88,6 +93,7 @@ public class DefaultGitLabProvider : IGitLabProvider
             log.Debug($"Failed to determine current project identity: Project path is null or whitespace");
             return null;
         }
+
         log.Debug($"Project path is '{projectPath}'");
 
 
@@ -100,12 +106,13 @@ public class DefaultGitLabProvider : IGitLabProvider
         return null;
     }
 
+    /// <inheritdoc />
     public async Task<Pipeline> GetPipelineAsync(string serverUrl, string accessToken, ProjectId project, int pipelineId)
     {
-        var log = GetLogForCurrentAlias();
+        var log = GetLogForCurrentOperation();
         log.Verbose($"Getting pipeline {pipelineId} from GitLab project {project}");
 
-        var client = GetClient(m_Context, serverUrl, accessToken);
+        var client = GetClient(serverUrl, accessToken);
 
         try
         {
@@ -118,12 +125,13 @@ public class DefaultGitLabProvider : IGitLabProvider
         }
     }
 
+    /// <inheritdoc />
     public async Task SetPipelineNameAsync(string serverUrl, string accessToken, ProjectId project, int pipelineId, string name)
     {
-        var log = GetLogForCurrentAlias();
+        var log = GetLogForCurrentOperation();
         log.Verbose($"Setting name of pipeline {pipelineId} in GitLab project {project} to {name}");
 
-        var client = GetClient(m_Context, serverUrl, accessToken);
+        var client = GetClient(serverUrl, accessToken);
         var pipelinesClient = client.GetPipelines(project);
         try
         {
@@ -135,16 +143,17 @@ public class DefaultGitLabProvider : IGitLabProvider
         }
     }
 
+    /// <inheritdoc />
     public async Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
     {
         Guard.NotNullOrWhitespace(filePath);
         Guard.NotNullOrWhitespace(@ref);
         Guard.NotNull(destination);
 
-        var log = GetLogForCurrentAlias();
+        var log = GetLogForCurrentOperation();
         log.Verbose($"Downloading {filePath} from GitLab project {project} at reference '{@ref}' to '{destination}'");
 
-        var client = GetClient(m_Context, serverUrl, accessToken);
+        var client = GetClient(serverUrl, accessToken);
         var repo = client.GetRepository(project);
         FileData fileData;
         try
@@ -176,12 +185,13 @@ public class DefaultGitLabProvider : IGitLabProvider
         log.Verbose("File downloaded successfully");
     }
 
+    /// <inheritdoc />
     public Task<IReadOnlyCollection<Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, ProjectId project)
     {
-        var log = GetLogForCurrentAlias();
+        var log = GetLogForCurrentOperation();
         log.Verbose($"Getting branches from GitLab project {project}");
 
-        var client = GetClient(m_Context, serverUrl, accessToken);
+        var client = GetClient(serverUrl, accessToken);
         var repo = client.GetRepository(project);
         Branch[] branches;
         try
@@ -197,16 +207,17 @@ public class DefaultGitLabProvider : IGitLabProvider
         return Task.FromResult<IReadOnlyCollection<Branch>>(branches);
     }
 
+    /// <inheritdoc />
     public async Task<Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, ProjectId project, string @ref, string name)
     {
         Guard.NotNullOrWhitespace(@ref);
         Guard.NotNullOrWhitespace(name);
 
 
-        var log = GetLogForCurrentAlias();
+        var log = GetLogForCurrentOperation();
         log.Verbose($"Creating tag '{name}' for reference '{@ref}' in GitLab project {project}");
 
-        var client = GetClient(m_Context, serverUrl, accessToken);
+        var client = GetClient(serverUrl, accessToken);
 
         // 'ref' might be a branch or tag name or abbreviated commit SHA
         // To make comparisons easier, get the commit for the reference (and thus let the GitLab server perform the matching of the ref to a commit)
@@ -239,23 +250,20 @@ public class DefaultGitLabProvider : IGitLabProvider
         return tag;
     }
 
-    private DebugLog GetLogForCurrentAlias([CallerMemberName] string methodName = "") => new DebugLog(m_Context.Log, $"GitLab.{methodName}");
-
-
-    private static IGitLabClient GetClient(ICakeContext context, string serverUrl, string accessToken, [CallerMemberName] string aliasName = "")
+    protected virtual IGitLabClient GetClient(string serverUrl, string accessToken, [CallerMemberName] string operationName = "")
     {
         Guard.NotNullOrWhitespace(serverUrl);
         Guard.NotNullOrWhitespace(accessToken);
 
-        var log = GetLogForCurrentAlias(context, aliasName);
+        var log = GetLogForCurrentOperation(operationName);
 
         log.Debug($"Creating GitLab client for server url '{serverUrl}'");
 
         IGitLabClientFactory clientFactory;
-        if (context is IGitLabClientFactory)
+        if (m_Context is IGitLabClientFactory)
         {
-            log.Debug($"Context of type '{context.GetType().FullName}' implements {nameof(IGitLabClientFactory)}. Delegating client creation to context");
-            clientFactory = (IGitLabClientFactory)context;
+            log.Debug($"Context of type '{m_Context.GetType().FullName}' implements {nameof(IGitLabClientFactory)}. Delegating client creation to context");
+            clientFactory = (IGitLabClientFactory)m_Context;
         }
         else
         {
@@ -266,9 +274,7 @@ public class DefaultGitLabProvider : IGitLabProvider
         return clientFactory.GetClient(serverUrl, accessToken);
     }
 
-    private static DebugLog GetLogForCurrentAlias(ICakeContext context, [CallerMemberName] string aliasName = "") => new DebugLog(context.Log, aliasName);
-
-
+    private DebugLog GetLogForCurrentOperation([CallerMemberName] string operationName = "") => new DebugLog(m_Context.Log, $"GitLab.{operationName}");
 
     private Commit GetCommitInternal(ICakeLog log, IGitLabClient client, ProjectId project, string @ref)
     {

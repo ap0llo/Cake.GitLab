@@ -17,10 +17,8 @@ public static partial class GitLabAliases
     /// <param name="pipelineId">The id of the pipeline to load data for.</param>
     [CakeMethodAlias]
     [CakeAliasCategory("Pipelines")]
-    public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId)
-    {
-        return await context.GetGitLabProvider().GetPipelineAsync(serverUrl, accessToken, project, pipelineId);
-    }
+    public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId) =>
+        await context.GetGitLabProvider().GetPipelineAsync(serverUrl, accessToken, project, pipelineId);
 
     /// <summary>
     /// Updates the name of the specified pipeline
@@ -33,8 +31,6 @@ public static partial class GitLabAliases
     /// <param name="name">The name to set the pipeline name to.</param>
     [CakeMethodAlias]
     [CakeAliasCategory("Pipelines")]
-    public static async Task GitLabSetPipelineNameAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId, string name)
-    {
+    public static async Task GitLabSetPipelineNameAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId, string name) =>
         await context.GetGitLabProvider().SetPipelineNameAsync(serverUrl, accessToken, project, pipelineId, name);
-    }
 }
