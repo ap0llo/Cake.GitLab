@@ -14,12 +14,12 @@ public interface IGitLabProvider
     /// <summary>
     /// Implements the functionality of <see cref="GitLabAliases.GitLabTryGetCurrentServerIdentity"/>
     /// </summary>
-    GitLabServerIdentity? TryGetCurrentServerIdentity();
+    ServerIdentity? TryGetCurrentServerIdentity();
 
     /// <summary>
     /// Implements the functionality of <see cref="GitLabAliases.GitLabTryGetCurrentProjectIdentity"/>
     /// </summary>
-    GitLabProjectIdentity? TryGetCurrentProjectIdentity();
+    ProjectIdentity? TryGetCurrentProjectIdentity();
 
     /// <summary>
     /// Implements the functionality of <see cref="GitLabAliases.GitLabGetPipelineAsync(ICakeContext,string,string,ProjectId,long)"/>

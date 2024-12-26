@@ -4,9 +4,9 @@ using Cake.GitLab.Internal;
 namespace Cake.GitLab;
 
 /// <summary>
-/// Provides both the identity and credentials for a GitLab project
+/// Provides both the identity and credentials for a GitLab server
 /// </summary>
-public record GitLabProjectConnection : GitLabProjectIdentity
+public record ServerConnection : ServerIdentity
 {
     private readonly string m_AccessToken = "";
 
@@ -19,17 +19,12 @@ public record GitLabProjectConnection : GitLabProjectIdentity
         init => m_AccessToken = Guard.NotNullOrWhitespace(value);
     }
 
-    public GitLabProjectConnection(string host, string @namespace, string project, string accessToken) : base(host, @namespace, project)
+    public ServerConnection(string host, string accessToken) : base(host)
     {
         m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
     }
 
-    public GitLabProjectConnection(string host, string projectPath, string accessToken) : base(host, projectPath)
-    {
-        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
-    }
-
-    public GitLabProjectConnection(GitLabProjectIdentity projectIdentity, string accessToken) : base(projectIdentity)
+    public ServerConnection(ServerIdentity identity, string accessToken) : base(identity)
     {
         m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
     }
@@ -46,7 +41,7 @@ public record GitLabProjectConnection : GitLabProjectIdentity
     }
 
     /// <inheritdoc />
-    public virtual bool Equals(GitLabProjectConnection? other)
+    public virtual bool Equals(ServerConnection? other)
     {
         return other is not null &&
             base.Equals(other) &&

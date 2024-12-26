@@ -20,24 +20,24 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         public INamedTypeSymbol GitLabAliases { get; set; } = null!;
 
         /// <summary>
-        /// Gets the symbol for the <c>Cake.GitLab.GitLabServerIdentity</c> type
+        /// Gets the symbol for the <c>Cake.GitLab.ServerIdentity</c> type
         /// </summary>
-        public INamedTypeSymbol GitLabServerIdentity { get; set; } = null!;
+        public INamedTypeSymbol ServerIdentity { get; set; } = null!;
 
         /// <summary>
-        /// Gets the symbol for the <c>Cake.GitLab.GitLabServerConnection</c> type
+        /// Gets the symbol for the <c>Cake.GitLab.ServerConnection</c> type
         /// </summary>
-        public INamedTypeSymbol GitLabServerConnection { get; set; } = null!;
+        public INamedTypeSymbol ServerConnection { get; set; } = null!;
 
         /// <summary>
-        /// Gets the symbol for the <c>Cake.GitLab.GitLabProjectIdentity</c> type
+        /// Gets the symbol for the <c>Cake.GitLab.ProjectIdentity</c> type
         /// </summary>
-        public INamedTypeSymbol GitLabProjectIdentity { get; set; } = null!;
+        public INamedTypeSymbol ProjectIdentity { get; set; } = null!;
 
         /// <summary>
-        /// Gets the symbol for the <c>Cake.GitLab.GitLabProjectConnection</c> type
+        /// Gets the symbol for the <c>Cake.GitLab.ProjectConnection</c> type
         /// </summary>
-        public INamedTypeSymbol GitLabProjectConnection { get; set; } = null!;
+        public INamedTypeSymbol ProjectConnection { get; set; } = null!;
 
         /// <summary>
         /// Gets the symbol for the <c>Cake.Core.ICakeContext</c> type
@@ -74,10 +74,10 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         {
             // Find required type symbols
             if (!TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabAliases", out var gitLabAliasesSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabServerIdentity", out var gitlabServerIdentitySymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabServerConnection", out var gitlabServerConnectionSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabProjectIdentity", out var gitlabProjectIdentitySymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabProjectConnection", out var gitlabProjectConnectionSymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ServerIdentity", out var serverIdentitySymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ServerConnection", out var serverConnectionSymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ProjectIdentity", out var projectIdentitySymbol) ||
+               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ProjectConnection", out var projectConnectionSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.ICakeContext", out var cakeContextSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeMethodAliasAttribute", out var cakeMethodAliasAttributeSymbol) ||
                !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeAliasCategoryAttribute", out var cakeAliasCategoryAttributeSymbol) ||
@@ -92,10 +92,10 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             return new Symbols()
             {
                 GitLabAliases = gitLabAliasesSymbol!,
-                GitLabServerIdentity = gitlabServerIdentitySymbol!,
-                GitLabServerConnection = gitlabServerConnectionSymbol!,
-                GitLabProjectIdentity = gitlabProjectIdentitySymbol!,
-                GitLabProjectConnection = gitlabProjectConnectionSymbol!,
+                ServerIdentity = serverIdentitySymbol!,
+                ServerConnection = serverConnectionSymbol!,
+                ProjectIdentity = projectIdentitySymbol!,
+                ProjectConnection = projectConnectionSymbol!,
                 CakeContext = cakeContextSymbol!,
                 CakeMethodAliasAttribute = cakeMethodAliasAttributeSymbol!,
                 CakeAliasCategoryAttribute = cakeAliasCategoryAttributeSymbol!,
@@ -221,35 +221,35 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
             foreach (var alias in aliases)
             {
                 //
-                // Generate an overload that uses a GitLabServerIdentity instead of the serverUrl string
+                // Generate an overload that uses a ServerIdentity instead of the serverUrl string
                 //
                 GenerateOverload(context, alias,
                 [
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "serverUrl",
-                        NewParameterType = context.Symbols.GitLabServerIdentity,
+                        NewParameterType = context.Symbols.ServerIdentity,
                         NewParameterName = "serverIdentity",
                         ConversionExpression = "serverIdentity.Url"
                     }
                 ]);
 
                 //
-                // Generate an overload that uses a GitLabServerConnection instead of the serverUrl and accessToken strings
+                // Generate an overload that uses a ServerConnection instead of the serverUrl and accessToken strings
                 //
                 GenerateOverload(context, alias,
                 [
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "serverUrl",
-                        NewParameterType = context.Symbols.GitLabServerConnection,
+                        NewParameterType = context.Symbols.ServerConnection,
                         NewParameterName = "serverConnection",
                         ConversionExpression = "serverConnection.Url"
                     },
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "accessToken",
-                        NewParameterType = context.Symbols.GitLabServerConnection,
+                        NewParameterType = context.Symbols.ServerConnection,
                         NewParameterName = "serverConnection",
                         ConversionExpression = "serverConnection.AccessToken"
                     }
@@ -258,21 +258,21 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 
 
                 //
-                // Generate an overload that uses a GitLabProjectIdentity instead of the serverUrl and project parameters
+                // Generate an overload that uses a ProjectIdentity instead of the serverUrl and project parameters
                 //
                 GenerateOverload(context, alias,
                 [
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "serverUrl",
-                        NewParameterType = context.Symbols.GitLabProjectIdentity,
+                        NewParameterType = context.Symbols.ProjectIdentity,
                         NewParameterName = "projectIdentity",
                         ConversionExpression = "projectIdentity.Url"
                     },
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "project",
-                        NewParameterType = context.Symbols.GitLabProjectIdentity,
+                        NewParameterType = context.Symbols.ProjectIdentity,
                         NewParameterName = "projectIdentity",
                         ConversionExpression = "projectIdentity.ProjectPath"
                     }
@@ -281,28 +281,28 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 
 
                 //
-                // Generate an overload that uses a GitLabProjectConnection instead of the serverUrl, project and accessToken parameters
+                // Generate an overload that uses a ProjectConnection instead of the serverUrl, project and accessToken parameters
                 //
                 GenerateOverload(context, alias,
                 [
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "serverUrl",
-                        NewParameterType = context.Symbols.GitLabProjectConnection,
+                        NewParameterType = context.Symbols.ProjectConnection,
                         NewParameterName = "projectConnection",
                         ConversionExpression = "projectConnection.Url"
                     },
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "accessToken",
-                        NewParameterType = context.Symbols.GitLabProjectConnection,
+                        NewParameterType = context.Symbols.ProjectConnection,
                         NewParameterName = "projectConnection",
                         ConversionExpression = "projectConnection.AccessToken"
                     },
                     new ParameterReplacement()
                     {
                         OriginalParameterName = "project",
-                        NewParameterType = context.Symbols.GitLabProjectConnection,
+                        NewParameterType = context.Symbols.ProjectConnection,
                         NewParameterName = "projectConnection",
                         ConversionExpression = "projectConnection.ProjectPath"
                     }

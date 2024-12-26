@@ -15,7 +15,7 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsulates the identity of a project on a GitLab server
 /// </summary>
-public record GitLabProjectIdentity : GitLabServerIdentity
+public record ProjectIdentity : ServerIdentity
 {
     private readonly string m_Namespace;
     private readonly string m_Project;
@@ -66,20 +66,20 @@ public record GitLabProjectIdentity : GitLabServerIdentity
 
 
     /// <summary>
-    /// Initializes a new instance of <see cref="GitLabProjectIdentity"/>
+    /// Initializes a new instance of <see cref="ProjectIdentity"/>
     /// </summary>
     /// <param name="host">The host name of the GitLab server.</param>
     /// <param name="namespace">The GitLab project's namespace (username or group and subgroup)</param>
     /// <param name="project">The GitLab project's name</param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="host"/>, <paramref name="namespace"/> or <paramref name="project"/> is null or whitespace</exception>
-    public GitLabProjectIdentity(string host, string @namespace, string project) : base(host)
+    public ProjectIdentity(string host, string @namespace, string project) : base(host)
     {
         m_Namespace = Guard.NotNullOrWhitespace(@namespace);
         m_Project = Guard.NotNullOrWhitespace(project);
     }
 
 
-    public GitLabProjectIdentity(string host, string projectPath) : base(host)
+    public ProjectIdentity(string host, string projectPath) : base(host)
     {
         if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
         {
@@ -102,7 +102,7 @@ public record GitLabProjectIdentity : GitLabServerIdentity
     }
 
     /// <inheritdoc />
-    public virtual bool Equals(GitLabProjectIdentity? other)
+    public virtual bool Equals(ProjectIdentity? other)
     {
         return other is not null &&
             base.Equals(other) &&
@@ -115,8 +115,8 @@ public record GitLabProjectIdentity : GitLabServerIdentity
     /// Determines the GitLab server and project path based on a git repository's remote url
     /// </summary>
     /// <param name="remoteUrl">A git remote url. Supports both HTTP and SSH urls (including urls in the SCP format, e.g. <c>git@github.com:ap0llo/Cake.GitLab.git</c>)</param>
-    /// <returns>Returns a <see cref="GitLabProjectIdentity"/> with the information extracted from the url or <c>null</c> if not project data could be read from the remote url.</returns>
-    public static GitLabProjectIdentity FromGitRemoteUrl(string remoteUrl)
+    /// <returns>Returns a <see cref="ProjectIdentity"/> with the information extracted from the url or <c>null</c> if not project data could be read from the remote url.</returns>
+    public static ProjectIdentity FromGitRemoteUrl(string remoteUrl)
     {
         Guard.NotNullOrWhitespace(remoteUrl);
 
@@ -133,13 +133,13 @@ public record GitLabProjectIdentity : GitLabServerIdentity
     /// <summary>
     /// Attempts to determine the GitLab server and project path based on a git repository's remote url
     /// </summary>
-    public static bool TryGetFromGitRemoteUrl(string remoteUrl, [NotNullWhen(true)] out GitLabProjectIdentity? projectIdentity) =>
+    public static bool TryGetFromGitRemoteUrl(string remoteUrl, [NotNullWhen(true)] out ProjectIdentity? projectIdentity) =>
         TryParseRemoteUrl(remoteUrl, out projectIdentity, out var _);
 
     /// <summary>
-    /// Attempts to create a <see cref="GitLabProjectIdentity"/> from a host name and a project path.
+    /// Attempts to create a <see cref="ProjectIdentity"/> from a host name and a project path.
     /// </summary>
-    internal static bool TryGetFromHostAndProjectPath(string host, string projectPath, [NotNullWhen(true)] out GitLabProjectIdentity? projectIdentity)
+    internal static bool TryGetFromHostAndProjectPath(string host, string projectPath, [NotNullWhen(true)] out ProjectIdentity? projectIdentity)
     {
         if (String.IsNullOrWhiteSpace(host))
         {
@@ -153,7 +153,7 @@ public record GitLabProjectIdentity : GitLabServerIdentity
             return false;
         }
 
-        projectIdentity = new GitLabProjectIdentity(host, @namespace, project);
+        projectIdentity = new ProjectIdentity(host, @namespace, project);
         return true;
     }
 
@@ -198,7 +198,7 @@ public record GitLabProjectIdentity : GitLabServerIdentity
         return true;
     }
 
-    private static bool TryParseRemoteUrl(string url, [NotNullWhen(true)] out GitLabProjectIdentity? projectInfo, [NotNullWhen(false)] out string? errorMessage)
+    private static bool TryParseRemoteUrl(string url, [NotNullWhen(true)] out ProjectIdentity? projectInfo, [NotNullWhen(false)] out string? errorMessage)
     {
         projectInfo = null;
         errorMessage = null;
@@ -238,7 +238,7 @@ public record GitLabProjectIdentity : GitLabServerIdentity
                     return false;
                 }
 
-                projectInfo = new GitLabProjectIdentity(uri.Host, @namespace, project);
+                projectInfo = new ProjectIdentity(uri.Host, @namespace, project);
                 return true;
 
             default:

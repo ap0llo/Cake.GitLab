@@ -13,29 +13,29 @@ using Xunit;
 namespace Cake.GitLab.Test;
 
 /// <summary>
-/// Tests for <see cref="GitLabServerIdentity"/>
+/// Tests for <see cref="ServerIdentity"/>
 /// </summary>
-public class GitLabServerIdentityTest : EqualityTest<GitLabServerIdentity, GitLabServerIdentityTest>, IEqualityTestDataProvider<GitLabServerIdentity>
+public class ServerIdentityTest : EqualityTest<ServerIdentity, ServerIdentityTest>, IEqualityTestDataProvider<ServerIdentity>
 {
-    public IEnumerable<(GitLabServerIdentity left, GitLabServerIdentity right)> GetEqualTestCases()
+    public IEnumerable<(ServerIdentity left, ServerIdentity right)> GetEqualTestCases()
     {
         yield return (
-            new GitLabServerIdentity("example.com"),
-            new GitLabServerIdentity("example.com")
+            new ServerIdentity("example.com"),
+            new ServerIdentity("example.com")
         );
 
         // Comparisons must be case-insensitive
         yield return (
-            new GitLabServerIdentity("example.com"),
-            new GitLabServerIdentity("EXAMPLE.COM")
+            new ServerIdentity("example.com"),
+            new ServerIdentity("EXAMPLE.COM")
         );
     }
 
-    public IEnumerable<(GitLabServerIdentity left, GitLabServerIdentity right)> GetUnequalTestCases()
+    public IEnumerable<(ServerIdentity left, ServerIdentity right)> GetUnequalTestCases()
     {
         yield return (
-            new GitLabServerIdentity("example.com"),
-            new GitLabServerIdentity("example.net")
+            new ServerIdentity("example.com"),
+            new ServerIdentity("example.net")
         );
     }
 
@@ -50,7 +50,7 @@ public class GitLabServerIdentityTest : EqualityTest<GitLabServerIdentity, GitLa
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new GitLabServerIdentity(host!));
+        var ex = Record.Exception(() => new ServerIdentity(host!));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);

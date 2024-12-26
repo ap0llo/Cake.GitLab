@@ -13,90 +13,90 @@ using Xunit;
 namespace Cake.GitLab.Test;
 
 /// <summary>
-/// Tests for <see cref="GitLabProjectIdentity"/>
+/// Tests for <see cref="ProjectIdentity"/>
 /// </summary>
-public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, GitLabProjectIdentityTest>, IEqualityTestDataProvider<GitLabProjectIdentity>
+public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentityTest>, IEqualityTestDataProvider<ProjectIdentity>
 {
-    public IEnumerable<(GitLabProjectIdentity left, GitLabProjectIdentity right)> GetEqualTestCases()
+    public IEnumerable<(ProjectIdentity left, ProjectIdentity right)> GetEqualTestCases()
     {
         yield return (
-            new GitLabProjectIdentity("example.com", "user", "repo"),
-            new GitLabProjectIdentity("example.com", "user", "repo")
+            new ProjectIdentity("example.com", "user", "repo"),
+            new ProjectIdentity("example.com", "user", "repo")
         );
 
         yield return (
-            new GitLabProjectIdentity("example.com", "user", "repo"),
-            new GitLabProjectIdentity("example.com", "user/repo")
+            new ProjectIdentity("example.com", "user", "repo"),
+            new ProjectIdentity("example.com", "user/repo")
         );
 
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo")
+            new ProjectIdentity("example.com", "group/subgroup", "repo"),
+            new ProjectIdentity("example.com", "group/subgroup", "repo")
         );
 
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
-            new GitLabProjectIdentity("example.com", "group/subgroup/repo")
+            new ProjectIdentity("example.com", "group/subgroup", "repo"),
+            new ProjectIdentity("example.com", "group/subgroup/repo")
         );
 
 
         // Comparisons must be case-insensitive
         yield return (
-            new GitLabProjectIdentity("example.com", "user", "repo"),
-            new GitLabProjectIdentity("EXAMPLE.COM", "user", "repo")
+            new ProjectIdentity("example.com", "user", "repo"),
+            new ProjectIdentity("EXAMPLE.COM", "user", "repo")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
-            new GitLabProjectIdentity("EXAMPLE.COM", "group/subgroup", "repo")
+            new ProjectIdentity("example.com", "group/subgroup", "repo"),
+            new ProjectIdentity("EXAMPLE.COM", "group/subgroup", "repo")
         );
 
         yield return (
-            new GitLabProjectIdentity("example.com", "user", "repo"),
-            new GitLabProjectIdentity("example.com", "USER", "repo")
+            new ProjectIdentity("example.com", "user", "repo"),
+            new ProjectIdentity("example.com", "USER", "repo")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
-            new GitLabProjectIdentity("example.com", "GROUP/SUBGROUP", "repo")
+            new ProjectIdentity("example.com", "group/subgroup", "repo"),
+            new ProjectIdentity("example.com", "GROUP/SUBGROUP", "repo")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "user", "repo"),
-            new GitLabProjectIdentity("example.com", "user", "REPO")
+            new ProjectIdentity("example.com", "user", "repo"),
+            new ProjectIdentity("example.com", "user", "REPO")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
-            new GitLabProjectIdentity("example.com", "group/subgroup", "REPO")
+            new ProjectIdentity("example.com", "group/subgroup", "repo"),
+            new ProjectIdentity("example.com", "group/subgroup", "REPO")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
-            new GitLabProjectIdentity("example.com", "group/SUBGROUP", "repo")
+            new ProjectIdentity("example.com", "group/subgroup", "repo"),
+            new ProjectIdentity("example.com", "group/SUBGROUP", "repo")
         );
     }
 
-    public IEnumerable<(GitLabProjectIdentity left, GitLabProjectIdentity right)> GetUnequalTestCases()
+    public IEnumerable<(ProjectIdentity left, ProjectIdentity right)> GetUnequalTestCases()
     {
         yield return (
-            new GitLabProjectIdentity("example.com", "user", "repo"),
-            new GitLabProjectIdentity("example.net", "user", "repo")
+            new ProjectIdentity("example.com", "user", "repo"),
+            new ProjectIdentity("example.net", "user", "repo")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo"),
-            new GitLabProjectIdentity("example.net", "group/subgroup", "repo")
+            new ProjectIdentity("example.com", "group/subgroup", "repo"),
+            new ProjectIdentity("example.net", "group/subgroup", "repo")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "user1", "repo"),
-            new GitLabProjectIdentity("example.com", "user2", "repo")
+            new ProjectIdentity("example.com", "user1", "repo"),
+            new ProjectIdentity("example.com", "user2", "repo")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "group1/subgroup", "repo"),
-            new GitLabProjectIdentity("example.com", "group2/subgroup", "repo")
+            new ProjectIdentity("example.com", "group1/subgroup", "repo"),
+            new ProjectIdentity("example.com", "group2/subgroup", "repo")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "user", "repo1"),
-            new GitLabProjectIdentity("example.com", "user", "repo2")
+            new ProjectIdentity("example.com", "user", "repo1"),
+            new ProjectIdentity("example.com", "user", "repo2")
         );
         yield return (
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo1"),
-            new GitLabProjectIdentity("example.com", "group/subgroup", "repo2")
+            new ProjectIdentity("example.com", "group/subgroup", "repo1"),
+            new ProjectIdentity("example.com", "group/subgroup", "repo2")
         );
     }
 
@@ -111,7 +111,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new GitLabProjectIdentity(host!, "user", "repo"));
+        var ex = Record.Exception(() => new ProjectIdentity(host!, "user", "repo"));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -127,7 +127,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new GitLabProjectIdentity("example.com", @namespace!, "repo"));
+        var ex = Record.Exception(() => new ProjectIdentity("example.com", @namespace!, "repo"));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -143,7 +143,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new GitLabProjectIdentity("example.com", "user", project!));
+        var ex = Record.Exception(() => new ProjectIdentity("example.com", "user", project!));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -160,7 +160,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new GitLabProjectIdentity("example.com", projectPath!));
+        var ex = Record.Exception(() => new ProjectIdentity("example.com", projectPath!));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -169,8 +169,8 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
     [Fact]
     public void Can_be_initialized_from_project_path()
     {
-        var fromNamespaceAndProjectName = new GitLabProjectIdentity("example.com", "some-group", "some-project");
-        var fromProjectPath = new GitLabProjectIdentity("example.com", "some-group/some-project");
+        var fromNamespaceAndProjectName = new ProjectIdentity("example.com", "some-group", "some-project");
+        var fromProjectPath = new ProjectIdentity("example.com", "some-group/some-project");
 
         Assert.Equal(fromNamespaceAndProjectName, fromProjectPath);
     }
@@ -179,7 +179,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
     public void Setting_Project_updates_project_path()
     {
         // ARRANGE
-        var initial = new GitLabProjectIdentity("example.com", "group/subgroup", "project");
+        var initial = new ProjectIdentity("example.com", "group/subgroup", "project");
 
         // ACT 
         var updated = initial with { Project = "another-project" };
@@ -193,7 +193,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
     public void Setting_Namespace_updates_project_path()
     {
         // ARRANGE
-        var initial = new GitLabProjectIdentity("example.com", "group/subgroup", "project");
+        var initial = new ProjectIdentity("example.com", "group/subgroup", "project");
 
         // ACT 
         var updated = initial with { Namespace = "someUser" };
@@ -208,7 +208,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
     public void Setting_ProjectPath_updates_namespace_and_project(string projectPath, string expectedNamespace, string expetedProject)
     {
         // ARRANGE
-        var initial = new GitLabProjectIdentity("example.com", "initalNamespace", "initialProject");
+        var initial = new ProjectIdentity("example.com", "initalNamespace", "initialProject");
 
         // ACT 
         var updated = initial with { ProjectPath = projectPath };
@@ -229,7 +229,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
     public void Setting_ProjectPath_throws_ArgumentException_if_path_is_invalid(string projectPath)
     {
         // ARRANGE
-        var initial = new GitLabProjectIdentity("example.com", "initalNamespace", "initialProject");
+        var initial = new ProjectIdentity("example.com", "initalNamespace", "initialProject");
 
         // ACT 
         var ex = Record.Exception(() => initial with { ProjectPath = projectPath });
@@ -252,7 +252,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => GitLabProjectIdentity.FromGitRemoteUrl(url!));
+        var ex = Record.Exception(() => ProjectIdentity.FromGitRemoteUrl(url!));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -266,13 +266,13 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
     [InlineData("git@gitlab.com:group/subgroup/repoName.git", "gitlab.com", "group/subgroup", "repoName")]
     [InlineData("git@example.com:user/repoName.git", "example.com", "user", "repoName")]
     [InlineData("git@example.com:group/subgroup/repoName.git", "example.com", "group/subgroup", "repoName")]
-    public void FromGitRemoteUrl_returns_the_expected_GitLabProjectIdentity(string remoteUrl, string host, string @namespace, string projectName)
+    public void FromGitRemoteUrl_returns_the_expected_ProjectIdentity(string remoteUrl, string host, string @namespace, string projectName)
     {
         // ARRANGE
-        var expected = new GitLabProjectIdentity(host, @namespace, projectName);
+        var expected = new ProjectIdentity(host, @namespace, projectName);
 
         // ACT
-        var actual = GitLabProjectIdentity.FromGitRemoteUrl(remoteUrl);
+        var actual = ProjectIdentity.FromGitRemoteUrl(remoteUrl);
 
         // ASSERT
         Assert.Equal(expected, actual);
@@ -292,7 +292,7 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
         // ARRANGE
 
         // ACT
-        var success = GitLabProjectIdentity.TryGetFromGitRemoteUrl(url!, out var parsed);
+        var success = ProjectIdentity.TryGetFromGitRemoteUrl(url!, out var parsed);
 
         // ASSERT
         Assert.False(success);
@@ -310,10 +310,10 @@ public class GitLabProjectIdentityTest : EqualityTest<GitLabProjectIdentity, Git
     public void TryParseRemoteUrl_returns_the_expected_GitHubProjectInfo(string url, string host, string @namespace, string projectName)
     {
         // ARRANGE
-        var expected = new GitLabProjectIdentity(host, @namespace, projectName);
+        var expected = new ProjectIdentity(host, @namespace, projectName);
 
         // ACT 
-        var success = GitLabProjectIdentity.TryGetFromGitRemoteUrl(url, out var parsed);
+        var success = ProjectIdentity.TryGetFromGitRemoteUrl(url, out var parsed);
 
         // ASSERT
         Assert.True(success);

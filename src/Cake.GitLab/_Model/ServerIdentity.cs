@@ -6,7 +6,7 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsulates the identity of GitLab server
 /// </summary>
-public record GitLabServerIdentity
+public record ServerIdentity
 {
     private readonly string m_Host;
 
@@ -26,11 +26,11 @@ public record GitLabServerIdentity
 
 
     /// <summary>
-    /// Initializes a new instance of <see cref="GitLabProjectIdentity"/>
+    /// Initializes a new instance of <see cref="ServerIdentity"/>
     /// </summary>
     /// <param name="host">The host name of the GitLab server.</param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="host"/> is null or whitespace</exception>
-    public GitLabServerIdentity(string host)
+    public ServerIdentity(string host)
     {
         m_Host = Guard.NotNullOrWhitespace(host);
     }
@@ -39,7 +39,7 @@ public record GitLabServerIdentity
     public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode(Host);
 
     /// <inheritdoc />
-    public virtual bool Equals(GitLabServerIdentity? other)
+    public virtual bool Equals(ServerIdentity? other)
     {
         return other is not null &&
             StringComparer.OrdinalIgnoreCase.Equals(Host, other.Host);

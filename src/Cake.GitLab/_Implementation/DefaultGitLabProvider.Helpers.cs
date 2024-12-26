@@ -11,7 +11,7 @@ public partial class DefaultGitLabProvider
 
 
     /// <inheritdoc />
-    public GitLabServerIdentity? TryGetCurrentServerIdentity()
+    public ServerIdentity? TryGetCurrentServerIdentity()
     {
         var log = GetLogForCurrentOperation();
 
@@ -34,11 +34,11 @@ public partial class DefaultGitLabProvider
 
         log.Debug($"{CI_SERVER_HOST} is '{host}'");
 
-        return new GitLabServerIdentity(host);
+        return new ServerIdentity(host);
     }
 
     /// <inheritdoc />
-    public GitLabProjectIdentity? TryGetCurrentProjectIdentity()
+    public ProjectIdentity? TryGetCurrentProjectIdentity()
     {
         var log = GetLogForCurrentOperation();
 
@@ -71,7 +71,7 @@ public partial class DefaultGitLabProvider
         log.Debug($"Project path is '{projectPath}'");
 
 
-        if (GitLabProjectIdentity.TryGetFromHostAndProjectPath(host, projectPath, out var identity))
+        if (ProjectIdentity.TryGetFromHostAndProjectPath(host, projectPath, out var identity))
         {
             return identity;
         }

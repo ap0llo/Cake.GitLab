@@ -12,13 +12,13 @@ To change this file edit the source file and then run MarkdownSnippets.
 
   * [Overview](#overview)
   * ["Identity" objects](#identity-objects)
-    * [GitLabServerIdentity](#gitlabserveridentity)
-    * [GitLabProjectIdentity](#gitlabprojectidentity)
+    * [ServerIdentity](#serveridentity)
+    * [ProjectIdentity](#projectidentity)
     * [Get identity from a git remote url](#get-identity-from-a-git-remote-url)
     * [Get identity from environment variables](#get-identity-from-environment-variables)
   * ["Connection" objects](#connection-objects)
-    * [GitLabServerConnection](#gitlabserverconnection)
-    * [GitLabProjectConnection](#gitlabprojectconnection)<!-- endToc -->
+    * [ServerConnection](#serverconnection)
+    * [ProjectConnection](#projectconnection)<!-- endToc -->
 
 ## Overview
 
@@ -29,23 +29,23 @@ The connections parameters for a GitLab Server or project may be specified as "I
 
 ## "Identity" objects
 
-### GitLabServerIdentity
+### ServerIdentity
 
-A `GitLabServerIdentity` object encapsulates all data to identify a Gitlab server.
+A `ServerIdentity` object encapsulates all data to identify a Gitlab server.
 
 It can be created from the GitLab server's host name.
 
-<!-- snippet: GitLabServerIdentity -->
-<a id='snippet-GitLabServerIdentity'></a>
+<!-- snippet: ServerIdentity -->
+<a id='snippet-ServerIdentity'></a>
 ```cs
-var serverIdentity = new GitLabServerIdentity("example.com");
+var serverIdentity = new ServerIdentity("example.com");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L69-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabServerIdentity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L69-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-ServerIdentity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-### GitLabProjectIdentity
+### ProjectIdentity
 
-A `GitLabProjectIdentity` object encapsulates all data to identify a project on a Gitlab server.
+A `ProjectIdentity` object encapsulates all data to identify a project on a Gitlab server.
 This includes
 
 - The server's host name
@@ -54,37 +54,37 @@ This includes
 
 A project identity can be constructed from these individual values:
 
-<!-- snippet: GitLabProjectIdentity-Simple -->
-<a id='snippet-GitLabProjectIdentity-Simple'></a>
+<!-- snippet: ProjectIdentity-Simple -->
+<a id='snippet-ProjectIdentity-Simple'></a>
 ```cs
-GitLabProjectIdentity projectIdentity;
+ProjectIdentity projectIdentity;
 
-// A GitLabProjectIdentity can be constructed from the server host name, namespace and project name
-projectIdentity = new GitLabProjectIdentity("example.com", "example-group", "example-project");
+// A ProjectIdentity can be constructed from the server host name, namespace and project name
+projectIdentity = new ProjectIdentity("example.com", "example-group", "example-project");
 
 // Alternatively, the project path (which is both the namesapce and project name) can be passed in as a single parameter
-projectIdentity = new GitLabProjectIdentity("example.com", "example-group/example-project");
+projectIdentity = new ProjectIdentity("example.com", "example-group/example-project");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L77-L86' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-Simple' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L77-L86' title='Snippet source file'>snippet source</a> | <a href='#snippet-ProjectIdentity-Simple' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Project identity objects are immutable record types, modified copies can be created using C#'s `with` expression. 
 
-<!-- snippet: GitLabProjectIdentity-CopyAndModify -->
-<a id='snippet-GitLabProjectIdentity-CopyAndModify'></a>
+<!-- snippet: ProjectIdentity-CopyAndModify -->
+<a id='snippet-ProjectIdentity-CopyAndModify'></a>
 ```cs
-var projectIdentity = new GitLabProjectIdentity("example.com", "example-group", "example-project");
+var projectIdentity = new ProjectIdentity("example.com", "example-group", "example-project");
 
 // Changing the "Project" property creates the identity of a project in the same group/subgroup on the same GitLab server
 var siblingProjectIdentity = projectIdentity with { Project = "sibling-project" };
 
-GitLabProjectIdentity otherProjectIdentity;
+ProjectIdentity otherProjectIdentity;
 // Changing the "ProjectPath" will also update the "Project" and "Namespace" properties
 otherProjectIdentity = projectIdentity with { ProjectPath = "another-group/subgroup/another-project" };
 // This is equivalent to
 otherProjectIdentity = projectIdentity with { Namespace = "another-group/subgroup", Project = "another-project" };
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L99-L112' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-CopyAndModify' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L99-L112' title='Snippet source file'>snippet source</a> | <a href='#snippet-ProjectIdentity-CopyAndModify' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### Get identity from a git remote url
@@ -92,15 +92,15 @@ otherProjectIdentity = projectIdentity with { Namespace = "another-group/subgrou
 The project identity can be extracted from the git remote url of a (local) git repository.
 This can be useful to e.g. avoid hard-coding GitLab project information in a Cake build script and instead retrieve the data from the local git repository.
 
-<!-- snippet: GitLabProjectIdentity-FromRemoteUrl -->
-<a id='snippet-GitLabProjectIdentity-FromRemoteUrl'></a>
+<!-- snippet: ProjectIdentity-FromRemoteUrl -->
+<a id='snippet-ProjectIdentity-FromRemoteUrl'></a>
 ```cs
 // The project identity can also be constructed from a git remote url (either SSH or HTTP urls)
-GitLabProjectIdentity projectIdentity;
-projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
-projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("https://example.com/example-group/example-project.git");
+ProjectIdentity projectIdentity;
+projectIdentity = ProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
+projectIdentity = ProjectIdentity.FromGitRemoteUrl("https://example.com/example-group/example-project.git");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L90-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectIdentity-FromRemoteUrl' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L90-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-ProjectIdentity-FromRemoteUrl' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -110,72 +110,72 @@ If a build is running on GitLab CI, the current server and project identities ca
 
 A build running on GitLab CI can use the following aliases to determine the current server or project identity:
 
-- `GitLabTryGetCurrentServerIdentity()`: Creates a `GitLabServerIdentity` for the current build
-- `GitLabTryGetCurrentProjectIdentity()`: Creates a `GitLabProjectIdentity` for the current build
+- `GitLabTryGetCurrentServerIdentity()`: Creates a `ServerIdentity` for the current build
+- `GitLabTryGetCurrentProjectIdentity()`: Creates a `ProjectIdentity` for the current build
 
 If the build is not running in a GitLab CI pipeline, both aliases will return `null`.
 
 ## "Connection" objects
 
-### GitLabServerConnection
+### ServerConnection
 
-`GitLabServerConnection` extends `GitLabServerIdentity` with an access token and thus encapsulates all data required for identifying a server and authenticating to the GitLab API.
+`ServerConnection` extends `ServerIdentity` with an access token and thus encapsulates all data required for identifying a server and authenticating to the GitLab API.
 
-Initialization of `GitLabServerConnection` is analogous to the initialization of `GitLabServerIdentity` with the addition of a `accessToken` parameter
+Initialization of `ServerConnection` is analogous to the initialization of `ServerIdentity` with the addition of a `accessToken` parameter
 
-<!-- snippet: GitLabServerConnection-Simple -->
-<a id='snippet-GitLabServerConnection-Simple'></a>
+<!-- snippet: ServerConnection-Simple -->
+<a id='snippet-ServerConnection-Simple'></a>
 ```cs
-var serverConnection = new GitLabServerConnection("example.com", "ACCESSTOKEN");
+var serverConnection = new ServerConnection("example.com", "ACCESSTOKEN");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L119-L121' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabServerConnection-Simple' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L119-L121' title='Snippet source file'>snippet source</a> | <a href='#snippet-ServerConnection-Simple' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-A `GitLabServerConnection` can also be created from an existing `GitLabServerdentity`.
+A `ServerConnection` can also be created from an existing `GitLabServerdentity`.
 
-<!-- snippet: GitLabServerConnection-FromIdentity -->
-<a id='snippet-GitLabServerConnection-FromIdentity'></a>
+<!-- snippet: ServerConnection-FromIdentity -->
+<a id='snippet-ServerConnection-FromIdentity'></a>
 ```cs
-var serverIdentity = new GitLabServerIdentity("example.com");
+var serverIdentity = new ServerIdentity("example.com");
 
-GitLabServerConnection serverConnection;
-serverConnection = new GitLabServerConnection(serverIdentity, "ACCESSTOKEN");
+ServerConnection serverConnection;
+serverConnection = new ServerConnection(serverIdentity, "ACCESSTOKEN");
 
-// since GitLabProjectIdentity derives from GitLabServerIdentity, a server connection can also be initialized from a git remote url:
-var projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
-serverConnection = new GitLabServerConnection(projectIdentity, "ACCESSTOKEN");
+// since ProjectIdentity derives from ServerIdentity, a server connection can also be initialized from a git remote url:
+var projectIdentity = ProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
+serverConnection = new ServerConnection(projectIdentity, "ACCESSTOKEN");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L126-L136' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabServerConnection-FromIdentity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L126-L136' title='Snippet source file'>snippet source</a> | <a href='#snippet-ServerConnection-FromIdentity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-### GitLabProjectConnection
+### ProjectConnection
 
-`GitLabProjectConnection` extends `GitLabProjectIdentity` with an access token and thus encapsulates all data required for identifying a project and authenticating to the GitLab API.
+`ProjectConnection` extends `ProjectIdentity` with an access token and thus encapsulates all data required for identifying a project and authenticating to the GitLab API.
 
-Initialization of `GitLabProjectConnection` is analogous to the initialization of `GitLabProjectIdentity` with the addition of a `accessToken` parameter
+Initialization of `ProjectConnection` is analogous to the initialization of `ProjectIdentity` with the addition of a `accessToken` parameter
 
-<!-- snippet: GitLabProjectConnection-Simple -->
-<a id='snippet-GitLabProjectConnection-Simple'></a>
+<!-- snippet: ProjectConnection-Simple -->
+<a id='snippet-ProjectConnection-Simple'></a>
 ```cs
-GitLabProjectConnection projectConnection;
+ProjectConnection projectConnection;
 
-// A GitLabProjectConnection can be constructed from the server host name, namespace, project name and access token
-projectConnection = new GitLabProjectConnection("example.com", "example-group", "example-project", "ACCESSTOKEN");
+// A ProjectConnection can be constructed from the server host name, namespace, project name and access token
+projectConnection = new ProjectConnection("example.com", "example-group", "example-project", "ACCESSTOKEN");
 
 // Alternatively, the project path (which is both the namesapce and project name) can be passed in as a single parameter
-projectConnection = new GitLabProjectConnection("example.com", "example-group/example-project", "ACCESSSTOKEN");
+projectConnection = new ProjectConnection("example.com", "example-group/example-project", "ACCESSSTOKEN");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L143-L152' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectConnection-Simple' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L143-L152' title='Snippet source file'>snippet source</a> | <a href='#snippet-ProjectConnection-Simple' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-A `GitLabProjectConnection` can also be created from an existing `GitLabProjectIdentity`, allowing e.g. the usage for `FromGitRemoteUrl()` as shown above:
+A `ProjectConnection` can also be created from an existing `ProjectIdentity`, allowing e.g. the usage for `FromGitRemoteUrl()` as shown above:
 
-<!-- snippet: GitLabProjectConnection-FromIdentity -->
-<a id='snippet-GitLabProjectConnection-FromIdentity'></a>
+<!-- snippet: ProjectConnection-FromIdentity -->
+<a id='snippet-ProjectConnection-FromIdentity'></a>
 ```cs
-var projectIdentity = GitLabProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
+var projectIdentity = ProjectIdentity.FromGitRemoteUrl("git@example.com:example-group/example-project.git");
 
-var projectConnection = new GitLabProjectConnection(projectIdentity, "ACCESSTOKEN");
+var projectConnection = new ProjectConnection(projectIdentity, "ACCESSTOKEN");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L157-L161' title='Snippet source file'>snippet source</a> | <a href='#snippet-GitLabProjectConnection-FromIdentity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L157-L161' title='Snippet source file'>snippet source</a> | <a href='#snippet-ProjectConnection-FromIdentity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

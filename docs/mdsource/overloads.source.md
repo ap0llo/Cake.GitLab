@@ -20,8 +20,8 @@ To improve on that, common parameters may be combined into a single object which
 An "identity" object encapsulates all data required to identify a server or a project.
 There are two identity objects supported:
 
-- `GitLabServerIdentity` identifies a GitLab Server
-- `GitLabProjectIdentity` identifies a specific project on a GitLab server
+- `ServerIdentity` identifies a GitLab Server
+- `ProjectIdentity` identifies a specific project on a GitLab server
 
 snippet: Overloads-Identity-Objects
 
@@ -31,15 +31,15 @@ A "connection" object combines the data to identify a project or server with an 
 
 There are two connection objects supported:
   
-- `GitLabServerConnection` specifies a GitLab server and an access token
-- `GitLabProjectConnection` identifies a GitLab project and provides an access token
+- `ServerConnection` specifies a GitLab server and an access token
+- `ProjectConnection` identifies a GitLab project and provides an access token
 
 snippet: Overloads-Connection-Objects
 
 ## Mix and Match
 
-Since the project identity/connection objects derive from their "server" counterparts, a GitLabProjectConnection or GitLabProjectIdentity object can also be used to get data from a different project.
+Since the project identity/connection objects derive from their "server" counterparts, a ProjectConnection or ProjectIdentity object can also be used to get data from a different project.
 
-For example, use a GitLabProjectConnection object to hold data about the default project, but also get data from a different project on the same server using the same access token.
+For example, use a ProjectConnection object to hold data about the default project, but also get data from a different project on the same server using the same access token.
 
 snippet: Overloads-MixAndMatch

@@ -52,7 +52,7 @@ public static partial class GitLabAliasesTest
             context.Environment.SetEnvironmentVariable("CI_SERVER", ciServerVariable);
             context.Environment.SetEnvironmentVariable("CI_SERVER_HOST", "example.com");
 
-            var expected = new GitLabServerIdentity("example.com");
+            var expected = new ServerIdentity("example.com");
 
             // ACT
             var actual = context.GitLabTryGetCurrentServerIdentity();
@@ -132,7 +132,7 @@ public static partial class GitLabAliasesTest
             context.Environment.SetEnvironmentVariable("CI_SERVER_HOST", host);
             context.Environment.SetEnvironmentVariable("CI_PROJECT_PATH", projectPath);
 
-            var expected = new GitLabProjectIdentity(host, projectPath);
+            var expected = new ProjectIdentity(host, projectPath);
 
             // ACT
             var actual = context.GitLabTryGetCurrentProjectIdentity();
