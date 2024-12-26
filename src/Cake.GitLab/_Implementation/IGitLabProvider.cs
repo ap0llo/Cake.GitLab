@@ -22,14 +22,14 @@ public interface IGitLabProvider
     GitLabProjectIdentity? TryGetCurrentProjectIdentity();
 
     /// <summary>
-    /// Implements the functionality of <see cref="GitLabAliases.GitLabGetPipelineAsync(ICakeContext,string,string,ProjectId,int)"/>
+    /// Implements the functionality of <see cref="GitLabAliases.GitLabGetPipelineAsync(ICakeContext,string,string,ProjectId,long)"/>
     /// </summary>
-    Task<Pipeline> GetPipelineAsync(string serverUrl, string accessToken, ProjectId project, int pipelineId);
+    Task<Pipeline> GetPipelineAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId);
 
     /// <summary>
-    /// Implements the functionality of <see cref="GitLabAliases.GitLabSetPipelineNameAsync(ICakeContext,string,string,ProjectId,int,string)"/>
+    /// Implements the functionality of <see cref="GitLabAliases.GitLabSetPipelineNameAsync(ICakeContext,string,string,ProjectId,long,string)"/>
     /// </summary>
-    Task SetPipelineNameAsync(string serverUrl, string accessToken, ProjectId project, int pipelineId, string name);
+    Task SetPipelineNameAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId, string name);
 
     /// <summary>
     /// Implements the functionality of <see cref="GitLabAliases.GitLabRepositoryDownloadFileAsync(ICakeContext,string,string,ProjectId,string,string,FilePath)"/>

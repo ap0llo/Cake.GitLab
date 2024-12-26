@@ -9,7 +9,7 @@ namespace Cake.GitLab;
 public partial class DefaultGitLabProvider
 {
     /// <inheritdoc />
-    public async Task<Pipeline> GetPipelineAsync(string serverUrl, string accessToken, ProjectId project, int pipelineId)
+    public async Task<Pipeline> GetPipelineAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId)
     {
         var log = GetLogForCurrentOperation();
         log.Verbose($"Getting pipeline {pipelineId} from GitLab project {project}");
@@ -28,7 +28,7 @@ public partial class DefaultGitLabProvider
     }
 
     /// <inheritdoc />
-    public async Task SetPipelineNameAsync(string serverUrl, string accessToken, ProjectId project, int pipelineId, string name)
+    public async Task SetPipelineNameAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId, string name)
     {
         var log = GetLogForCurrentOperation();
         log.Verbose($"Setting name of pipeline {pipelineId} in GitLab project {project} to {name}");
