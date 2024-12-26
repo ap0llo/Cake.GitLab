@@ -6,24 +6,32 @@ using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.GitLab.Internal;
 using NGitLab;
 using NGitLab.Models;
 
-namespace Cake.GitLab.Internal;
+namespace Cake.GitLab;
 
-internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGitLabClient gitLabClient) : ClientBase(log, fileSystem, gitLabClient)
+public partial class DefaultGitLabProvider
 {
-    public async Task DownloadFileAsync(ProjectId project, string filePath, string @ref, FilePath destination)
+    /// <inheritdoc />
+    public async Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
     {
-        m_Log.Verbose($"Downloading {filePath} from GitLab project {project} at reference '{@ref}' to '{destination}'");
+        Guard.NotNullOrWhitespace(filePath);
+        Guard.NotNullOrWhitespace(@ref);
+        Guard.NotNull(destination);
 
-        var repo = m_GitLabClient.GetRepository(project);
+        var log = GetLogForCurrentOperation();
+        log.Verbose($"Downloading {filePath} from GitLab project {project} at reference '{@ref}' to '{destination}'");
+
+        var client = GetClient(serverUrl, accessToken);
+        var repo = client.GetRepository(project);
         FileData fileData;
         try
         {
-            m_Log.Debug("Getting file from GitLab");
+            log.Debug("Getting file from GitLab");
             fileData = await repo.Files.GetAsync(filePath, @ref);
-            m_Log.Debug("Received response from GitLab");
+            log.Debug("Received response from GitLab");
         }
         catch (GitLabException ex)
         {
@@ -38,21 +46,24 @@ internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGi
         }
 
         var destinationDirectory = destination.GetDirectory();
-        m_Log.Debug($"Creating destination directory '{destination}'");
-        m_FileSystem.GetDirectory(destinationDirectory).Create();
+        log.Debug($"Creating destination directory '{destination}'");
+        m_Context.FileSystem.GetDirectory(destinationDirectory).Create();
 
-        m_Log.Debug($"Writing contents to destination file '{destination}'");
-        using var outStream = m_FileSystem.GetFile(destination).OpenWrite();
+        log.Debug($"Writing contents to destination file '{destination}'");
+        using var outStream = m_Context.FileSystem.GetFile(destination).OpenWrite();
         await outStream.WriteAsync(Convert.FromBase64String(fileData.Content));
 
-        m_Log.Verbose("File downloaded sucessfully");
+        log.Verbose("File downloaded successfully");
     }
 
-    public ValueTask<IReadOnlyCollection<Branch>> GetBranchesAsync(ProjectId project)
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, ProjectId project)
     {
-        m_Log.Verbose($"Getting branches from GitLab project {project}");
+        var log = GetLogForCurrentOperation();
+        log.Verbose($"Getting branches from GitLab project {project}");
 
-        var repo = m_GitLabClient.GetRepository(project);
+        var client = GetClient(serverUrl, accessToken);
+        var repo = client.GetRepository(project);
         Branch[] branches;
         try
         {
@@ -63,23 +74,31 @@ internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGi
             throw new CakeException($"Failed to get branches from GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
         }
 
-        m_Log.Verbose($"Loaded data for {branches.Length} branches");
-        return new ValueTask<IReadOnlyCollection<Branch>>(branches);
+        log.Verbose($"Loaded data for {branches.Length} branches");
+        return Task.FromResult<IReadOnlyCollection<Branch>>(branches);
     }
 
-    public async Task<Tag> CreateTagAsync(ProjectId project, string @ref, string name)
+    /// <inheritdoc />
+    public async Task<Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, ProjectId project, string @ref, string name)
     {
-        m_Log.Verbose($"Creating tag '{name}' for reference '{@ref}' in GitLab project {project}");
+        Guard.NotNullOrWhitespace(@ref);
+        Guard.NotNullOrWhitespace(name);
+
+
+        var log = GetLogForCurrentOperation();
+        log.Verbose($"Creating tag '{name}' for reference '{@ref}' in GitLab project {project}");
+
+        var client = GetClient(serverUrl, accessToken);
 
         // 'ref' might be a branch or tag name or abbreviated commit SHA
         // To make comparisons easier, get the commit for the reference (and thus let the GitLab server perform the matching of the ref to a commit)
-        var commit = GetCommitInternal(project, @ref);
+        var commit = GetCommitInternal(log, client, project, @ref);
 
         // Check if ´the tag already exists with the same target id
-        var existingTag = await TryGetTagInternalAsync(project, name);
+        var existingTag = await TryGetTagInternalAsync(log, client, project, name);
         if (existingTag?.Commit?.Id == commit.Id)
         {
-            m_Log.Verbose($"Tag '{existingTag.Name}' for commit {existingTag.Commit.Id} already exists");
+            log.Verbose($"Tag '{existingTag.Name}' for commit {existingTag.Commit.Id} already exists");
             return existingTag;
         }
 
@@ -90,27 +109,27 @@ internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGi
             // By using the commit id, we can ensure there is no race-condition between the check if a tag already exists and the creation of the tag.
             // Otherwise, when 'ref' is e.g. a branch name, the commit the ref refers to might change between getting existing tags and creation of new tags
             var tagCreate = new TagCreate() { Ref = commit.Id.ToString(), Name = name };
-            m_Log.Debug($"Creating tag '{tagCreate.Name}' for reference '{tagCreate.Ref}'");
-            tag = m_GitLabClient.GetRepository(project).Tags.Create(tagCreate);
+            log.Debug($"Creating tag '{tagCreate.Name}' for reference '{tagCreate.Ref}'");
+            tag = client.GetRepository(project).Tags.Create(tagCreate);
         }
-
         catch (GitLabException ex)
         {
             throw new CakeException($"Failed to create tag '{name}' for reference '{@ref}' in GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
         }
 
-        m_Log.Verbose($"Tag '{tag.Name}' for commit {tag.Commit.Id} created successfully");
+        log.Verbose($"Tag '{tag.Name}' for commit {tag.Commit.Id} created successfully");
         return tag;
     }
 
-    private Commit GetCommitInternal(ProjectId project, string @ref)
+
+    private Commit GetCommitInternal(ICakeLog log, IGitLabClient client, ProjectId project, string @ref)
     {
         Commit commit;
         try
         {
-            m_Log.Debug($"Getting commit for reference '{@ref}'");
-            commit = m_GitLabClient.GetCommits(project).GetCommit(@ref);
-            m_Log.Debug($"Commit for reference '{@ref}' is {commit.Id}");
+            log.Debug($"Getting commit for reference '{@ref}'");
+            commit = client.GetCommits(project).GetCommit(@ref);
+            log.Debug($"Commit for reference '{@ref}' is {commit.Id}");
         }
         catch (GitLabException ex)
         {
@@ -120,18 +139,18 @@ internal sealed class RepositoryClient(ICakeLog log, IFileSystem fileSystem, IGi
         return commit;
     }
 
-    private async Task<Tag?> TryGetTagInternalAsync(ProjectId project, string name)
+    private async Task<Tag?> TryGetTagInternalAsync(ICakeLog log, IGitLabClient client, ProjectId project, string name)
     {
         Tag tag;
         try
         {
-            m_Log.Debug($"Attempting to get tag '{name}'");
-            tag = await m_GitLabClient.GetRepository(project).Tags.GetByNameAsync(name);
-            m_Log.Debug($"Found tag '{tag.Name}' for commit '{tag.Commit.Id}'");
+            log.Debug($"Attempting to get tag '{name}'");
+            tag = await client.GetRepository(project).Tags.GetByNameAsync(name);
+            log.Debug($"Found tag '{tag.Name}' for commit '{tag.Commit.Id}'");
         }
         catch (GitLabException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
-            m_Log.Debug($"Tag '{name}' does not exist. Getting tag failed with status code '{ex.StatusCode}'");
+            log.Debug($"Tag '{name}' does not exist. Getting tag failed with status code '{ex.StatusCode}'");
             return null;
         }
         catch (GitLabException ex)

@@ -17,5 +17,4 @@ For each alias, multiple overloads are available, see [Overloads](./overloads.md
 
 - [Overloads](./overloads.md)
 - [Identity and Connection objects](./identites-and-connection-objects.md)
-- [Client Factory](./client-factory.md)
 - [Testing](./testing.md)

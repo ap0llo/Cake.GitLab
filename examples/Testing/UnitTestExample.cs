@@ -1,8 +1,8 @@
-﻿using Cake.Testing;
+﻿using Cake.GitLab.Testing;
+using Cake.Testing;
 using Moq;
-using NGitLab.Mock.Config;
+using NGitLab.Models;
 using Xunit;
-
 
 public class UnitTestExample
 {
@@ -15,32 +15,23 @@ public class UnitTestExample
         // ARRANGE
         //
 
-        // Create a mock GitLab server (using NGitLab.Mock library)
-        var gitLabConfig =
-            new GitLabConfig() { Url = "https://example.com" }
-                .WithUser("user1", isDefault: true)
-                .WithGroup("example-group")
-                .WithProjectOfFullPath(
-                    fullPath: "example-project",
-                    id: 23,
-                    configure: project =>
-                    {
-                        project.DefaultBranch = "example-branch";
-                        project.WithCommit("Intial commit");
-                    }
-                );
-
-        // Create a mock ICakeContext
-        var contextMock = new Mock<ICakeContext>();
+        // Create a mock of IGitLabProvider
+        var gitlabProviderMock = new Mock<IGitLabProvider>();
         {
-            // Add implementation of IGitlabClientFactory to the context
-            contextMock
-                .As<IGitLabClientFactory>()
-                .Setup(x => x.GetClient(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(gitLabConfig.BuildClient());
+            gitlabProviderMock
+                .Setup(x => x.RepositoryGetBranchesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ProjectId>()))
+                .ReturnsAsync(
+                    [
+                        new Branch() { Name = "example-branch" }
+                    ]);
+        }
 
-            var log = new FakeLog();
-            contextMock.Setup(x => x.Log).Returns(log);
+        // Create a mock IGitLabCakeContext
+        var contextMock = new Mock<IGitLabCakeContext>();
+        {
+            contextMock.Setup(x => x.GitLab).Returns(gitlabProviderMock.Object);
+
+            contextMock.Setup(x => x.Log).Returns(new FakeLog());
 
             var fileSystem = new FakeFileSystem(FakeEnvironment.CreateUnixEnvironment());
             contextMock.Setup(x => x.FileSystem).Returns(fileSystem);

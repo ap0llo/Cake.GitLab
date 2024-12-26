@@ -1,8 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Annotations;
-using Cake.GitLab.Internal;
 using NGitLab.Models;
 
 namespace Cake.GitLab;
@@ -19,11 +17,8 @@ public static partial class GitLabAliases
     /// <param name="pipelineId">The id of the pipeline to load data for.</param>
     [CakeMethodAlias]
     [CakeAliasCategory("Pipelines")]
-    public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId)
-    {
-        var pipelinesClient = GetPipelinesClient(context, serverUrl, accessToken);
-        return await pipelinesClient.GetPipelineAsync(project, pipelineId);
-    }
+    public static async Task<Pipeline> GitLabGetPipelineAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId) =>
+        await context.GetGitLabProvider().GetPipelineAsync(serverUrl, accessToken, project, pipelineId);
 
     /// <summary>
     /// Updates the name of the specified pipeline
@@ -36,17 +31,6 @@ public static partial class GitLabAliases
     /// <param name="name">The name to set the pipeline name to.</param>
     [CakeMethodAlias]
     [CakeAliasCategory("Pipelines")]
-    public static async Task GitLabSetPipelineNameAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId, string name)
-    {
-        var pipelinesClient = GetPipelinesClient(context, serverUrl, accessToken);
-        await pipelinesClient.SetPipelineNameAsync(project, pipelineId, name);
-    }
-
-    private static PipelinesClient GetPipelinesClient(ICakeContext context, string serverUrl, string accessToken, [CallerMemberName] string aliasName = "")
-    {
-        var gitLabClient = GetClient(context, serverUrl, accessToken);
-        var log = GetLogForCurrentAlias(context, aliasName);
-        var pipelinesClient = new PipelinesClient(log, context.FileSystem, gitLabClient);
-        return pipelinesClient;
-    }
+    public static async Task GitLabSetPipelineNameAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, int pipelineId, string name) =>
+        await context.GetGitLabProvider().SetPipelineNameAsync(serverUrl, accessToken, project, pipelineId, name);
 }
