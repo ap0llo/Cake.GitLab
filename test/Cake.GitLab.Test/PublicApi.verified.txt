@@ -140,8 +140,12 @@
     public class ServerIdentity : System.IEquatable<Cake.GitLab.ServerIdentity>
     {
         public ServerIdentity(string host) { }
-        public string Url { get; }
+        public ServerIdentity(string protocol, string host) { }
+        public ServerIdentity(string protocol, string host, int port) { }
         public string Host { get; init; }
+        public int Port { get; init; }
+        public string Protocol { get; init; }
+        public string Url { get; init; }
         public virtual bool Equals(Cake.GitLab.ServerIdentity? other) { }
         public override int GetHashCode() { }
     }

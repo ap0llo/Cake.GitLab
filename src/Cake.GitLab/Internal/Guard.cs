@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using Cake.Common.Tools.VSWhere.Latest;
 
 namespace Cake.GitLab.Internal;
 
@@ -20,6 +22,16 @@ internal static class Guard
         if (value is null)
         {
             throw new ArgumentNullException(valueExpression);
+        }
+
+        return value;
+    }
+
+    public static int Positive(int value, [CallerArgumentExpression(nameof(value))] string valueExpression = "")
+    {
+        if (value <= 0)
+        {
+            throw new ArgumentOutOfRangeException(valueExpression, value, "Value must be positive");
         }
 
         return value;
