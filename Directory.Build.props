@@ -41,8 +41,8 @@
     <Authors>Andreas Gruenwald</Authors>
     <PackageProjectUrl>https://github.com/ap0llo/Cake.GitLab</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description></Description>
-    <Copyright>Copyright (c) 2024, Andreas Gruenwald</Copyright>
+    <Description>Cake aliases for interacting with GitLab</Description>
+    <Copyright>Copyright (c) 2024-2025, Andreas Gruenwald</Copyright>
     <PackageTags>cake;build;cake-build;cake-addin</PackageTags>
   </PropertyGroup>
 
