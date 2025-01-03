@@ -23,7 +23,7 @@ await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOK
 // or using the project's numeric id
 await context.GitLabRepositoryGetBranchesAsync("https://example.com", "ACCESSTOKEN", 12345);
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L15-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Individual-Parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L13-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Individual-Parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 However, passing all required values individually can become repetitive, especially when calling multiple GitLab APIs.
@@ -48,10 +48,10 @@ var serverIdentity = new ServerIdentity("example.com");
 await context.GitLabRepositoryGetBranchesAsync(serverIdentity, "ACCESSTOKEN", "example-group/example-project");
 
 // ProjectIdentity replaces both the serverUrl and project parameters
-var projectIdentity = new ProjectIdentity("example.com", "example-group", "example-project");
+var projectIdentity = new ProjectIdentity(serverIdentity, "example-group", "example-project");
 await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN");
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L24-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Identity-Objects' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L22-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Identity-Objects' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## "Connection" objects
@@ -71,26 +71,8 @@ var serverConnection = new ServerConnection("example.com", "ACCESSTOKEN");
 await context.GitLabRepositoryGetBranchesAsync(serverConnection, "example-group/example-project");
 
 // ProjectConnection replaces the serverUrl, accessToken and project parameters
-var projectConnection = new ProjectConnection("example.com", "example-group", "example-project", "ACCESSTOKEN");
+var projectConnection = new ProjectConnection(serverConnection, "example-group", "example-project");
 await context.GitLabRepositoryGetBranchesAsync(projectConnection);
 ```
-<sup><a href='/examples/Frosting/Examples.cs#L35-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Connection-Objects' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
-
-## Mix and Match
-
-Since the project identity/connection objects derive from their "server" counterparts, a ProjectConnection or ProjectIdentity object can also be used to get data from a different project.
-
-For example, use a ProjectConnection object to hold data about the default project, but also get data from a different project on the same server using the same access token.
-
-<!-- snippet: Overloads-MixAndMatch -->
-<a id='snippet-Overloads-MixAndMatch'></a>
-```cs
-await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN");
-await context.GitLabRepositoryGetBranchesAsync(projectIdentity, "ACCESSTOKEN", "another-group/another-project");
-
-await context.GitLabRepositoryGetBranchesAsync(projectConnection);
-await context.GitLabRepositoryGetBranchesAsync(projectConnection, "another-group/another-project");
-```
-<sup><a href='/examples/Frosting/Examples.cs#L45-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-MixAndMatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/examples/Frosting/Examples.cs#L33-L41' title='Snippet source file'>snippet source</a> | <a href='#snippet-Overloads-Connection-Objects' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

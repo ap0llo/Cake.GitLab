@@ -19,12 +19,22 @@ public record ServerConnection : ServerIdentity
         init => m_AccessToken = Guard.NotNullOrWhitespace(value);
     }
 
+    public ServerConnection(ServerIdentity identity, string accessToken) : base(identity)
+    {
+        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
     public ServerConnection(string host, string accessToken) : base(host)
     {
         m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
     }
 
-    public ServerConnection(ServerIdentity identity, string accessToken) : base(identity)
+    public ServerConnection(string protocol, string host, string accessToken) : base(protocol, host)
+    {
+        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
+    public ServerConnection(string protocol, string host, int port, string accessToken) : base(protocol, host, port)
     {
         m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
     }
@@ -44,7 +54,7 @@ public record ServerConnection : ServerIdentity
     public virtual bool Equals(ServerConnection? other)
     {
         return other is not null &&
-            base.Equals(other) &&
-            StringComparer.Ordinal.Equals(AccessToken, other.AccessToken);
+               base.Equals(other) &&
+               StringComparer.Ordinal.Equals(AccessToken, other.AccessToken);
     }
 }

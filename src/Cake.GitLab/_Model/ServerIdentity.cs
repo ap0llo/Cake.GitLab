@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Xml.Serialization;
 using Cake.GitLab.Internal;
-using Microsoft.VisualBasic;
-using NGitLab.Models;
 
 namespace Cake.GitLab;
 
@@ -129,7 +125,6 @@ public record ServerIdentity
     }
 
 
-
     /// <inheritdoc />
     public override int GetHashCode() =>
         HashCode.Combine(
@@ -150,7 +145,7 @@ public record ServerIdentity
     /// Initializes a new <see cref="ServerIdentity"/> from a server url
     /// </summary>
     /// <param name="url">The url of the GitLab server.</param>
-    internal static ServerIdentity FromUrl(string url)
+    public static ServerIdentity FromUrl(string url)
     {
         var uriBuilder = new UriBuilder(url);
         return new ServerIdentity(uriBuilder);

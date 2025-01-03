@@ -166,7 +166,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         public string NewParameterName { get; set; } = null!;
 
         /// <summary>
-        /// Gets the expression to use as as argument for the replaced parameter when calling the original method
+        /// Gets the expression to use as argument for the replaced parameter when calling the original method
         /// </summary>
         public string ConversionExpression { get; set; } = null!;
 
@@ -267,7 +267,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                         OriginalParameterName = "serverUrl",
                         NewParameterType = context.Symbols.ProjectIdentity,
                         NewParameterName = "projectIdentity",
-                        ConversionExpression = "projectIdentity.Url"
+                        ConversionExpression = "projectIdentity.Server.Url"
                     },
                     new ParameterReplacement()
                     {
@@ -290,7 +290,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
                         OriginalParameterName = "serverUrl",
                         NewParameterType = context.Symbols.ProjectConnection,
                         NewParameterName = "projectConnection",
-                        ConversionExpression = "projectConnection.Url"
+                        ConversionExpression = "projectConnection.Server.Url"
                     },
                     new ParameterReplacement()
                     {

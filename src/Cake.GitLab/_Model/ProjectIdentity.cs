@@ -15,10 +15,20 @@ namespace Cake.GitLab;
 /// <summary>
 /// Encapsulates the identity of a project on a GitLab server
 /// </summary>
-public record ProjectIdentity : ServerIdentity
+public record ProjectIdentity
 {
+    private readonly ServerIdentity m_Server;
     private readonly string m_Namespace;
     private readonly string m_Project;
+
+    /// <summary>
+    /// Gets the identity of the GitLab server that hosts the project.
+    /// </summary>
+    public ServerIdentity Server
+    {
+        get => m_Server;
+        init => m_Server = Guard.NotNull(value);
+    }
 
     /// <summary>
     /// Gets or sets the project namespace (the user or group (incl. subgroups) the project belongs to).
@@ -68,58 +78,51 @@ public record ProjectIdentity : ServerIdentity
     /// <summary>
     /// Initializes a new instance of <see cref="ProjectIdentity"/>
     /// </summary>
-    /// <param name="host">The host name of the GitLab server.</param>
+    /// <param name="server">The identity of the GitLab server that hosts the project.</param>
     /// <param name="namespace">The GitLab project's namespace (username or group and subgroup)</param>
     /// <param name="project">The GitLab project's name</param>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="host"/>, <paramref name="namespace"/> or <paramref name="project"/> is null or whitespace</exception>
-    public ProjectIdentity(string host, string @namespace, string project) : base(host)
+    /// <exception cref="ArgumentNullException">Then when <paramref name="server"/> is <c>null</c></exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="namespace"/> or <paramref name="project"/> is null or whitespace</exception>
+    public ProjectIdentity(ServerIdentity server, string @namespace, string project)
     {
+        m_Server = Guard.NotNull(server);
         m_Namespace = Guard.NotNullOrWhitespace(@namespace);
         m_Project = Guard.NotNullOrWhitespace(project);
     }
 
-    internal ProjectIdentity(ServerIdentity server, string @namespace, string project) : base(server)
-    {
-        m_Namespace = Guard.NotNullOrWhitespace(@namespace);
-        m_Project = Guard.NotNullOrWhitespace(project);
-    }
 
-    public ProjectIdentity(string host, string projectPath) : base(host)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="server">The identity of the GitLab server that hosts the project.</param>
+    /// <param name="projectPath">The path of the project (including both the user or group name and the project name)</param>
+    /// <exception cref="ArgumentNullException">Then when <paramref name="server"/> is <c>null</c></exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="projectPath"/> could not be parsed.</exception>
+    public ProjectIdentity(ServerIdentity server, string projectPath)
     {
+        m_Server = Guard.NotNull(server);
         if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
         {
             throw new ArgumentException(error, nameof(projectPath));
         }
-        (m_Namespace, m_Project) = (@namespace, project);
-    }
-
-    internal ProjectIdentity(ServerIdentity server, string projectPath) : base(server)
-    {
-        if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
-        {
-            throw new ArgumentException(error, nameof(projectPath));
-        }
-        (m_Namespace, m_Project) = (@namespace, project);
+        m_Namespace = @namespace;
+        m_Project = project;
     }
 
 
     /// <inheritdoc />
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            var hash = base.GetHashCode() * 397;
-            hash ^= StringComparer.OrdinalIgnoreCase.GetHashCode(Namespace);
-            hash ^= StringComparer.OrdinalIgnoreCase.GetHashCode(Project);
-            return hash;
-        }
-    }
+    public override int GetHashCode() =>
+        HashCode.Combine(
+            Server,
+            StringComparer.OrdinalIgnoreCase.GetHashCode(Namespace),
+            StringComparer.OrdinalIgnoreCase.GetHashCode(Project)
+        );
 
     /// <inheritdoc />
     public virtual bool Equals(ProjectIdentity? other)
     {
         return other is not null &&
-            base.Equals(other) &&
+            Server.Equals(other.Server) &&
             StringComparer.OrdinalIgnoreCase.Equals(Namespace, other.Namespace) &&
             StringComparer.OrdinalIgnoreCase.Equals(Project, other.Project);
     }
@@ -134,14 +137,12 @@ public record ProjectIdentity : ServerIdentity
     {
         Guard.NotNullOrWhitespace(remoteUrl);
 
-        if (TryParseRemoteUrl(remoteUrl, out var projectInfo, out var errorMessage))
-        {
-            return projectInfo;
-        }
-        else
+        if (!TryParseRemoteUrl(remoteUrl, out var parsed, out var errorMessage))
         {
             throw new ArgumentException(errorMessage, nameof(remoteUrl));
         }
+
+        return parsed;
     }
 
     /// <summary>
@@ -150,12 +151,10 @@ public record ProjectIdentity : ServerIdentity
     public static bool TryGetFromGitRemoteUrl(string remoteUrl, [NotNullWhen(true)] out ProjectIdentity? projectIdentity) =>
         TryParseRemoteUrl(remoteUrl, out projectIdentity, out var _);
 
-    /// <summary>
-    /// Attempts to create a <see cref="ProjectIdentity"/> from a host name and a project path.
-    /// </summary>
-    internal static bool TryGetFromServerAndProjectPath(ServerIdentity server, string projectPath, [NotNullWhen(true)] out ProjectIdentity? projectIdentity)
+
+    internal static bool TryGetFromProjectPath(ServerIdentity server, string projectPath, [NotNullWhen(true)] out ProjectIdentity? projectIdentity)
     {
-        if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
+        if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out _))
         {
             projectIdentity = null;
             return false;
@@ -206,9 +205,9 @@ public record ProjectIdentity : ServerIdentity
         return true;
     }
 
-    private static bool TryParseRemoteUrl(string url, [NotNullWhen(true)] out ProjectIdentity? projectInfo, [NotNullWhen(false)] out string? errorMessage)
+    private static bool TryParseRemoteUrl(string url, [NotNullWhen(true)] out ProjectIdentity? result, [NotNullWhen(false)] out string? errorMessage)
     {
-        projectInfo = null;
+        result = null;
         errorMessage = null;
 
         if (String.IsNullOrWhiteSpace(url))
@@ -246,7 +245,8 @@ public record ProjectIdentity : ServerIdentity
                     return false;
                 }
 
-                projectInfo = new ProjectIdentity(uri.Host, @namespace, project);
+                var server = new ServerIdentity(uri.Host);
+                result = new ProjectIdentity(server, @namespace, project);
                 return true;
 
             default:

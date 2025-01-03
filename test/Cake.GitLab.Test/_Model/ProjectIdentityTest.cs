@@ -20,101 +20,84 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     public IEnumerable<(ProjectIdentity left, ProjectIdentity right)> GetEqualTestCases()
     {
         yield return (
-            new ProjectIdentity("example.com", "user", "repo"),
-            new ProjectIdentity("example.com", "user", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo")
         );
 
         yield return (
-            new ProjectIdentity("example.com", "user", "repo"),
-            new ProjectIdentity("example.com", "user/repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "user/repo")
         );
 
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo"),
-            new ProjectIdentity("example.com", "group/subgroup", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo")
         );
 
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo"),
-            new ProjectIdentity("example.com", "group/subgroup/repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup/repo")
         );
 
 
         // Comparisons must be case-insensitive
         yield return (
-            new ProjectIdentity("example.com", "user", "repo"),
-            new ProjectIdentity("EXAMPLE.COM", "user", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo"),
+            new ProjectIdentity(new ServerIdentity("EXAMPLE.COM"), "user", "repo")
         );
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo"),
-            new ProjectIdentity("EXAMPLE.COM", "group/subgroup", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("EXAMPLE.COM"), "group/subgroup", "repo")
         );
 
         yield return (
-            new ProjectIdentity("example.com", "user", "repo"),
-            new ProjectIdentity("example.com", "USER", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "USER", "repo")
         );
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo"),
-            new ProjectIdentity("example.com", "GROUP/SUBGROUP", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "GROUP/SUBGROUP", "repo")
         );
         yield return (
-            new ProjectIdentity("example.com", "user", "repo"),
-            new ProjectIdentity("example.com", "user", "REPO")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "REPO")
         );
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo"),
-            new ProjectIdentity("example.com", "group/subgroup", "REPO")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "REPO")
         );
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo"),
-            new ProjectIdentity("example.com", "group/SUBGROUP", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/SUBGROUP", "repo")
         );
     }
 
     public IEnumerable<(ProjectIdentity left, ProjectIdentity right)> GetUnequalTestCases()
     {
         yield return (
-            new ProjectIdentity("example.com", "user", "repo"),
-            new ProjectIdentity("example.net", "user", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.net"), "user", "repo")
         );
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo"),
-            new ProjectIdentity("example.net", "group/subgroup", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.net"), "group/subgroup", "repo")
         );
         yield return (
-            new ProjectIdentity("example.com", "user1", "repo"),
-            new ProjectIdentity("example.com", "user2", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user1", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "user2", "repo")
         );
         yield return (
-            new ProjectIdentity("example.com", "group1/subgroup", "repo"),
-            new ProjectIdentity("example.com", "group2/subgroup", "repo")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group1/subgroup", "repo"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "group2/subgroup", "repo")
         );
         yield return (
-            new ProjectIdentity("example.com", "user", "repo1"),
-            new ProjectIdentity("example.com", "user", "repo2")
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo1"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "user", "repo2")
         );
         yield return (
-            new ProjectIdentity("example.com", "group/subgroup", "repo1"),
-            new ProjectIdentity("example.com", "group/subgroup", "repo2")
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo1"),
+            new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "repo2")
         );
-    }
-
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("  ")]
-    [InlineData("\t")]
-    public void Host_must_not_be_null_or_whitespace(string? host)
-    {
-        // ARRANGE
-
-        // ACT
-        var ex = Record.Exception(() => new ProjectIdentity(host!, "user", "repo"));
-
-        // ASSERT
-        Assert.IsType<ArgumentException>(ex);
     }
 
     [Theory]
@@ -127,7 +110,7 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new ProjectIdentity("example.com", @namespace!, "repo"));
+        var ex = Record.Exception(() => new ProjectIdentity(new ServerIdentity("example.com"), @namespace!, "repo"));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -143,7 +126,7 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new ProjectIdentity("example.com", "user", project!));
+        var ex = Record.Exception(() => new ProjectIdentity(new ServerIdentity("example.com"), "user", project!));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -160,7 +143,7 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
         // ARRANGE
 
         // ACT
-        var ex = Record.Exception(() => new ProjectIdentity("example.com", projectPath!));
+        var ex = Record.Exception(() => new ProjectIdentity(new ServerIdentity("example.com"), projectPath!));
 
         // ASSERT
         Assert.IsType<ArgumentException>(ex);
@@ -169,8 +152,8 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     [Fact]
     public void Can_be_initialized_from_project_path()
     {
-        var fromNamespaceAndProjectName = new ProjectIdentity("example.com", "some-group", "some-project");
-        var fromProjectPath = new ProjectIdentity("example.com", "some-group/some-project");
+        var fromNamespaceAndProjectName = new ProjectIdentity(new ServerIdentity("example.com"), "some-group", "some-project");
+        var fromProjectPath = new ProjectIdentity(new ServerIdentity("example.com"), "some-group/some-project");
 
         Assert.Equal(fromNamespaceAndProjectName, fromProjectPath);
     }
@@ -179,9 +162,9 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     public void Setting_Project_updates_project_path()
     {
         // ARRANGE
-        var initial = new ProjectIdentity("example.com", "group/subgroup", "project");
+        var initial = new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "project");
 
-        // ACT 
+        // ACT
         var updated = initial with { Project = "another-project" };
 
         // ASSERT
@@ -193,9 +176,9 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     public void Setting_Namespace_updates_project_path()
     {
         // ARRANGE
-        var initial = new ProjectIdentity("example.com", "group/subgroup", "project");
+        var initial = new ProjectIdentity(new ServerIdentity("example.com"), "group/subgroup", "project");
 
-        // ACT 
+        // ACT
         var updated = initial with { Namespace = "someUser" };
 
         // ASSERT
@@ -208,9 +191,9 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     public void Setting_ProjectPath_updates_namespace_and_project(string projectPath, string expectedNamespace, string expetedProject)
     {
         // ARRANGE
-        var initial = new ProjectIdentity("example.com", "initalNamespace", "initialProject");
+        var initial = new ProjectIdentity(new ServerIdentity("example.com"), "initalNamespace", "initialProject");
 
-        // ACT 
+        // ACT
         var updated = initial with { ProjectPath = projectPath };
 
         // ASSERT
@@ -229,9 +212,9 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     public void Setting_ProjectPath_throws_ArgumentException_if_path_is_invalid(string projectPath)
     {
         // ARRANGE
-        var initial = new ProjectIdentity("example.com", "initalNamespace", "initialProject");
+        var initial = new ProjectIdentity(new ServerIdentity("example.com"), "initalNamespace", "initialProject");
 
-        // ACT 
+        // ACT
         var ex = Record.Exception(() => initial with { ProjectPath = projectPath });
 
         // ASSERT
@@ -269,7 +252,7 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     public void FromGitRemoteUrl_returns_the_expected_ProjectIdentity(string remoteUrl, string host, string @namespace, string projectName)
     {
         // ARRANGE
-        var expected = new ProjectIdentity(host, @namespace, projectName);
+        var expected = new ProjectIdentity(new ServerIdentity(host), @namespace, projectName);
 
         // ACT
         var actual = ProjectIdentity.FromGitRemoteUrl(remoteUrl);
@@ -310,9 +293,9 @@ public class ProjectIdentityTest : EqualityTest<ProjectIdentity, ProjectIdentity
     public void TryParseRemoteUrl_returns_the_expected_GitHubProjectInfo(string url, string host, string @namespace, string projectName)
     {
         // ARRANGE
-        var expected = new ProjectIdentity(host, @namespace, projectName);
+        var expected = new ProjectIdentity(new ServerIdentity(host), @namespace, projectName);
 
-        // ACT 
+        // ACT
         var success = ProjectIdentity.TryGetFromGitRemoteUrl(url, out var parsed);
 
         // ASSERT

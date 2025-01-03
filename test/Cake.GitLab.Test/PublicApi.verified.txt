@@ -111,19 +111,23 @@
     public class ProjectConnection : Cake.GitLab.ProjectIdentity, System.IEquatable<Cake.GitLab.ProjectConnection>
     {
         public ProjectConnection(Cake.GitLab.ProjectIdentity projectIdentity, string accessToken) { }
-        public ProjectConnection(string host, string projectPath, string accessToken) { }
-        public ProjectConnection(string host, string @namespace, string project, string accessToken) { }
+        public ProjectConnection(Cake.GitLab.ServerConnection server, string projectPath) { }
+        public ProjectConnection(Cake.GitLab.ServerConnection server, string @namespace, string project) { }
+        public ProjectConnection(Cake.GitLab.ServerIdentity server, string projectPath, string accessToken) { }
+        public ProjectConnection(Cake.GitLab.ServerIdentity server, string @namespace, string project, string accessToken) { }
+        public Cake.GitLab.ServerConnection Server { get; }
         public string AccessToken { get; init; }
         public virtual bool Equals(Cake.GitLab.ProjectConnection? other) { }
         public override int GetHashCode() { }
     }
-    public class ProjectIdentity : Cake.GitLab.ServerIdentity, System.IEquatable<Cake.GitLab.ProjectIdentity>
+    public class ProjectIdentity : System.IEquatable<Cake.GitLab.ProjectIdentity>
     {
-        public ProjectIdentity(string host, string projectPath) { }
-        public ProjectIdentity(string host, string @namespace, string project) { }
+        public ProjectIdentity(Cake.GitLab.ServerIdentity server, string projectPath) { }
+        public ProjectIdentity(Cake.GitLab.ServerIdentity server, string @namespace, string project) { }
         public string Namespace { get; init; }
         public string ProjectPath { get; init; }
         public string Project { get; init; }
+        public Cake.GitLab.ServerIdentity Server { get; init; }
         public virtual bool Equals(Cake.GitLab.ProjectIdentity? other) { }
         public override int GetHashCode() { }
         public static Cake.GitLab.ProjectIdentity FromGitRemoteUrl(string remoteUrl) { }
@@ -133,6 +137,8 @@
     {
         public ServerConnection(Cake.GitLab.ServerIdentity identity, string accessToken) { }
         public ServerConnection(string host, string accessToken) { }
+        public ServerConnection(string protocol, string host, string accessToken) { }
+        public ServerConnection(string protocol, string host, int port, string accessToken) { }
         public string AccessToken { get; init; }
         public virtual bool Equals(Cake.GitLab.ServerConnection? other) { }
         public override int GetHashCode() { }
@@ -148,6 +154,7 @@
         public string Url { get; init; }
         public virtual bool Equals(Cake.GitLab.ServerIdentity? other) { }
         public override int GetHashCode() { }
+        public static Cake.GitLab.ServerIdentity FromUrl(string url) { }
     }
 }
 namespace Cake.GitLab.Testing

@@ -35,11 +35,3 @@ There are two connection objects supported:
 - `ProjectConnection` identifies a GitLab project and provides an access token
 
 snippet: Overloads-Connection-Objects
-
-## Mix and Match
-
-Since the project identity/connection objects derive from their "server" counterparts, a ProjectConnection or ProjectIdentity object can also be used to get data from a different project.
-
-For example, use a ProjectConnection object to hold data about the default project, but also get data from a different project on the same server using the same access token.
-
-snippet: Overloads-MixAndMatch

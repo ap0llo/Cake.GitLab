@@ -15,7 +15,7 @@ The connections parameters for a GitLab Server or project may be specified as "I
 
 A `ServerIdentity` object encapsulates all data to identify a Gitlab server.
 
-It can be created from the GitLab server's host name.
+It can be created from the GitLab server's host name or url.
 
 snippet: ServerIdentity
 
@@ -24,7 +24,7 @@ snippet: ServerIdentity
 A `ProjectIdentity` object encapsulates all data to identify a project on a Gitlab server.
 This includes
 
-- The server's host name
+- The server's identity
 - The project namespace (i.e. the name of the user or group (including subgroups) that owns the project)
 - The project name
 
@@ -61,7 +61,7 @@ If the build is not running in a GitLab CI pipeline, both aliases will return `n
 
 `ServerConnection` extends `ServerIdentity` with an access token and thus encapsulates all data required for identifying a server and authenticating to the GitLab API.
 
-Initialization of `ServerConnection` is analogous to the initialization of `ServerIdentity` with the addition of a `accessToken` parameter
+Initialization of `ServerConnection` is analogous to the initialization of `ServerIdentity` with the addition of an `accessToken` parameter
 
 snippet: ServerConnection-Simple
 
@@ -73,7 +73,7 @@ snippet: ServerConnection-FromIdentity
 
 `ProjectConnection` extends `ProjectIdentity` with an access token and thus encapsulates all data required for identifying a project and authenticating to the GitLab API.
 
-Initialization of `ProjectConnection` is analogous to the initialization of `ProjectIdentity` with the addition of a `accessToken` parameter
+Initialization of `ProjectConnection` is analogous to the initialization of `ProjectIdentity` with the addition of an `accessToken` parameter
 
 snippet: ProjectConnection-Simple
 

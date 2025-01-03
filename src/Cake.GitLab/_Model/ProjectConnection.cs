@@ -19,19 +19,32 @@ public record ProjectConnection : ProjectIdentity
         init => m_AccessToken = Guard.NotNullOrWhitespace(value);
     }
 
-    public ProjectConnection(string host, string @namespace, string project, string accessToken) : base(host, @namespace, project)
-    {
-        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
-    }
-
-    public ProjectConnection(string host, string projectPath, string accessToken) : base(host, projectPath)
-    {
-        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
-    }
+    public new ServerConnection Server => new ServerConnection(base.Server, m_AccessToken);
 
     public ProjectConnection(ProjectIdentity projectIdentity, string accessToken) : base(projectIdentity)
     {
         m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
+    public ProjectConnection(ServerIdentity server, string @namespace, string project, string accessToken) : base(server, @namespace, project)
+    {
+        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
+    public ProjectConnection(ServerIdentity server, string projectPath, string accessToken) : base(server, projectPath)
+    {
+        m_AccessToken = Guard.NotNullOrWhitespace(accessToken);
+    }
+
+
+    public ProjectConnection(ServerConnection server, string @namespace, string project) : base(server, @namespace, project)
+    {
+        m_AccessToken = server.AccessToken;
+    }
+
+    public ProjectConnection(ServerConnection server, string projectPath) : base(server, projectPath)
+    {
+        m_AccessToken = server.AccessToken;
     }
 
     /// <inheritdoc />
@@ -49,7 +62,7 @@ public record ProjectConnection : ProjectIdentity
     public virtual bool Equals(ProjectConnection? other)
     {
         return other is not null &&
-            base.Equals(other) &&
-            StringComparer.Ordinal.Equals(AccessToken, other.AccessToken);
+               base.Equals(other) &&
+               StringComparer.Ordinal.Equals(AccessToken, other.AccessToken);
     }
 }

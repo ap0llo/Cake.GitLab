@@ -46,7 +46,7 @@ public partial class DefaultGitLabProvider
 
         log.Debug($"Project path is '{projectPath}'");
 
-        if (ProjectIdentity.TryGetFromServerAndProjectPath(server, projectPath, out var identity))
+        if (ProjectIdentity.TryGetFromProjectPath(server, projectPath, out var identity))
         {
             return identity;
         }
