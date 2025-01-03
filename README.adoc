@@ -57,6 +57,10 @@ Install the addin into your Cake build.
 
 For a list of aliases provided by the addin, please refer to the link:./docs/README.md[documentation].
 
+=== Demo Project
+
+A demo project showing the usage of this addin in a GitLab CI pipeline can be found link:https://gitlab.com/ap0llo/cake-gitlab-demo[here].
+
 == License
 
 Cake.GitLab is licensed under the MIT License.
