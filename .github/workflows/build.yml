@@ -36,6 +36,7 @@ env:
   GITHUB_ACCESSTOKEN: ${{ secrets.GITHUB_TOKEN }}  
   # The build uses feedz.io, not MyGet, but the Cake build expects the API Key to be provided via the MYGET_APIKEY environment variable
   MYGET_APIKEY: ${{ secrets.FEEDZ_IO_ACCESS_TOKEN }} 
+  NUGET_ORG_APIKEY: ${{ secrets.NUGET_ORG_APIKEY }} 
 
 jobs:
   build:
