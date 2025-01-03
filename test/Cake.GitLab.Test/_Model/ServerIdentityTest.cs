@@ -294,4 +294,23 @@ public class ServerIdentityTest : EqualityTest<ServerIdentity, ServerIdentityTes
         Assert.Equal(expectedHost, updated.Host);
         Assert.Equal(expectedPort, updated.Port);
     }
+
+    [Theory]
+    [InlineData("https://gitlab.example.com", "https", "gitlab.example.com", 443)]
+    [InlineData("https://gitlab.example.com:443", "https", "gitlab.example.com", 443)]
+    [InlineData("http://gitlab.example.com", "http", "gitlab.example.com", 80)]
+    [InlineData("http://gitlab.example.com:80", "http", "gitlab.example.com", 80)]
+    [InlineData("http://gitlab.example.com:8080", "http", "gitlab.example.com", 8080)]
+    public void FromUrl_initializes_a_new_ServerIdentity_from_a_servers_url(string url, string expectedProtocol, string expectedHost, int expectedPort)
+    {
+        // ARRANGE
+
+        // ACT
+        var result = ServerIdentity.FromUrl(url);
+
+        // ASSERT
+        Assert.Equal(expectedProtocol, result.Protocol);
+        Assert.Equal(expectedHost, result.Host);
+        Assert.Equal(expectedPort, result.Port);
+    }
 }

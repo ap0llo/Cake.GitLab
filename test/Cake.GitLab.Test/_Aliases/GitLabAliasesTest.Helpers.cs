@@ -50,7 +50,7 @@ public static partial class GitLabAliasesTest
             // ARRANGE
             var context = new FakeContext(testOutputHelper);
             context.Environment.SetEnvironmentVariable("CI_SERVER", ciServerVariable);
-            context.Environment.SetEnvironmentVariable("CI_SERVER_HOST", "example.com");
+            context.Environment.SetEnvironmentVariable("CI_SERVER_URL", "https://example.com");
 
             var expected = new ServerIdentity("example.com");
 
@@ -122,17 +122,17 @@ public static partial class GitLabAliasesTest
         }
 
         [Theory]
-        [InlineData("yes", "example.com", "user/project")]
-        [InlineData("YES", "gitlab.example.com", "group/subgroup/project")]
-        public void Returns_expected_project_identity(string? ciServerVariable, string host, string projectPath)
+        [InlineData("yes", "https://example.com", "user/project")]
+        [InlineData("YES", "https://gitlab.example.com", "group/subgroup/project")]
+        public void Returns_expected_project_identity(string? ciServerVariable, string serverUrl, string projectPath)
         {
             // ARRANGE
             var context = new FakeContext(testOutputHelper);
             context.Environment.SetEnvironmentVariable("CI_SERVER", ciServerVariable);
-            context.Environment.SetEnvironmentVariable("CI_SERVER_HOST", host);
+            context.Environment.SetEnvironmentVariable("CI_SERVER_URL", serverUrl);
             context.Environment.SetEnvironmentVariable("CI_PROJECT_PATH", projectPath);
 
-            var expected = new ProjectIdentity(host, projectPath);
+            var expected = new ProjectIdentity(ServerIdentity.FromUrl(serverUrl), projectPath);
 
             // ACT
             var actual = context.GitLabTryGetCurrentProjectIdentity();

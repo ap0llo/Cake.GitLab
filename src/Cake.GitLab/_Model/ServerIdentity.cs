@@ -123,6 +123,13 @@ public record ServerIdentity
         };
     }
 
+    private ServerIdentity(UriBuilder uriBuilder)
+    {
+        m_UriBuilder = Guard.NotNull(uriBuilder);
+    }
+
+
+
     /// <inheritdoc />
     public override int GetHashCode() =>
         HashCode.Combine(
@@ -137,5 +144,15 @@ public record ServerIdentity
                StringComparer.OrdinalIgnoreCase.Equals(Protocol, other.Protocol) &&
                StringComparer.OrdinalIgnoreCase.Equals(Host, other.Host) &&
                Port == other.Port;
+    }
+
+    /// <summary>
+    /// Initializes a new <see cref="ServerIdentity"/> from a server url
+    /// </summary>
+    /// <param name="url">The url of the GitLab server.</param>
+    internal static ServerIdentity FromUrl(string url)
+    {
+        var uriBuilder = new UriBuilder(url);
+        return new ServerIdentity(uriBuilder);
     }
 }

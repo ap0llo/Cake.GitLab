@@ -6,9 +6,8 @@ namespace Cake.GitLab;
 
 public partial class DefaultGitLabProvider
 {
-    // TODO: CI_SERVER_HOST is not available though Cake's IGitLabCIProvider => consider opening up a PR
-    private const string CI_SERVER_HOST = "CI_SERVER_HOST";
-
+    // CI_SERVER_URL is not available though Cake's IGitLabCIProvider, see https://github.com/cake-build/cake/issues/4418
+    private const string CI_SERVER_URL = "CI_SERVER_URL";
 
     /// <inheritdoc />
     public ServerIdentity? TryGetCurrentServerIdentity()
@@ -25,16 +24,16 @@ public partial class DefaultGitLabProvider
 
         log.Debug("Current build is running on GitLab CI");
 
-        var host = m_Context.Environment.GetEnvironmentVariable(CI_SERVER_HOST);
-        if (String.IsNullOrWhiteSpace(host))
+        var serverUrl = m_Context.Environment.GetEnvironmentVariable(CI_SERVER_URL);
+        if (String.IsNullOrWhiteSpace(serverUrl))
         {
-            log.Debug($"Failed to determine current server identity: {CI_SERVER_HOST} is null or whitespace");
+            log.Debug($"Failed to determine current server identity: {CI_SERVER_URL} is null or whitespace");
             return null;
         }
 
-        log.Debug($"{CI_SERVER_HOST} is '{host}'");
+        log.Debug($"{CI_SERVER_URL} is '{serverUrl}'");
 
-        return new ServerIdentity(host);
+        return ServerIdentity.FromUrl(serverUrl);
     }
 
     /// <inheritdoc />
@@ -52,14 +51,14 @@ public partial class DefaultGitLabProvider
 
         log.Debug("Current build is running on GitLab CI");
 
-        var host = m_Context.Environment.GetEnvironmentVariable(CI_SERVER_HOST);
-        if (String.IsNullOrWhiteSpace(host))
+        var serverUrl = m_Context.Environment.GetEnvironmentVariable(CI_SERVER_URL);
+        if (String.IsNullOrWhiteSpace(serverUrl))
         {
-            log.Debug($"Failed to determine current project identity: {CI_SERVER_HOST} is null or whitespace");
+            log.Debug($"Failed to determine current server identity: {CI_SERVER_URL} is null or whitespace");
             return null;
         }
 
-        log.Debug($"{CI_SERVER_HOST} is '{host}'");
+        log.Debug($"{CI_SERVER_URL} is '{serverUrl}'");
 
         var projectPath = m_Context.GitLabCI().Environment.Project.Path;
         if (String.IsNullOrWhiteSpace(projectPath))
@@ -71,7 +70,8 @@ public partial class DefaultGitLabProvider
         log.Debug($"Project path is '{projectPath}'");
 
 
-        if (ProjectIdentity.TryGetFromHostAndProjectPath(host, projectPath, out var identity))
+        var server = ServerIdentity.FromUrl(serverUrl);
+        if (ProjectIdentity.TryGetFromServerAndProjectPath(server, projectPath, out var identity))
         {
             return identity;
         }

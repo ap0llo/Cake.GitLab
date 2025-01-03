@@ -78,8 +78,22 @@ public record ProjectIdentity : ServerIdentity
         m_Project = Guard.NotNullOrWhitespace(project);
     }
 
+    internal ProjectIdentity(ServerIdentity server, string @namespace, string project) : base(server)
+    {
+        m_Namespace = Guard.NotNullOrWhitespace(@namespace);
+        m_Project = Guard.NotNullOrWhitespace(project);
+    }
 
     public ProjectIdentity(string host, string projectPath) : base(host)
+    {
+        if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
+        {
+            throw new ArgumentException(error, nameof(projectPath));
+        }
+        (m_Namespace, m_Project) = (@namespace, project);
+    }
+
+    internal ProjectIdentity(ServerIdentity server, string projectPath) : base(server)
     {
         if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
         {
@@ -139,21 +153,15 @@ public record ProjectIdentity : ServerIdentity
     /// <summary>
     /// Attempts to create a <see cref="ProjectIdentity"/> from a host name and a project path.
     /// </summary>
-    internal static bool TryGetFromHostAndProjectPath(string host, string projectPath, [NotNullWhen(true)] out ProjectIdentity? projectIdentity)
+    internal static bool TryGetFromServerAndProjectPath(ServerIdentity server, string projectPath, [NotNullWhen(true)] out ProjectIdentity? projectIdentity)
     {
-        if (String.IsNullOrWhiteSpace(host))
-        {
-            projectIdentity = null;
-            return false;
-        }
-
         if (!TryParseProjectPath(projectPath, out var @namespace, out var project, out var error))
         {
             projectIdentity = null;
             return false;
         }
 
-        projectIdentity = new ProjectIdentity(host, @namespace, project);
+        projectIdentity = new ProjectIdentity(server, @namespace, project);
         return true;
     }
 
