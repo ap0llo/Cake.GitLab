@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cake.Core;
+using Cake.GitLab.Test.TestHelpers;
+using Moq;
 using NGitLab;
 using NGitLab.Mock.Config;
 using NGitLab.Models;
@@ -75,5 +79,122 @@ public static partial class GitLabAliasesTest
             Assert.IsType<CakeException>(ex);
             Assert.StartsWith($"Error while getting pipeline {s_PipelineId + 10} from GitLab project {s_ProjectPath}:", ex.Message);
         }
+    }
+
+    public class GitLabGetPipelineJobsAsync(ITestOutputHelper testOutputHelper)
+    {
+        public static TheoryData<string, long, GetPipelineJobsOptions?, Action<PipelineJobQuery>> TestCases()
+        {
+            var testCases = new TheoryData<string, long, GetPipelineJobsOptions?, Action<PipelineJobQuery>>()
+            {
+                {
+                    "T01",
+                    123, null,
+                    query =>
+                    {
+                        Assert.Equal(123, query.PipelineId);
+                        Assert.Null(query.IncludeRetried);
+                        Assert.Null(query.Scope);
+                    }
+                },
+                {
+                    "T02",
+                    123, new GetPipelineJobsOptions(),
+                    query =>
+                    {
+                        Assert.Equal(123, query.PipelineId);
+                        Assert.Null(query.IncludeRetried);
+                        Assert.Null(query.Scope);
+                    }
+                },
+                {
+                    "T03",
+                    123, new GetPipelineJobsOptions() { IncludeRetried = true },
+                    query =>
+                    {
+                        Assert.Equal(123, query.PipelineId);
+                        Assert.True(query.IncludeRetried);
+                        Assert.Null(query.Scope);
+                    }
+                },
+                {
+                    "T04",
+                    123, new GetPipelineJobsOptions() { IncludeRetried = false },
+                    query =>
+                    {
+                        Assert.Equal(123, query.PipelineId);
+                        Assert.False(query.IncludeRetried);
+                        Assert.Null(query.Scope);
+                    }
+                },
+                {
+                    "T05",
+                    456, new GetPipelineJobsOptions() { Scopes = [] },
+                    query =>
+                    {
+                        Assert.Equal(456, query.PipelineId);
+                        Assert.Null(query.IncludeRetried);
+                        Assert.Null(query.Scope);
+                    }
+                },
+            };
+
+            // Add test cases to ensure JobScope values are mapped to the expected strings
+            var scopeScenarios = new Dictionary<JobScope, string>()
+            {
+                { JobScope.Created , "created"},
+                { JobScope.Pending , "pending"},
+                { JobScope.Running , "running"},
+                { JobScope.Failed , "failed"},
+                { JobScope.Success , "success"},
+                { JobScope.Canceled , "canceled"},
+                { JobScope.Skipped , "skipped"},
+                { JobScope.WaitingForResource , "waiting_for_resource"},
+                { JobScope.Manual , "manual"},
+            };
+
+            foreach (var (scope, expectedScope) in scopeScenarios)
+            {
+                testCases.Add(
+                    $"T06-{scope}",
+                    123,
+                    new GetPipelineJobsOptions() { Scopes = [scope] },
+                    query =>
+                    {
+                        var actualScope = Assert.Single(query.Scope);
+                        Assert.Equal(expectedScope, actualScope);
+                    });
+            }
+
+            return testCases;
+        }
+
+        [Theory]
+        [MemberData(nameof(TestCases))]
+        public void Calls_GitLab_with_the_expected_pipeline_query(string id, long pipelineId, GetPipelineJobsOptions? options, Action<PipelineJobQuery> assertQuery)
+        {
+            // ARRANGE
+            _ = id;
+            PipelineJobQuery? actualQuery = null;
+            var context = new MoqContext(testOutputHelper);
+            {
+                context.GitLabClient.Pipelines.Mock
+                    .Setup(x => x.GetJobsAsync(It.IsAny<PipelineJobQuery>()))
+                    .Callback((PipelineJobQuery query) =>
+                    {
+                        actualQuery = query;
+                    })
+                    .Returns(GitLabCollectionResponse.Empty<Job>());
+            }
+
+            // ACT
+            _ = context.GitLabGetPipelineJobsAsync("https://gitlab.example.com", "ACCESSTOKEN", 123, pipelineId, options);
+
+            // ASSERT
+            context.GitLabClient.Pipelines.Mock.Verify(x => x.GetJobsAsync(It.IsAny<PipelineJobQuery>()), Times.Once);
+            Assert.NotNull(actualQuery);
+            assertQuery(actualQuery);
+        }
+
     }
 }
