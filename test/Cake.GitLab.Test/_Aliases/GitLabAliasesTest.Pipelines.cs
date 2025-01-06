@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
-using Cake.GitLab.Test.TestHelpers;
-using Moq;
 using NGitLab;
 using NGitLab.Mock.Config;
 using NGitLab.Models;
@@ -175,25 +173,14 @@ public static partial class GitLabAliasesTest
         {
             // ARRANGE
             _ = id;
-            PipelineJobQuery? actualQuery = null;
-            var context = new MoqContext(testOutputHelper);
-            {
-                context.GitLabClient.Pipelines.Mock
-                    .Setup(x => x.GetJobsAsync(It.IsAny<PipelineJobQuery>()))
-                    .Callback((PipelineJobQuery query) =>
-                    {
-                        actualQuery = query;
-                    })
-                    .Returns(GitLabCollectionResponse.Empty<Job>());
-            }
+            var context = new FakeGitLabContext(testOutputHelper);
 
             // ACT
             _ = context.GitLabGetPipelineJobsAsync("https://gitlab.example.com", "ACCESSTOKEN", 123, pipelineId, options);
 
             // ASSERT
-            context.GitLabClient.Pipelines.Mock.Verify(x => x.GetJobsAsync(It.IsAny<PipelineJobQuery>()), Times.Once);
-            Assert.NotNull(actualQuery);
-            assertQuery(actualQuery);
+            var invocation = Assert.Single(context.GitLabClient.Pipelines[123].Invocations.GetJobsAsync);
+            assertQuery(invocation);
         }
 
     }
