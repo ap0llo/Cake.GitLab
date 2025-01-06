@@ -1,44 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
-using Cake.GitLab.Testing;
 using Cake.Testing;
-using NGitLab;
-using NGitLab.Mock;
 using Xunit;
 
 namespace Cake.GitLab.Test;
 
-public class FakeContext : IGitLabCakeContext
+public class FakeContext : ICakeContext
 {
-    private class MockGitLabProvider(ICakeContext context) : DefaultGitLabProvider(context)
-    {
-        private readonly Dictionary<string, GitLabServer> m_GitLabServers = new(StringComparer.OrdinalIgnoreCase);
-
-        protected override IGitLabClient GetClient(string serverUrl, string accessToken)
-        {
-            if (m_GitLabServers.TryGetValue(serverUrl, out var server))
-            {
-                return server.CreateClient(server.Users.First());
-            }
-            else
-            {
-                throw new ArgumentException($"No server for connection {serverUrl} configured");
-            }
-        }
-
-        public void AddServer(GitLabServer server) => m_GitLabServers.Add(server.Url.ToString(), server);
-    }
-
-
     private readonly CompositeCakeLog m_LogWithXunitOutput;
-    private readonly MockGitLabProvider m_GitLabProvider;
 
     public FakeFileSystem FileSystem { get; }
 
@@ -72,9 +46,6 @@ public class FakeContext : IGitLabCakeContext
 
     ICakeConfiguration ICakeContext.Configuration => throw new NotImplementedException();
 
-    /// <inheritdoc />
-    public IGitLabProvider GitLab => m_GitLabProvider;
-
 
     public FakeContext(ITestOutputHelper testOutputHelper)
     {
@@ -88,12 +59,5 @@ public class FakeContext : IGitLabCakeContext
 
         Environment.WorkingDirectory = FileSystem.GetDirectory("/").Path.Combine("work");
         FileSystem.CreateDirectory(Environment.WorkingDirectory);
-
-        m_GitLabProvider = new MockGitLabProvider(this);
     }
-
-
-
-    public void AddServer(GitLabServer server) => m_GitLabProvider.AddServer(server);
-
 }

@@ -47,8 +47,9 @@ public static partial class GitLabAliasesTest
 
             var server = m_GitLabConfig.BuildServer();
 
-            var context = new FakeContext(testOutputHelper);
-            context.AddServer(server);
+
+            var context = new NGitLabMockContext(testOutputHelper);
+            context.GitLab.AddServer(server);
 
             // ACT
             var pipeline = await context.GitLabGetPipelineAsync(server.Url.ToString(), "SomeAccessToken", projectId, s_PipelineId);
@@ -64,8 +65,8 @@ public static partial class GitLabAliasesTest
             // ARRANGE
             var server = m_GitLabConfig.BuildServer();
 
-            var context = new FakeContext(testOutputHelper);
-            context.AddServer(server);
+            var context = new NGitLabMockContext(testOutputHelper);
+            context.GitLab.AddServer(server);
 
             // ACT
             var ex = await Record.ExceptionAsync(async () => await context.GitLabGetPipelineAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, s_PipelineId + 10));
