@@ -388,7 +388,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         //
         var addedParameters = new HashSet<string>();
 
-        context.Output.Append("(this "); // assume, the overload if still an extension method
+        context.Output.Append("(this "); // assume, the overload is still an extension method
         foreach (var parameter in alias.Parameters)
         {
             if (parameterReplacements.SingleOrDefault(replacement => replacement.MatchesOrigrinalParameter(parameter)) is { } replacement)
