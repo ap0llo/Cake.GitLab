@@ -27,6 +27,11 @@ public interface IGitLabProvider
     Task<Pipeline> GetPipelineAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId);
 
     /// <summary>
+    /// Implements the functionality of <see cref="GitLabAliases.GitLabGetPipelineJobsAsync(ICakeContext,string,string,ProjectId,long,GetPipelineJobsOptions)"/>
+    /// </summary>
+    Task<IReadOnlyCollection<Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId, GetPipelineJobsOptions? options);
+
+    /// <summary>
     /// Implements the functionality of <see cref="GitLabAliases.GitLabSetPipelineNameAsync(ICakeContext,string,string,ProjectId,long,string)"/>
     /// </summary>
     Task SetPipelineNameAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId, string name);

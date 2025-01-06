@@ -5,12 +5,19 @@
         public DefaultGitLabProvider(Cake.Core.ICakeContext context) { }
         protected virtual NGitLab.IGitLabClient GetClient(string serverUrl, string accessToken) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId) { }
+        public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
         public System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
         public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
         public System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, string name) { }
         public Cake.GitLab.ProjectIdentity? TryGetCurrentProjectIdentity() { }
         public Cake.GitLab.ServerIdentity? TryGetCurrentServerIdentity() { }
+    }
+    public class GetPipelineJobsOptions
+    {
+        public GetPipelineJobsOptions() { }
+        public bool? IncludeRetried { get; set; }
+        public System.Collections.Generic.IList<Cake.GitLab.JobScope>? Scopes { get; set; }
     }
     [Cake.Core.Annotations.CakeAliasCategory("GitLab")]
     [Cake.Core.Annotations.CakeNamespaceImport("Cake.GitLab")]
@@ -31,6 +38,21 @@
         [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GitLabGetPipelineJobsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, long pipelineId, Cake.GitLab.GetPipelineJobsOptions options) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GitLabGetPipelineJobsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectIdentity projectIdentity, string accessToken, long pipelineId, Cake.GitLab.GetPipelineJobsOptions options) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GitLabGetPipelineJobsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerConnection serverConnection, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions options) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GitLabGetPipelineJobsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions options) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GitLabGetPipelineJobsAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options = null) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<NGitLab.Models.Tag> GitLabRepositoryCreateTagAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, string @ref, string name) { }
@@ -101,12 +123,34 @@
     public interface IGitLabProvider
     {
         System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options);
         System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name);
         System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination);
         System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project);
         System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, string name);
         Cake.GitLab.ProjectIdentity? TryGetCurrentProjectIdentity();
         Cake.GitLab.ServerIdentity? TryGetCurrentServerIdentity();
+    }
+    public enum JobScope
+    {
+        [System.Runtime.Serialization.EnumMember(Value="created")]
+        Created = 0,
+        [System.Runtime.Serialization.EnumMember(Value="pending")]
+        Pending = 1,
+        [System.Runtime.Serialization.EnumMember(Value="running")]
+        Running = 2,
+        [System.Runtime.Serialization.EnumMember(Value="failed")]
+        Failed = 3,
+        [System.Runtime.Serialization.EnumMember(Value="success")]
+        Success = 4,
+        [System.Runtime.Serialization.EnumMember(Value="canceled")]
+        Canceled = 5,
+        [System.Runtime.Serialization.EnumMember(Value="skipped")]
+        Skipped = 6,
+        [System.Runtime.Serialization.EnumMember(Value="waiting_for_resource")]
+        WaitingForResource = 7,
+        [System.Runtime.Serialization.EnumMember(Value="manual")]
+        Manual = 8,
     }
     public class ProjectConnection : Cake.GitLab.ProjectIdentity, System.IEquatable<Cake.GitLab.ProjectConnection>
     {

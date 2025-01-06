@@ -47,8 +47,8 @@ public static partial class GitLabAliasesTest
 
             var server = m_GitLabConfig.BuildServer();
 
-            var context = new FakeContext(testOutputHelper);
-            context.AddServer(server);
+            var context = new NGitLabMockContext(testOutputHelper);
+            context.GitLab.AddServer(server);
 
             var outputPath = (FilePath)"file1.txt";
 
@@ -67,8 +67,8 @@ public static partial class GitLabAliasesTest
             // ARRANGE
             var server = m_GitLabConfig.BuildServer();
 
-            var context = new FakeContext(testOutputHelper);
-            context.AddServer(server);
+            var context = new NGitLabMockContext(testOutputHelper);
+            context.GitLab.AddServer(server);
 
             // ACT
             var outputDirectory = context.Environment.WorkingDirectory.Combine("new-directory");
@@ -88,8 +88,8 @@ public static partial class GitLabAliasesTest
             // ARRANGE
             var server = m_GitLabConfig.BuildServer();
 
-            var context = new FakeContext(testOutputHelper);
-            context.AddServer(server);
+            var context = new NGitLabMockContext(testOutputHelper);
+            context.GitLab.AddServer(server);
 
             // ACT
             var ex = await Record.ExceptionAsync(() => context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", s_ProjectPath, "does-not-exist", "main", "output.txt"));
@@ -133,8 +133,8 @@ public static partial class GitLabAliasesTest
 
             server.AllProjects.Single().Repository.CreateBranch("some-other-branch");
 
-            var context = new FakeContext(testOutputHelper);
-            context.AddServer(server);
+            var context = new NGitLabMockContext(testOutputHelper);
+            context.GitLab.AddServer(server);
 
             // ACT
             var branches = await context.GitLabRepositoryGetBranchesAsync(server.Url.ToString(), "SomeAccessToken", projectId);
@@ -152,7 +152,7 @@ public static partial class GitLabAliasesTest
     {
         private readonly GitLabConfig m_GitLabConfig;
         private readonly ITestOutputHelper m_TestOutputHelper;
-        private readonly FakeContext m_Context;
+        private readonly NGitLabMockContext m_Context;
         private readonly NGitLab.Mock.Project m_Project;
         private readonly NGitLab.Mock.User m_User;
 
@@ -180,8 +180,8 @@ public static partial class GitLabAliasesTest
 
 
             var server = m_GitLabConfig.BuildServer();
-            m_Context = new FakeContext(m_TestOutputHelper);
-            m_Context.AddServer(server);
+            m_Context = new NGitLabMockContext(m_TestOutputHelper);
+            m_Context.GitLab.AddServer(server);
 
             m_Project = server.AllProjects.Single();
 
