@@ -7,6 +7,7 @@
         public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GetMergeRequestsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId) { }
         public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options) { }
+        public System.Threading.Tasks.Task<NGitLab.Models.Project> GetProjectAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
         public System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
         public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
@@ -76,6 +77,21 @@
         [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GitLabGetPipelineJobsAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options = null) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Projects")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<NGitLab.Models.Project> GitLabGetProjectAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Projects")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<NGitLab.Models.Project> GitLabGetProjectAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectIdentity projectIdentity, string accessToken) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Projects")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<NGitLab.Models.Project> GitLabGetProjectAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerConnection serverConnection, NGitLab.Models.ProjectId project) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Projects")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<NGitLab.Models.Project> GitLabGetProjectAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project) { }
+        [Cake.Core.Annotations.CakeAliasCategory("Projects")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<NGitLab.Models.Project> GitLabGetProjectAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<NGitLab.Models.Tag> GitLabRepositoryCreateTagAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, string @ref, string name) { }
@@ -148,6 +164,7 @@
         System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GetMergeRequestsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options);
         System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId);
         System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options);
+        System.Threading.Tasks.Task<NGitLab.Models.Project> GetProjectAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project);
         System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name);
         System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination);
         System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project);
