@@ -1,0 +1,6 @@
+feat: Add "GetProjectAsync()" alias
+
+Add alias "GetProjectAsync()" that allows retrieving information about a GitLab project.
+
+See-Also: [Get a single project (GitLab Docs)](https://docs.gitlab.com/ee/api/projects.html#get-a-single-project)
+Pull-Request: #31

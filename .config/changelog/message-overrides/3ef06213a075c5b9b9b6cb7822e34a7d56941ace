@@ -1,0 +1,6 @@
+feat: Add "GitLabGetPipelineJobsAsync()" alias
+
+Add alias "GitLabGetPipelineJobsAsync()" to retrieve a pipeline's jobs
+
+See-Also: [List pipeline jobs (GitLab Docs)](https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs)
+Pull-Request: #24

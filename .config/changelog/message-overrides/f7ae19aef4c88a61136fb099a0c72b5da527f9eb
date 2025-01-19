@@ -1,0 +1,6 @@
+feat: Add "GitLabGetMergeRequestsAsync()" alias 
+
+Add alias "GitLabGetMergeRequestsAsync()" that allows listing a project's merge requests.
+
+See-Also: [List Project Merge Requests (GitLab Docs)](https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests)
+Pull-Request: #30
