@@ -27,6 +27,14 @@ public partial class DefaultGitLabProvider
             query.TargetBranch = options.TargetBranch;
         }
 
+        log.Debug(
+            $"""
+            Querying merge requests with the following settings:
+                {nameof(query.State)} = '{(query.State.HasValue ? query.State : "<null>")}'
+                {nameof(query.SourceBranch)} = '{query.SourceBranch ?? "<null>"}'
+                {nameof(query.TargetBranch)} = '{query.TargetBranch ?? "<null>"}'
+            """);
+
         try
         {
             var mergeRequests = client.GetMergeRequest(project).Get(query).ToList();
