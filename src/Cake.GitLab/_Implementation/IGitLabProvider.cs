@@ -55,4 +55,9 @@ public interface IGitLabProvider
     /// Implements the functionality of <see cref="GitLabAliases.GitLabGetMergeRequestsAsync(ICakeContext,string,string,ProjectId,GetMergeRequestsOptions)"/>
     /// </summary>
     Task<IReadOnlyCollection<MergeRequest>> GetMergeRequestsAsync(string serverUrl, string accessToken, ProjectId project, GetMergeRequestsOptions? options);
+
+    /// <summary>
+    /// Implements the functionality of <see cref="GitLabAliases.GitLabGetProjectAsync(ICakeContext,string,string,ProjectId)"/>
+    /// </summary>
+    Task<Project> GetProjectAsync(string serverUrl, string accessToken, ProjectId project);
 }
