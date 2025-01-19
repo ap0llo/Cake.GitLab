@@ -179,7 +179,7 @@ public static partial class GitLabAliasesTest
             _ = context.GitLabGetPipelineJobsAsync("https://gitlab.example.com", "ACCESSTOKEN", 123, pipelineId, options);
 
             // ASSERT
-            var invocation = Assert.Single(context.GitLabClient.Pipelines[123].Invocations.GetJobsAsync);
+            var invocation = Assert.Single(context.GitLabClient.PipelinesClient[123].Invocations.GetJobsAsync);
             assertQuery(invocation);
         }
 
