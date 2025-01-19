@@ -4,6 +4,7 @@
     {
         public DefaultGitLabProvider(Cake.Core.ICakeContext context) { }
         protected virtual NGitLab.IGitLabClient GetClient(string serverUrl, string accessToken) { }
+        public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GetMergeRequestsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId) { }
         public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options) { }
         public System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
@@ -12,6 +13,13 @@
         public System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, string name) { }
         public Cake.GitLab.ProjectIdentity? TryGetCurrentProjectIdentity() { }
         public Cake.GitLab.ServerIdentity? TryGetCurrentServerIdentity() { }
+    }
+    public class GetMergeRequestsOptions
+    {
+        public GetMergeRequestsOptions() { }
+        public string? SourceBranch { get; set; }
+        public Cake.GitLab.MergeRequestState? State { get; set; }
+        public string? TargetBranch { get; set; }
     }
     public class GetPipelineJobsOptions
     {
@@ -23,6 +31,21 @@
     [Cake.Core.Annotations.CakeNamespaceImport("Cake.GitLab")]
     public static class GitLabAliases
     {
+        [Cake.Core.Annotations.CakeAliasCategory("MergeRequests")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GitLabGetMergeRequestsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, Cake.GitLab.GetMergeRequestsOptions? options = null) { }
+        [Cake.Core.Annotations.CakeAliasCategory("MergeRequests")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GitLabGetMergeRequestsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectIdentity projectIdentity, string accessToken, Cake.GitLab.GetMergeRequestsOptions? options = null) { }
+        [Cake.Core.Annotations.CakeAliasCategory("MergeRequests")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GitLabGetMergeRequestsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerConnection serverConnection, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options = null) { }
+        [Cake.Core.Annotations.CakeAliasCategory("MergeRequests")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GitLabGetMergeRequestsAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options = null) { }
+        [Cake.Core.Annotations.CakeAliasCategory("MergeRequests")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GitLabGetMergeRequestsAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options = null) { }
         [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GitLabGetPipelineAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, long pipelineId) { }
@@ -122,6 +145,7 @@
     }
     public interface IGitLabProvider
     {
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GetMergeRequestsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options);
         System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId);
         System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options);
         System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name);
@@ -151,6 +175,17 @@
         WaitingForResource = 7,
         [System.Runtime.Serialization.EnumMember(Value="manual")]
         Manual = 8,
+    }
+    public enum MergeRequestState
+    {
+        Opened = 0,
+        Closed = 1,
+        Locked = 2,
+        Merged = 3,
+    }
+    public static class MergeRequestStateExtensions
+    {
+        public static NGitLab.Models.MergeRequestState ToNGitLabMergeRequestState(this Cake.GitLab.MergeRequestState state) { }
     }
     public class ProjectConnection : Cake.GitLab.ProjectIdentity, System.IEquatable<Cake.GitLab.ProjectConnection>
     {

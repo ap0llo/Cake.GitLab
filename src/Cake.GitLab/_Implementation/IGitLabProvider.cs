@@ -50,4 +50,9 @@ public interface IGitLabProvider
     /// Implements the functionality of <see cref="GitLabAliases.GitLabRepositoryCreateTagAsync(ICakeContext,string,string,ProjectId,string,string)"/>
     /// </summary>
     Task<Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, ProjectId project, string @ref, string name);
+
+    /// <summary>
+    /// Implements the functionality of <see cref="GitLabAliases.GitLabGetMergeRequestsAsync(ICakeContext,string,string,ProjectId,GetMergeRequestsOptions)"/>
+    /// </summary>
+    Task<IReadOnlyCollection<MergeRequest>> GetMergeRequestsAsync(string serverUrl, string accessToken, ProjectId project, GetMergeRequestsOptions? options);
 }

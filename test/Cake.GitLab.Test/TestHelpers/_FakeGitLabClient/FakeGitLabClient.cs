@@ -6,10 +6,13 @@ namespace Cake.GitLab.Test.TestHelpers;
 
 public class FakeGitLabClient : IGitLabClient
 {
-    public FakesCollection<FakePipelineClient> Pipelines { get; } = new FakesCollection<FakePipelineClient>(id => new FakePipelineClient());
+    public FakesCollection<FakePipelineClient> PipelinesClient { get; } = new FakesCollection<FakePipelineClient>(id => new FakePipelineClient());
 
-    IPipelineClient IGitLabClient.GetPipelines(ProjectId projectId) => Pipelines[projectId];
+    public FakesCollection<FakeMergeRequestClient> MergeRequestClient { get; } = new FakesCollection<FakeMergeRequestClient>(id => new FakeMergeRequestClient());
 
+    IPipelineClient IGitLabClient.GetPipelines(ProjectId projectId) => PipelinesClient[projectId];
+
+    IMergeRequestClient IGitLabClient.GetMergeRequest(ProjectId projectId) => MergeRequestClient[projectId];
 
     public IEventClient GetEvents()
     {
@@ -52,11 +55,6 @@ public class FakeGitLabClient : IGitLabClient
     }
 
     public IJobClient GetJobs(ProjectId projectId)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public IMergeRequestClient GetMergeRequest(ProjectId projectId)
     {
         throw new System.NotImplementedException();
     }
