@@ -11,8 +11,7 @@
         public System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
         public System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
         public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
-        public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref) { }
-        public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string path) { }
+        public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string? path = null) { }
         public System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, string name) { }
         public Cake.GitLab.ProjectIdentity? TryGetCurrentProjectIdentity() { }
         public Cake.GitLab.ServerIdentity? TryGetCurrentServerIdentity() { }
@@ -141,34 +140,19 @@
         public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> GitLabRepositoryGetBranchesAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, string @ref) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, string @ref, string? path = null) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, string @ref, string path) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectIdentity projectIdentity, string accessToken, string @ref, string? path = null) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectIdentity projectIdentity, string accessToken, string @ref) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerConnection serverConnection, NGitLab.Models.ProjectId project, string @ref, string? path = null) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerConnection serverConnection, NGitLab.Models.ProjectId project, string @ref) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project, string @ref, string? path = null) { }
         [Cake.Core.Annotations.CakeAliasCategory("Repository")]
         [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectIdentity projectIdentity, string accessToken, string @ref, string path) { }
-        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
-        [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerConnection serverConnection, NGitLab.Models.ProjectId project, string @ref, string path) { }
-        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
-        [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project, string @ref) { }
-        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
-        [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref) { }
-        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
-        [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ServerIdentity serverIdentity, string accessToken, NGitLab.Models.ProjectId project, string @ref, string path) { }
-        [Cake.Core.Annotations.CakeAliasCategory("Repository")]
-        [Cake.Core.Annotations.CakeMethodAlias]
-        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string path) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this Cake.Core.ICakeContext context, string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string? path = null) { }
         [Cake.Core.Annotations.CakeAliasCategory("Pipelines")]
         [Cake.Core.Annotations.CakeMethodAlias]
         public static System.Threading.Tasks.Task GitLabSetPipelineNameAsync(this Cake.Core.ICakeContext context, Cake.GitLab.ProjectConnection projectConnection, long pipelineId, string name) { }
@@ -200,8 +184,7 @@
         System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name);
         System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination);
         System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project);
-        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref);
-        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string path);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string? path = null);
         System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, string name);
         Cake.GitLab.ProjectIdentity? TryGetCurrentProjectIdentity();
         Cake.GitLab.ServerIdentity? TryGetCurrentServerIdentity();

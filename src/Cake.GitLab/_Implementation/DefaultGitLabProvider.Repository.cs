@@ -15,19 +15,45 @@ namespace Cake.GitLab;
 public partial class DefaultGitLabProvider
 {
     /// <inheritdoc />
-    public async Task<IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, ProjectId project, string @ref)
+    public async Task<IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, ProjectId project, string @ref, string? path = null)
     {
         var log = GetLogForCurrentOperation();
-        log.Verbose($"Getting all files for reference '{@ref}' in GitLab project {project}");
-        return await GetFilesInternal(log, serverUrl, accessToken, project, @ref, null);
-    }
+        log.Verbose($"Getting for reference '{@ref}' {(path is null ? "" : $"and path '{path}' ")} in GitLab project {project}");
 
-    /// <inheritdoc />
-    public async Task<IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, ProjectId project, string @ref, string path)
-    {
-        var log = GetLogForCurrentOperation();
-        log.Verbose($"Getting all files in directory '{path}' for reference '{@ref}' in GitLab project {project}");
-        return await GetFilesInternal(log, serverUrl, accessToken, project, @ref, path);
+        var client = GetClient(serverUrl, accessToken);
+        var repo = client.GetRepository(project);
+
+        var options = new RepositoryGetTreeOptions()
+        {
+            Ref = @ref,
+            Recursive = true,
+        };
+
+        if (path is not null)
+        {
+            options.Path = path;
+        }
+
+        var files = new List<string>();
+
+        try
+        {
+            log.Debug($"Getting tree with options {nameof(options.Ref)} = {options.Ref}, {nameof(options.Recursive)} = {options.Recursive}{(path is null ? "" : $", {nameof(options.Path)} = {options.Path}")}");
+            await foreach (var tree in repo.GetTreeAsync(options))
+            {
+                if (tree.Type == ObjectType.blob)
+                {
+                    files.Add(tree.Path);
+                }
+            }
+        }
+        catch (GitLabException ex)
+        {
+            throw new CakeException($"Failed to get list of files at ref {@ref} from GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
+        }
+
+        log.Debug($"Found {files.Count} files");
+        return files;
     }
 
     /// <inheritdoc />
@@ -173,43 +199,5 @@ public partial class DefaultGitLabProvider
         }
 
         return tag;
-    }
-
-    private async Task<IReadOnlyList<string>> GetFilesInternal(ICakeLog log, string serverUrl, string accessToken, ProjectId project, string @ref, string? path)
-    {
-        var client = GetClient(serverUrl, accessToken);
-        var repo = client.GetRepository(project);
-
-        var options = new RepositoryGetTreeOptions()
-        {
-            Ref = @ref,
-            Recursive = true,
-        };
-
-        if (path is not null)
-        {
-            options.Path = path;
-        }
-
-        var files = new List<string>();
-
-        try
-        {
-            log.Debug($"Getting tree with options {nameof(options.Ref)} = {options.Ref}, {nameof(options.Recursive)} = {options.Recursive}{(path is null ? "" : $", {nameof(options.Path)} = {options.Path}")}");
-            await foreach (var tree in repo.GetTreeAsync(options))
-            {
-                if (tree.Type == ObjectType.blob)
-                {
-                    files.Add(tree.Path);
-                }
-            }
-        }
-        catch (GitLabException ex)
-        {
-            throw new CakeException($"Failed to get list of files at ref {@ref} from GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
-        }
-
-        log.Debug($"Found {files.Count} files");
-        return files;
     }
 }
