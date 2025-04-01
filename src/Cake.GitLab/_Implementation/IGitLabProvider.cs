@@ -37,6 +37,16 @@ public interface IGitLabProvider
     Task SetPipelineNameAsync(string serverUrl, string accessToken, ProjectId project, long pipelineId, string name);
 
     /// <summary>
+    /// Implements the functionality of <see cref="GitLabAliases.GitLabRepositoryGetFilesAsync(ICakeContext,string,string,ProjectId,string)"/>
+    /// </summary>
+    Task<IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, ProjectId project, string @ref);
+
+    /// <summary>
+    /// Implements the functionality of <see cref="GitLabAliases.GitLabRepositoryGetFilesAsync(ICakeContext,string,string,ProjectId,string, string)"/>
+    /// </summary>
+    Task<IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, ProjectId project, string @ref, string path);
+
+    /// <summary>
     /// Implements the functionality of <see cref="GitLabAliases.GitLabRepositoryDownloadFileAsync(ICakeContext,string,string,ProjectId,string,string,FilePath)"/>
     /// </summary>
     Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination);

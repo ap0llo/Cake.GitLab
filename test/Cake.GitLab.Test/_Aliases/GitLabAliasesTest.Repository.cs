@@ -126,7 +126,7 @@ public static partial class GitLabAliasesTest
                 .Configure(project =>
                 {
                     project.DefaultBranch = "main";
-                    project.WithCommit("Intial commit");
+                    project.WithCommit("Initial commit");
                 });
 
             var server = m_GitLabConfig.BuildServer();
@@ -174,7 +174,7 @@ public static partial class GitLabAliasesTest
                 .Configure(project =>
                 {
                     project.DefaultBranch = "main";
-                    project.WithCommit("Intial commit");
+                    project.WithCommit("Initial commit");
                     project.WithUserPermission("user1", AccessLevel.Maintainer);
                 });
 
@@ -280,6 +280,101 @@ public static partial class GitLabAliasesTest
                     Assert.Equal("tag-name", tag.FriendlyName);
                     Assert.Equal(commit1.Sha, tag.Target.Sha);
                 }
+            );
+        }
+    }
+
+    public class GitLabRepositoryGetFilesAsync
+    {
+        private readonly GitLabConfig m_GitLabConfig;
+        private readonly ITestOutputHelper m_TestOutputHelper;
+        private readonly NGitLabMockContext m_Context;
+        private readonly NGitLab.Mock.Project m_Project;
+        private readonly NGitLab.Mock.User m_User;
+
+        public GitLabRepositoryGetFilesAsync(ITestOutputHelper testOutputHelper)
+        {
+            m_TestOutputHelper = testOutputHelper;
+
+            m_GitLabConfig = new GitLabConfig() { Url = "https://example.gitlab.com" }
+                .WithUser("user1", isDefault: true)
+                .WithGroup(s_GroupName)
+                .WithProjectOfFullPath(
+                    fullPath: s_ProjectPath,
+                    id: (int)s_ProjectId
+                );
+
+            m_GitLabConfig
+                .Projects
+                .Single()
+                .Configure(project =>
+                {
+                    project.DefaultBranch = "main";
+                    project.WithCommit("Initial commit");
+                    project.WithUserPermission("user1", AccessLevel.Maintainer);
+                });
+
+
+            var server = m_GitLabConfig.BuildServer();
+            m_Context = new NGitLabMockContext(m_TestOutputHelper);
+            m_Context.GitLab.AddServer(server);
+
+            m_Project = server.AllProjects.Single();
+
+            m_User = server.Users.Single();
+        }
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Returns_expected_list_of_files(object projectId)
+        {
+            // ARRANGE
+            var commit = m_Project.Repository.Commit(
+                m_User,
+                "Some commit",
+                [
+                    NGitLab.Mock.File.CreateFromText("file1.txt", ""),
+                    NGitLab.Mock.File.CreateFromText("dir1/file2.txt", ""),
+                    NGitLab.Mock.File.CreateFromText("dir1/dir2/file3.txt", ""),
+                ]);
+
+            // ACT
+            var files = await m_Context.GitLabRepositoryGetFilesAsync(m_Project.Server.Url.ToString(), "SomeAccessToken", projectId.AsProjectId(), "main");
+
+            // ASSERT
+            Assert.Collection(
+                files.OrderBy(x => x.Length),
+                path => Assert.Equal("test.txt", path),  // test.txt get added implicitly by NGitLab.Mock
+                path => Assert.Equal("file1.txt", path),
+                path => Assert.Equal("dir1/file2.txt", path),
+                path => Assert.Equal("dir1/dir2/file3.txt", path)
+            );
+        }
+
+        [Theory]
+        [InlineData(s_ProjectId)]
+        [InlineData(s_ProjectPath)]
+        public async Task Returns_expected_list_of_files_for_subfolder(object projectId)
+        {
+            // ARRANGE
+            var commit = m_Project.Repository.Commit(
+                m_User,
+                "Some commit",
+                [
+                    NGitLab.Mock.File.CreateFromText("file1.txt", ""),
+                    NGitLab.Mock.File.CreateFromText("dir1/file2.txt", ""),
+                    NGitLab.Mock.File.CreateFromText("dir1/dir2/file3.txt", ""),
+                ]);
+
+            // ACT
+            var files = await m_Context.GitLabRepositoryGetFilesAsync(m_Project.Server.Url.ToString(), "SomeAccessToken", projectId.AsProjectId(), "main", "dir1");
+
+            // ASSERT
+            Assert.Collection(
+                files.OrderBy(x => x.Length),
+                path => Assert.Equal("dir1/file2.txt", path),
+                path => Assert.Equal("dir1/dir2/file3.txt", path)
             );
         }
     }

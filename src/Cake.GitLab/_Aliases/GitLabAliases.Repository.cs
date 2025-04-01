@@ -10,6 +10,75 @@ namespace Cake.GitLab;
 public static partial class GitLabAliases
 {
     /// <summary>
+    /// Gets a list of all files that exist in a GitLab-hosted repository
+    /// </summary>
+    /// <returns>
+    /// Returns the list of all files (as relative paths) that exist in the repository at the specified ref.
+    /// Listing of files is recursive.
+    /// </returns>
+    /// <param name="context">The current Cake context.</param>
+    /// <param name="serverUrl">The url of the GitLab server</param>
+    /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
+    /// <param name="project">The path (name and namespace) or id of the project to get the file from.</param>
+    /// <param name="ref">The name of the branch, a git tag or commit specifying the version of the file to get.</param>
+    /// <example language="cs"><![CDATA[
+    /// [TaskName("List-File")]
+    /// public class ListRepositoryFilesTask : AsyncFrostingTask
+    /// {
+    ///    public override async Task RunAsync(ICakeContext context)
+    ///    {
+    ///      var files = await context.GitLabRepositoryGetFilesAsync(
+    ///          "https://gitlab.com",
+    ///          "ACCESSTOKEN"
+    ///          "owner/repository",
+    ///          "main"
+    ///       );
+    ///    }
+    /// }
+    /// ]]>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Repository")]
+    public static async Task<IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref) =>
+        await context.GetGitLabProvider().RepositoryGetFilesAsync(serverUrl, accessToken, project, @ref);
+
+    /// <summary>
+    /// Gets a list of all files that exist in a GitLab-hosted repository for a directory
+    /// </summary>
+    /// <returns>
+    /// Returns the list of all files (as relative paths) that exist in the repository inside the specified directory at the specified ref.
+    /// Listing of files is recursive.
+    /// </returns>
+    /// <param name="context">The current Cake context.</param>
+    /// <param name="serverUrl">The url of the GitLab server</param>
+    /// <param name="accessToken">The access token for authenticating to the GitLab server</param>
+    /// <param name="project">The path (name and namespace) or id of the project to get the file from.</param>
+    /// <param name="ref">The name of the branch, a git tag or commit specifying the version of the file to get.</param>
+    /// <param name="path">The relative path of the directory which's files to list</param>
+    /// <example language="cs"><![CDATA[
+    /// [TaskName("List-File")]
+    /// public class ListRepositoryFilesTask : AsyncFrostingTask
+    /// {
+    ///    public override async Task RunAsync(ICakeContext context)
+    ///    {
+    ///      var files = await context.GitLabRepositoryGetFilesAsync(
+    ///          "https://gitlab.com",
+    ///          "ACCESSTOKEN"
+    ///          "owner/repository",
+    ///          "main",
+    ///          "some/directory"
+    ///       );
+    ///    }
+    /// }
+    /// ]]>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Repository")]
+    public static async Task<IReadOnlyList<string>> GitLabRepositoryGetFilesAsync(this ICakeContext context, string serverUrl, string accessToken, ProjectId project, string @ref, string path) =>
+        await context.GetGitLabProvider().RepositoryGetFilesAsync(serverUrl, accessToken, project, @ref, path);
+
+
+    /// <summary>
     /// Downloads a file from a GitLab-hosted repository
     /// </summary>
     /// <param name="context">The current Cake context.</param>
