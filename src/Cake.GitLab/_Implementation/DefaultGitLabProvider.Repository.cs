@@ -15,6 +15,22 @@ namespace Cake.GitLab;
 public partial class DefaultGitLabProvider
 {
     /// <inheritdoc />
+    public async Task<IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, ProjectId project, string @ref)
+    {
+        var log = GetLogForCurrentOperation();
+        log.Verbose($"Getting all files for reference '{@ref}' in GitLab project {project}");
+        return await GetFilesInternal(log, serverUrl, accessToken, project, @ref, null);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, ProjectId project, string @ref, string path)
+    {
+        var log = GetLogForCurrentOperation();
+        log.Verbose($"Getting all files in directory '{path}' for reference '{@ref}' in GitLab project {project}");
+        return await GetFilesInternal(log, serverUrl, accessToken, project, @ref, path);
+    }
+
+    /// <inheritdoc />
     public async Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, ProjectId project, string filePath, string @ref, FilePath destination)
     {
         Guard.NotNullOrWhitespace(filePath);
@@ -84,7 +100,6 @@ public partial class DefaultGitLabProvider
         Guard.NotNullOrWhitespace(@ref);
         Guard.NotNullOrWhitespace(name);
 
-
         var log = GetLogForCurrentOperation();
         log.Verbose($"Creating tag '{name}' for reference '{@ref}' in GitLab project {project}");
 
@@ -94,7 +109,7 @@ public partial class DefaultGitLabProvider
         // To make comparisons easier, get the commit for the reference (and thus let the GitLab server perform the matching of the ref to a commit)
         var commit = GetCommitInternal(log, client, project, @ref);
 
-        // Check if ´the tag already exists with the same target id
+        // Check if the tag already exists with the same target id
         var existingTag = await TryGetTagInternalAsync(log, client, project, name);
         if (existingTag?.Commit?.Id == commit.Id)
         {
@@ -120,7 +135,6 @@ public partial class DefaultGitLabProvider
         log.Verbose($"Tag '{tag.Name}' for commit {tag.Commit.Id} created successfully");
         return tag;
     }
-
 
     private Commit GetCommitInternal(ICakeLog log, IGitLabClient client, ProjectId project, string @ref)
     {
@@ -159,5 +173,43 @@ public partial class DefaultGitLabProvider
         }
 
         return tag;
+    }
+
+    private async Task<IReadOnlyList<string>> GetFilesInternal(ICakeLog log, string serverUrl, string accessToken, ProjectId project, string @ref, string? path)
+    {
+        var client = GetClient(serverUrl, accessToken);
+        var repo = client.GetRepository(project);
+
+        var options = new RepositoryGetTreeOptions()
+        {
+            Ref = @ref,
+            Recursive = true,
+        };
+
+        if (path is not null)
+        {
+            options.Path = path;
+        }
+
+        var files = new List<string>();
+
+        try
+        {
+            log.Debug($"Getting tree with options {nameof(options.Ref)} = {options.Ref}, {nameof(options.Recursive)} = {options.Recursive}{(path is null ? "" : $", {nameof(options.Path)} = {options.Path}")}");
+            await foreach (var tree in repo.GetTreeAsync(options))
+            {
+                if (tree.Type == ObjectType.blob)
+                {
+                    files.Add(tree.Path);
+                }
+            }
+        }
+        catch (GitLabException ex)
+        {
+            throw new CakeException($"Failed to get list of files at ref {@ref} from GitLab project {project}: {ex.ErrorMessage ?? ex.Message}", ex);
+        }
+
+        log.Debug($"Found {files.Count} files");
+        return files;
     }
 }
