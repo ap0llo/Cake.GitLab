@@ -62,12 +62,12 @@
       },
       "NGitLab.Mock": {
         "type": "Direct",
-        "requested": "[7.2.0, )",
-        "resolved": "7.2.0",
-        "contentHash": "ljKYx50IZ7Mnj2bO6Gopu5laLvCFiLya+fUTw16htQkr14rH6n+IPxLY3jqW0M9gMd5OabXqrsdAYhwIpPyqqA==",
+        "requested": "[8.3.0, )",
+        "resolved": "8.3.0",
+        "contentHash": "mO5vSW2OXflOzmyOMc/+qtGxfQVXoBeh8SNZZ3sDjUybjf/7qjOLVN8NnvR04xr9xhNjgP8jpkwk9tu9ukMXpA==",
         "dependencies": {
           "LibGit2Sharp": "0.30.0",
-          "NGitLab": "7.2.0",
+          "NGitLab": "8.3.0",
           "YamlDotNet": "16.3.0"
         }
       },
@@ -260,8 +260,8 @@
       },
       "NGitLab": {
         "type": "Transitive",
-        "resolved": "7.2.0",
-        "contentHash": "qV3zvEM7DTJMSRiLZkXFzzVEZjO9dnNtRkPXgITcqmIiDez7+QrvLVgNDLLZhm47MWrrCw36sIkGgR3qd/mYOA==",
+        "resolved": "8.3.0",
+        "contentHash": "Rd39LKudlE0S1dNIBjaXwWOy3UZqV4aBzWmGM6YY5YUKFseeXJpCjhFdV3ls917ZyU2r8K3z0jjG7Fj8rf4+4A==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "8.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
@@ -408,7 +408,7 @@
       "cake.gitlab": {
         "type": "Project",
         "dependencies": {
-          "NGitLab": "[7.2.0, )"
+          "NGitLab": "[8.3.0, )"
         }
       }
     },
@@ -473,12 +473,12 @@
       },
       "NGitLab.Mock": {
         "type": "Direct",
-        "requested": "[7.2.0, )",
-        "resolved": "7.2.0",
-        "contentHash": "ljKYx50IZ7Mnj2bO6Gopu5laLvCFiLya+fUTw16htQkr14rH6n+IPxLY3jqW0M9gMd5OabXqrsdAYhwIpPyqqA==",
+        "requested": "[8.3.0, )",
+        "resolved": "8.3.0",
+        "contentHash": "mO5vSW2OXflOzmyOMc/+qtGxfQVXoBeh8SNZZ3sDjUybjf/7qjOLVN8NnvR04xr9xhNjgP8jpkwk9tu9ukMXpA==",
         "dependencies": {
           "LibGit2Sharp": "0.30.0",
-          "NGitLab": "7.2.0",
+          "NGitLab": "8.3.0",
           "YamlDotNet": "16.3.0"
         }
       },
@@ -671,8 +671,8 @@
       },
       "NGitLab": {
         "type": "Transitive",
-        "resolved": "7.2.0",
-        "contentHash": "qV3zvEM7DTJMSRiLZkXFzzVEZjO9dnNtRkPXgITcqmIiDez7+QrvLVgNDLLZhm47MWrrCw36sIkGgR3qd/mYOA==",
+        "resolved": "8.3.0",
+        "contentHash": "Rd39LKudlE0S1dNIBjaXwWOy3UZqV4aBzWmGM6YY5YUKFseeXJpCjhFdV3ls917ZyU2r8K3z0jjG7Fj8rf4+4A==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "8.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
@@ -819,7 +819,7 @@
       "cake.gitlab": {
         "type": "Project",
         "dependencies": {
-          "NGitLab": "[7.2.0, )"
+          "NGitLab": "[8.3.0, )"
         }
       }
     }
