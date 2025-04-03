@@ -84,12 +84,15 @@ public partial class DefaultGitLabProvider
         // To prevent wrong data from being written in case this changes in the future, abort if encoding is unexpected
         if (!StringComparer.Ordinal.Equals(fileData.Encoding, "base64"))
         {
-            throw new InvalidOperationException($"Unexpected encoding of file content recevied from GitLab. Expected: base64, Actual: {fileData.Encoding}");
+            throw new InvalidOperationException($"Unexpected encoding of file content received from GitLab. Expected: base64, Actual: {fileData.Encoding}");
         }
 
         var destinationDirectory = destination.GetDirectory();
-        log.Debug($"Creating destination directory '{destination}'");
-        m_Context.FileSystem.GetDirectory(destinationDirectory).Create();
+        if (destinationDirectory is not null && !String.IsNullOrEmpty(destinationDirectory.FullPath))
+        {
+            log.Debug($"Creating destination directory '{destination}'");
+            m_Context.FileSystem.GetDirectory(destinationDirectory).Create();
+        }
 
         log.Debug($"Writing contents to destination file '{destination}'");
         using var outStream = m_Context.FileSystem.GetFile(destination).OpenWrite();

@@ -36,9 +36,10 @@ public static partial class GitLabAliasesTest
 
 
         [Theory]
-        [InlineData(s_ProjectId)]
-        [InlineData(s_ProjectPath)]
-        public async Task Creates_expected_file(object projectIdOrPath)
+        [InlineData(s_ProjectId, "file1.txt")]
+        [InlineData(s_ProjectPath, "file1.txt")]
+        [InlineData(s_ProjectPath, "directory/file1.txt")]
+        public async Task Creates_expected_file(object projectIdOrPath, string destination)
         {
             // ARRANGE
             ProjectId projectId = projectIdOrPath is string
@@ -50,15 +51,29 @@ public static partial class GitLabAliasesTest
             var context = new NGitLabMockContext(testOutputHelper);
             context.GitLab.AddServer(server);
 
-            var outputPath = (FilePath)"file1.txt";
-
             // ACT
-            await context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", projectId, s_FileName, "main", outputPath);
+            await context.GitLabRepositoryDownloadFileAsync(server.Url.ToString(), "SomeAccessToken", projectId, s_FileName, "main", destination);
 
             // ASSERT
-            var outFile = context.FileSystem.GetFile(outputPath);
+            var outFile = context.FileSystem.GetFile(destination);
             Assert.True(outFile.Exists);
             Assert.Equal(s_FileContent, outFile.GetTextContent());
+
+            // GitLabRepositoryDownloadFileAsync() must create the directory for the download destination
+            // If the destination is just a file name (e.g. "file.txt"), getting the directory path results an empty string.
+            // This causes a crash when trying to create the directory.
+            // However, this cannot be observed in the test, since the test used the FakeFileSystem which behaves slightly different in this scenario.
+            // Thus, to cover this with a test (at least a little), check if the message that is logged when the directory is created
+            // appears in the log or not.
+            var destinationHasDirectory = !String.IsNullOrEmpty(((FilePath)destination).GetDirectory().FullPath);
+            if (destinationHasDirectory)
+            {
+                Assert.Contains(context.Log.Entries, entry => entry.Message.Contains("Creating destination directory"));
+            }
+            else
+            {
+                Assert.DoesNotContain(context.Log.Entries, entry => entry.Message.Contains("Creating destination directory"));
+            }
         }
 
         [Fact]
@@ -99,7 +114,6 @@ public static partial class GitLabAliasesTest
             Assert.Equal("Failed to download does-not-exist at ref main from GitLab project group1/project1: File not found", ex.Message);
         }
     }
-
 
     public class GitLabRepositoryGetBranchesAsync(ITestOutputHelper testOutputHelper)
     {
