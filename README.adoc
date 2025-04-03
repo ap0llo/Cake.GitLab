@@ -40,7 +40,7 @@ Install the addin into your Cake build.
 ==== Use prerelease version
 
 * Releases of Cake.GitLab are available on  link:https://nuget.org/packages/Cake.GitLab[nuget.org]
-* Prerelease versions are available in the CI feed on [feedz.io](https://feedz.io/org/ap0llo/repository/cake-gitlab-ci)
+* Prerelease versions are available in the CI feed on link:https://feedz.io/org/ap0llo/repository/cake-gitlab-ci[feedz.io]
   To use prerelease packages, add the feed `https://f.feedz.io/ap0llo/cake-gitlab-ci/nuget/index.json` to your `nuget.config`, e.g.
 +
 [source,xml]
