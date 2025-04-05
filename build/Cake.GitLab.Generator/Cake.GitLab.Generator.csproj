@@ -10,11 +10,12 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
     <PackageReference Include="Grynwald.XmlDocs" Version="1.1.29-pre" PrivateAssets="all" GeneratePathProperty="true" />
+    <PackageReference Include="Scriban" Version="6.0.0" GeneratePathProperty="true" />
   </ItemGroup>
 
   
   <!-- 
-    Make the Grynwald.XmlDocs assembly available to the source generator
+    Make the Grynwald.XmlDocs and Scriban assemblies available to the source generator
     For reference, see 
     https://github.com/dotnet/roslyn/discussions/47517#discussioncomment-1655242
     and 
@@ -28,7 +29,20 @@
   <Target Name="GetDependencyTargetPaths">
     <ItemGroup>
       <TargetPathWithTargetPlatformMoniker Include="$(PkgGrynwald_XmlDocs)\lib\netstandard2.0\*.dll" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)\lib\netstandard2.0\*.dll" />
     </ItemGroup>
   </Target>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)/**/*.scriban-cs">
+      <LogicalName>$([System.String]::Copy('%(RecursiveDir)').Replace('\', '/'))%(FileName)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)/../../src/_Shared/**/*.cs" 
+            Link="_Shared/%(RecursiveDir)%(FileName)%(Extension)" />
+  </ItemGroup>
+  
 </Project>

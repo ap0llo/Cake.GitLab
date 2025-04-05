@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
-using Cake.Common.Tools.VSWhere.Latest;
 
 namespace Cake.GitLab.Internal;
 
@@ -14,7 +12,7 @@ internal static class Guard
             throw new ArgumentException("Value must not be null or whitespace", valueExpression);
         }
 
-        return value;
+        return value!;
     }
 
     public static T NotNull<T>(T? value, [CallerArgumentExpression(nameof(value))] string valueExpression = "") where T : class

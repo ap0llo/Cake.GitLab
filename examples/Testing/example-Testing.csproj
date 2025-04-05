@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/Cake.GitLab/Cake.GitLab.csproj" />
+    <ProjectReference Include="../../src/Cake.GitLab.Testing/Cake.GitLab.Testing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

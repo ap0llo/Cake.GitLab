@@ -15,5 +15,15 @@ internal static class DiagnosticDescriptors
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
+
+    public static readonly DiagnosticDescriptor ScribanTemplateError =
+        new DiagnosticDescriptor(
+            id: "CGL002",
+            title: "Scriban template has errors",
+            messageFormat: "{0}",
+            category: "Usage",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
 #pragma warning restore RS2008 // Enable analyzer release tracking
 }

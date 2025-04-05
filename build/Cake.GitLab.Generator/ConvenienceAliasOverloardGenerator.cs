@@ -73,17 +73,17 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         public static Symbols? TryGet(GeneratorExecutionContext generatorContext)
         {
             // Find required type symbols
-            if (!TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.GitLabAliases", out var gitLabAliasesSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ServerIdentity", out var serverIdentitySymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ServerConnection", out var serverConnectionSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ProjectIdentity", out var projectIdentitySymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.GitLab.ProjectConnection", out var projectConnectionSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.ICakeContext", out var cakeContextSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeMethodAliasAttribute", out var cakeMethodAliasAttributeSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "Cake.Core.Annotations.CakeAliasCategoryAttribute", out var cakeAliasCategoryAttributeSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "System.String", out var systemStringSymbol) ||
-               !TryGetSymbolByMetadataName(generatorContext, "System.CodeDom.Compiler.GeneratedCodeAttribute", out var generatedCodeAttributeSymbol)
+            if (!generatorContext.TryGetSymbolByMetadataName("Cake.GitLab.GitLabAliases", out var gitLabAliasesSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("Cake.GitLab.ServerIdentity", out var serverIdentitySymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("Cake.GitLab.ServerConnection", out var serverConnectionSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("Cake.GitLab.ProjectIdentity", out var projectIdentitySymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("Cake.GitLab.ProjectConnection", out var projectConnectionSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("Cake.Core.ICakeContext", out var cakeContextSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("Cake.Core.Annotations.CakeMethodAliasAttribute", out var cakeMethodAliasAttributeSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("Cake.Core.Annotations.CakeAliasCategoryAttribute", out var cakeAliasCategoryAttributeSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("System.Threading.Tasks.Task", out var systemThreadingTasksTaskSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("System.String", out var systemStringSymbol) ||
+                !generatorContext.TryGetSymbolByMetadataName("System.CodeDom.Compiler.GeneratedCodeAttribute", out var generatedCodeAttributeSymbol)
             )
             {
                 return null;
@@ -106,20 +106,7 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
         }
 
 
-        private static bool TryGetSymbolByMetadataName(GeneratorExecutionContext generatorContext, string metadataName, out INamedTypeSymbol? symbol)
-        {
-            symbol = generatorContext.Compilation.GetTypeByMetadataName(metadataName);
 
-            if (symbol is null)
-            {
-                generatorContext.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.RequiredTypeNotFound, location: null, metadataName));
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
     }
 
     private class Context : IDisposable
@@ -183,6 +170,11 @@ public class ConvenienceAliasOverloardGenerator : ISourceGenerator
 
     public void Execute(GeneratorExecutionContext generatorContext)
     {
+        if (generatorContext.Compilation.AssemblyName != "Cake.GitLab")
+        {
+            return;
+        }
+
         using var context = Context.TryCreate(generatorContext);
 
         if (context is null)

@@ -27,7 +27,7 @@ public class SourceCodeBuilder
     public void Append(ITypeSymbol symbol)
     {
         m_StringBuilder.Append("global::");
-        m_StringBuilder.Append(GetFullName(symbol));
+        m_StringBuilder.Append(symbol.GetFullName());
     }
 
     public void AppendParameter(IParameterSymbol parameter)
@@ -101,7 +101,7 @@ public class SourceCodeBuilder
     public void AppendFileScopedNamespace(INamespaceSymbol @namespace)
     {
         m_StringBuilder.Append($"namespace ");
-        m_StringBuilder.Append(GetFullName(@namespace));
+        m_StringBuilder.Append(@namespace.GetFullName());
         m_StringBuilder.Append(";");
         m_StringBuilder.AppendLine();
 
@@ -152,27 +152,4 @@ public class SourceCodeBuilder
 
     public override string ToString() => m_StringBuilder.ToString();
 
-
-    private static string GetFullName(INamespaceOrTypeSymbol symbol)
-    {
-        string name;
-        if (symbol.ContainingNamespace is not null && GetFullName(symbol.ContainingNamespace) is string parentName && !String.IsNullOrEmpty(parentName))
-        {
-            name = $"{parentName}.{symbol.Name}";
-        }
-        else
-        {
-            name = symbol.Name;
-        }
-
-        if (symbol is INamedTypeSymbol namedTypeSymbol)
-        {
-            if (namedTypeSymbol.Arity > 0)
-            {
-                name += $"<{String.Join(",", namedTypeSymbol.TypeArguments.Select(GetFullName))}>";
-            }
-        }
-
-        return name;
-    }
 }

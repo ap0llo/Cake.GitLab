@@ -1,0 +1,152 @@
+﻿#nullable enable
+
+using System;
+using System.Collections.Generic;
+
+namespace Cake.GitLab.Testing;
+
+/// <summary>
+/// Fake implementation of <see cref="IGitLabProvider" /> for testing
+/// </summary>
+/// <remarks>
+/// <see cref="FakeGitLabProvider" /> provides an implementation of all methods defined in <see cref="IGitLabProvider" />.
+/// Additionally, for each method, a dedicated property for configuring the methods and logging executions of the methods are provided.
+/// These are accessed via the the <see cref="FakeGitLabProvider.Methods" /> property.
+/// <list type="bullet">
+///   <item>Each execution of a method is logged and accessible via the <c>Invocations</c> proeprty</item>
+///   <item>
+///       The behavior of all methods can be customized by setting the <c>OnExecute</c> property to a delegate. 
+///       This delegate will be called for each call to the corresponding method.
+///   </item>
+/// </list>
+/// </remarks>
+/// <example>
+/// <para>
+/// To set the return value of e.g. the <see cref="IGitLabProvider.GetPipelineJobsAsync" /> method, use
+/// <code lang="cs"><![CDATA[
+///    var provider = new FakeGitLabProvider();
+///    provider.Methods.GetPipelineJobsAsync.OnExecute = (args) => {
+///       var jobs = Array.Empty<NGitLab.Models.Job>();
+///       return Task.FromResult<IReadOnlyCollection<NGitLab.Models.Job>>(jobs);
+///    };
+/// ]]>
+/// </code> 
+/// </para>
+/// <para>
+/// To check the invocations of e.g. the <see cref="IGitLabProvider.RepositoryGetBranchesAsync" /> method, use
+/// <code lang="cs"><![CDATA[
+///    var provider = new FakeGitLabProvider();
+///    Assert.Collection(
+///        provider.Methods.RepositoryGetBranchesAsync.Invocations,
+///        args =>  Assert.Equal("https://example.com", args.serverUrl);    
+///    );
+/// ]]>
+/// </code>
+/// </para>
+/// </example>
+public class FakeGitLabProvider : IGitLabProvider
+{
+    /// <summary>
+    /// Provides setup and logging functionality for individual methods of <see cref="IGitLabProvider" />
+    /// </summary>
+    public FakeGitLabProviderMethods Methods { get; } = new FakeGitLabProviderMethods();
+
+    {{~ for method in Model.Methods ~}}
+
+    /// <inheritdoc />
+    {{~ if method.HasParameters ~}}
+    public virtual {{ method.ReturnType.FullName }} {{ method.Name }}(
+        {{~ for parameter in method.Parameters ~}}
+        {{~if  for.last ~}}
+        {{ parameter.Type.FullName }} {{ parameter.Name }}{{~~}}
+        {{~ else ~}}
+        {{ parameter.Type.FullName }} {{ parameter.Name }},
+        {{~ end ~}}
+        {{~ end ~}})
+    {{~ else ~}}
+    public virtual {{ method.ReturnType.FullName }} {{ method.Name }}()
+    {{~ end ~}}
+    {
+        {{~ if method.HasParameters ~}}
+        var arguments = new FakeGitLabProviderMethods.{{ method.Name }}Arguments(
+            {{~ for parameter in method.Parameters ~}}
+            {{~if  for.last ~}}
+            {{ parameter.Name }}{{~~}}
+            {{~ else ~}}
+            {{ parameter.Name }},
+            {{~ end ~}}
+            {{~ end ~}});
+        {{~ else ~}}
+        var arguments = new FakeGitLabProviderMethods.{{ method.Name}}Arguments();
+        {{~ end ~}}
+
+        Methods.{{ method.Name }}.AddInvocation(arguments);
+
+        var handler = Methods.{{ method.Name }}.OnExecute;
+        if(handler is not null)
+        {
+            return handler(arguments);
+        }
+
+        throw new NotImplementedException();
+    }
+    {{~ end ~}}
+}
+
+/// <summary>
+/// Provides mocking and logging functionality for the methods of <see cref="IGitLabProvider" />
+/// </summary>
+public class FakeGitLabProviderMethods
+{
+    {{~ for method in Model.Methods ~}}
+    /// <summary>
+    /// Provides mocking and logging functionality for the <see cref="IGitLabProvider.{{ method.Name }}" /> method
+    /// </summary>
+    public class {{method.Name}}Method
+    {
+        private readonly List<{{method.Name}}Arguments> m_Invocations = new List<{{method.Name}}Arguments>();
+
+        /// <summary>
+        /// Gets all the invocations of the <see cref="IGitLabProvider.{{method.Name}}" /> method and their arguments
+        /// </summary>
+        public IReadOnlyList<{{method.Name}}Arguments> Invocations => m_Invocations;
+
+        /// <summary>
+        /// Gets or sets the delegate to run when the <see cref="IGitLabProvider.{{method.Name}}" /> method is called
+        /// </summary>
+        public Func<{{method.Name}}Arguments, {{method.ReturnType.FullName}}>? OnExecute { get; set; }
+
+        internal void AddInvocation({{method.Name}}Arguments arguments)
+        {
+            m_Invocations.Add(arguments);
+        }
+    }
+
+    /// <summary>
+    /// Encapsulates the arguments for an invocation of <see cref="IGitLabProvider.{{ method.Name }}" />
+    /// </summary>
+    {{~ if method.HasParameters ~}}
+    public record {{ method.Name }}Arguments(
+        {{~ for parameter in method.Parameters ~}}
+        {{~if  for.last ~}}
+        {{ parameter.Type.FullName }} {{ parameter.Name }}
+        {{~ else ~}}
+        {{ parameter.Type.FullName }} {{ parameter.Name }},
+        {{~ end ~}}
+        {{~ end ~}}
+    );
+    {{~ else ~}}
+    public record {{ method.Name }}Arguments();
+    {{~ end ~}}
+
+    {{~ end ~}}
+
+    {{~ for method in Model.Methods ~}}
+    /// <summary>
+    /// Provides mocking and logging functionality for the <see cref="IGitLabProvider.{{ method.Name }}" />
+    /// </summary>
+    public {{method.Name}}Method {{method.Name}} { get; } = new {{method.Name}}Method();
+
+    {{~ end ~}}
+}
+

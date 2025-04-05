@@ -1,0 +1,10 @@
+<Project>
+
+  <Import Project="../Directory.Build.props" />
+
+  <ItemGroup>    
+    <Compile Include="$(MSBuildThisFileDirectory)/_Shared/**/*.cs" 
+             Link="_Shared/%(RecursiveDir)%(FileName)%(Extension)" />
+  </ItemGroup>
+
+</Project>
