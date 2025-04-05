@@ -1,0 +1,188 @@
+﻿namespace Cake.GitLab.Testing
+{
+    public class FakeGitLabProvider : Cake.GitLab.IGitLabProvider
+    {
+        public FakeGitLabProvider() { }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods Methods { get; }
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>> GetMergeRequestsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options) { }
+        public virtual System.Threading.Tasks.Task<NGitLab.Models.Pipeline> GetPipelineAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId) { }
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>> GetPipelineJobsAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options) { }
+        public virtual System.Threading.Tasks.Task<NGitLab.Models.Project> GetProjectAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
+        public virtual System.Threading.Tasks.Task<NGitLab.Models.Tag> RepositoryCreateTagAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
+        public virtual System.Threading.Tasks.Task RepositoryDownloadFileAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>> RepositoryGetBranchesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>> RepositoryGetFilesAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string? path) { }
+        public virtual System.Threading.Tasks.Task SetPipelineNameAsync(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, string name) { }
+        public virtual Cake.GitLab.ProjectIdentity? TryGetCurrentProjectIdentity() { }
+        public virtual Cake.GitLab.ServerIdentity? TryGetCurrentServerIdentity() { }
+    }
+    public class FakeGitLabProviderException : System.Exception
+    {
+        public FakeGitLabProviderException(string? message) { }
+    }
+    public class FakeGitLabProviderMethods
+    {
+        public FakeGitLabProviderMethods() { }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.GetMergeRequestsAsyncMethod GetMergeRequestsAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineAsyncMethod GetPipelineAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineJobsAsyncMethod GetPipelineJobsAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.GetProjectAsyncMethod GetProjectAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryCreateTagAsyncMethod RepositoryCreateTagAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryDownloadFileAsyncMethod RepositoryDownloadFileAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetBranchesAsyncMethod RepositoryGetBranchesAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetFilesAsyncMethod RepositoryGetFilesAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.SetPipelineNameAsyncMethod SetPipelineNameAsync { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentProjectIdentityMethod TryGetCurrentProjectIdentity { get; }
+        public Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentServerIdentityMethod TryGetCurrentServerIdentity { get; }
+        public class GetMergeRequestsAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetMergeRequestsAsyncArguments>
+        {
+            public GetMergeRequestsAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, Cake.GitLab.GetMergeRequestsOptions? options) { }
+            public string accessToken { get; init; }
+            public Cake.GitLab.GetMergeRequestsOptions? options { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class GetMergeRequestsAsyncMethod
+        {
+            public GetMergeRequestsAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetMergeRequestsAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetMergeRequestsAsyncArguments, System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.MergeRequest>>>? OnExecute { get; set; }
+        }
+        public class GetPipelineAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineAsyncArguments>
+        {
+            public GetPipelineAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId) { }
+            public string accessToken { get; init; }
+            public long pipelineId { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class GetPipelineAsyncMethod
+        {
+            public GetPipelineAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineAsyncArguments, System.Threading.Tasks.Task<NGitLab.Models.Pipeline>>? OnExecute { get; set; }
+        }
+        public class GetPipelineJobsAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineJobsAsyncArguments>
+        {
+            public GetPipelineJobsAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, Cake.GitLab.GetPipelineJobsOptions? options) { }
+            public string accessToken { get; init; }
+            public Cake.GitLab.GetPipelineJobsOptions? options { get; init; }
+            public long pipelineId { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class GetPipelineJobsAsyncMethod
+        {
+            public GetPipelineJobsAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineJobsAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetPipelineJobsAsyncArguments, System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Job>>>? OnExecute { get; set; }
+        }
+        public class GetProjectAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetProjectAsyncArguments>
+        {
+            public GetProjectAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
+            public string accessToken { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class GetProjectAsyncMethod
+        {
+            public GetProjectAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetProjectAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.GetProjectAsyncArguments, System.Threading.Tasks.Task<NGitLab.Models.Project>>? OnExecute { get; set; }
+        }
+        public class RepositoryCreateTagAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryCreateTagAsyncArguments>
+        {
+            public RepositoryCreateTagAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string name) { }
+            public string accessToken { get; init; }
+            public string name { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string @ref { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class RepositoryCreateTagAsyncMethod
+        {
+            public RepositoryCreateTagAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryCreateTagAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryCreateTagAsyncArguments, System.Threading.Tasks.Task<NGitLab.Models.Tag>>? OnExecute { get; set; }
+        }
+        public class RepositoryDownloadFileAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryDownloadFileAsyncArguments>
+        {
+            public RepositoryDownloadFileAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string filePath, string @ref, Cake.Core.IO.FilePath destination) { }
+            public string accessToken { get; init; }
+            public Cake.Core.IO.FilePath destination { get; init; }
+            public string filePath { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string @ref { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class RepositoryDownloadFileAsyncMethod
+        {
+            public RepositoryDownloadFileAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryDownloadFileAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryDownloadFileAsyncArguments, System.Threading.Tasks.Task>? OnExecute { get; set; }
+        }
+        public class RepositoryGetBranchesAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetBranchesAsyncArguments>
+        {
+            public RepositoryGetBranchesAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project) { }
+            public string accessToken { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class RepositoryGetBranchesAsyncMethod
+        {
+            public RepositoryGetBranchesAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetBranchesAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetBranchesAsyncArguments, System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<NGitLab.Models.Branch>>>? OnExecute { get; set; }
+        }
+        public class RepositoryGetFilesAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetFilesAsyncArguments>
+        {
+            public RepositoryGetFilesAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, string @ref, string? path) { }
+            public string accessToken { get; init; }
+            public string? path { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string @ref { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class RepositoryGetFilesAsyncMethod
+        {
+            public RepositoryGetFilesAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetFilesAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.RepositoryGetFilesAsyncArguments, System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<string>>>? OnExecute { get; set; }
+        }
+        public class SetPipelineNameAsyncArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.SetPipelineNameAsyncArguments>
+        {
+            public SetPipelineNameAsyncArguments(string serverUrl, string accessToken, NGitLab.Models.ProjectId project, long pipelineId, string name) { }
+            public string accessToken { get; init; }
+            public string name { get; init; }
+            public long pipelineId { get; init; }
+            public NGitLab.Models.ProjectId project { get; init; }
+            public string serverUrl { get; init; }
+        }
+        public class SetPipelineNameAsyncMethod
+        {
+            public SetPipelineNameAsyncMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.SetPipelineNameAsyncArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.SetPipelineNameAsyncArguments, System.Threading.Tasks.Task>? OnExecute { get; set; }
+        }
+        public class TryGetCurrentProjectIdentityArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentProjectIdentityArguments>
+        {
+            public TryGetCurrentProjectIdentityArguments() { }
+        }
+        public class TryGetCurrentProjectIdentityMethod
+        {
+            public TryGetCurrentProjectIdentityMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentProjectIdentityArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentProjectIdentityArguments, Cake.GitLab.ProjectIdentity?>? OnExecute { get; set; }
+        }
+        public class TryGetCurrentServerIdentityArguments : System.IEquatable<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentServerIdentityArguments>
+        {
+            public TryGetCurrentServerIdentityArguments() { }
+        }
+        public class TryGetCurrentServerIdentityMethod
+        {
+            public TryGetCurrentServerIdentityMethod() { }
+            public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentServerIdentityArguments> Invocations { get; }
+            public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentServerIdentityArguments, Cake.GitLab.ServerIdentity?>? OnExecute { get; set; }
+        }
+    }
+}

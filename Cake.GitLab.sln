@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example-Testing", "examples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.GitLab.Testing", "src\Cake.GitLab.Testing\Cake.GitLab.Testing.csproj", "{43CED541-7EC7-4E1D-805F-EC665FD8B7EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.GitLab.Testing.Test", "test\Cake.GitLab.Testing.Test\Cake.GitLab.Testing.Test.csproj", "{1A90B926-522C-919C-E286-BB95394F06D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{43CED541-7EC7-4E1D-805F-EC665FD8B7EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43CED541-7EC7-4E1D-805F-EC665FD8B7EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43CED541-7EC7-4E1D-805F-EC665FD8B7EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A90B926-522C-919C-E286-BB95394F06D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A90B926-522C-919C-E286-BB95394F06D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A90B926-522C-919C-E286-BB95394F06D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A90B926-522C-919C-E286-BB95394F06D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{68BB4B53-940E-4D90-8D1D-A90EA09A21F1} = {85265202-82C0-4C3F-BA65-EE9182FCE1F0}
 		{260FEA07-BC2D-4C07-B993-38F4CFE7DAF5} = {EE022570-8319-41F1-A03C-8F03084E673A}
 		{43CED541-7EC7-4E1D-805F-EC665FD8B7EC} = {CB234764-DF2D-4DC3-8590-5B44BD4568EC}
+		{1A90B926-522C-919C-E286-BB95394F06D1} = {D94C7483-C80A-4B55-9A3C-0CA7AECD469B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A24558A9-BA58-4B2C-BE43-CD75B6A47195}
