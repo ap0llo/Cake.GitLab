@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Cake.GitLab.Testing;
 
@@ -15,9 +16,14 @@ namespace Cake.GitLab.Testing;
 /// <list type="bullet">
 ///   <item>Each execution of a method is logged and accessible via the <c>Invocations</c> proeprty</item>
 ///   <item>
-///       The behavior of all methods can be customized by setting the <c>OnExecute</c> property to a delegate. 
+///       The behavior of all methods can be customized by setting the <c>OnExecute</c> property to a delegate.
 ///       This delegate will be called for each call to the corresponding method.
 ///   </item>
+/// </list>
+/// If the behavior for a method is not configured (i.e. <c>OnExecute</c> is not set), the default behavior applies:
+/// <list type="bullet">
+///   <item>Methods that do not return a value (`void` methods and methods that return a `Task` with no value), will do nothing.</item>
+///   <item>All other methods, will throw a <see cref="FakeGitLabProviderException" />.</item>
 /// </list>
 /// </remarks>
 /// <example>
@@ -30,7 +36,7 @@ namespace Cake.GitLab.Testing;
 ///       return Task.FromResult<IReadOnlyCollection<NGitLab.Models.Job>>(jobs);
 ///    };
 /// ]]>
-/// </code> 
+/// </code>
 /// </para>
 /// <para>
 /// To check the invocations of e.g. the <see cref="IGitLabProvider.RepositoryGetBranchesAsync" /> method, use
@@ -38,7 +44,7 @@ namespace Cake.GitLab.Testing;
 ///    var provider = new FakeGitLabProvider();
 ///    Assert.Collection(
 ///        provider.Methods.RepositoryGetBranchesAsync.Invocations,
-///        args =>  Assert.Equal("https://example.com", args.serverUrl);    
+///        args =>  Assert.Equal("https://example.com", args.serverUrl);
 ///    );
 /// ]]>
 /// </code>
@@ -55,16 +61,16 @@ public class FakeGitLabProvider : IGitLabProvider
 
     /// <inheritdoc />
     {{~ if method.HasParameters ~}}
-    public virtual {{ method.ReturnType.FullName }} {{ method.Name }}(
+    public virtual {{ method.ReturnType.CSharpName }} {{ method.Name }}(
         {{~ for parameter in method.Parameters ~}}
         {{~if  for.last ~}}
-        {{ parameter.Type.FullName }} {{ parameter.Name }}{{~~}}
+        {{ parameter.Type.CSharpName }} {{ parameter.Name }}{{~~}}
         {{~ else ~}}
-        {{ parameter.Type.FullName }} {{ parameter.Name }},
+        {{ parameter.Type.CSharpName }} {{ parameter.Name }},
         {{~ end ~}}
         {{~ end ~}})
     {{~ else ~}}
-    public virtual {{ method.ReturnType.FullName }} {{ method.Name }}()
+    public virtual {{ method.ReturnType.CSharpName }} {{ method.Name }}()
     {{~ end ~}}
     {
         {{~ if method.HasParameters ~}}
@@ -85,10 +91,19 @@ public class FakeGitLabProvider : IGitLabProvider
         var handler = Methods.{{ method.Name }}.OnExecute;
         if(handler is not null)
         {
+            {{~ if method.ReturnType.IsVoid ~}}
+            handler(arguments);
+            {{~ else ~}}
             return handler(arguments);
+            {{~ end ~}}
         }
 
-        throw new NotImplementedException();
+        {{~ if method.ReturnType.IsTaskWithoutValue ~}}
+        return Task.CompletedTask;
+        {{~ else if method.ReturnType.IsVoid ~}}        
+        {{~ else ~}}
+        throw new FakeGitLabProviderException("Behavior for method {{ method.Name }} has not been configured. To configure the action to perform when the method is called, set the Methods.{{ method.Name }}.OnExecute property.");
+        {{~ end ~}}
     }
     {{~ end ~}}
 }
@@ -114,8 +129,12 @@ public class FakeGitLabProviderMethods
         /// <summary>
         /// Gets or sets the delegate to run when the <see cref="IGitLabProvider.{{method.Name}}" /> method is called
         /// </summary>
-        public Func<{{method.Name}}Arguments, {{method.ReturnType.FullName}}>? OnExecute { get; set; }
-
+        {{~ if method.ReturnType.IsVoid ~}}
+        public Action<{{method.Name}}Arguments>? OnExecute { get; set; }
+        {{~ else ~}}
+        public Func<{{method.Name}}Arguments, {{method.ReturnType.CSharpName}}>? OnExecute { get; set; }
+        {{~ end ~}}
+        
         internal void AddInvocation({{method.Name}}Arguments arguments)
         {
             m_Invocations.Add(arguments);
@@ -129,9 +148,9 @@ public class FakeGitLabProviderMethods
     public record {{ method.Name }}Arguments(
         {{~ for parameter in method.Parameters ~}}
         {{~if  for.last ~}}
-        {{ parameter.Type.FullName }} {{ parameter.Name }}
+        {{ parameter.Type.CSharpName }} {{ parameter.Name }}
         {{~ else ~}}
-        {{ parameter.Type.FullName }} {{ parameter.Name }},
+        {{ parameter.Type.CSharpName }} {{ parameter.Name }},
         {{~ end ~}}
         {{~ end ~}}
     );
