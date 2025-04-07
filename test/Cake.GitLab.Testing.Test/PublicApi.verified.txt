@@ -1,5 +1,23 @@
 ﻿namespace Cake.GitLab.Testing
 {
+    public class FakeGitLabGroup
+    {
+        public Cake.GitLab.Testing.FakeGitLabGroup? Group { get; }
+        public System.Collections.Generic.IEnumerable<Cake.GitLab.Testing.FakeGitLabGroup> Groups { get; }
+        public string Name { get; }
+        public string Path { get; }
+        public System.Collections.Generic.IEnumerable<Cake.GitLab.Testing.FakeGitLabProject> Projects { get; }
+        public Cake.GitLab.Testing.FakeGitLabServer Server { get; }
+        public Cake.GitLab.Testing.FakeGitLabGroup AddGroup(string name) { }
+        public Cake.GitLab.Testing.FakeGitLabProject AddProject(string name) { }
+    }
+    public class FakeGitLabProject
+    {
+        public Cake.GitLab.Testing.FakeGitLabGroup Group { get; }
+        public int Id { get; set; }
+        public string Name { get; }
+        public string Path { get; }
+    }
     public class FakeGitLabProvider : Cake.GitLab.IGitLabProvider
     {
         public FakeGitLabProvider() { }
@@ -184,5 +202,12 @@
             public System.Collections.Generic.IReadOnlyList<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentServerIdentityArguments> Invocations { get; }
             public System.Func<Cake.GitLab.Testing.FakeGitLabProviderMethods.TryGetCurrentServerIdentityArguments, Cake.GitLab.ServerIdentity?>? OnExecute { get; set; }
         }
+    }
+    public class FakeGitLabServer
+    {
+        public FakeGitLabServer(string hostName) { }
+        public System.Collections.Generic.IEnumerable<Cake.GitLab.Testing.FakeGitLabGroup> Groups { get; }
+        public string Url { get; }
+        public Cake.GitLab.Testing.FakeGitLabGroup AddGroup(string name) { }
     }
 }

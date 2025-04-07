@@ -7,4 +7,9 @@
              Link="_Shared/%(RecursiveDir)%(FileName)%(Extension)" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).Test" />
+  </ItemGroup>
+
 </Project>

@@ -6,6 +6,7 @@
   
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="5.0.0" PrivateAssets="All" />
+    <PackageReference Include="NGitLab.Mock" Version="8.3.0" />
   </ItemGroup>
 
   <ItemGroup>
