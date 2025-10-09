@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="5.0.0" PrivateAssets="All" />
-    <PackageReference Include="Cake.Common" Version="5.0.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Core" Version="5.1.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Common" Version="5.1.0" PrivateAssets="All" />
     <PackageReference Include="NGitLab" Version="8.6.0" />
   </ItemGroup>
 
